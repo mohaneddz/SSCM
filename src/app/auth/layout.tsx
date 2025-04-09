@@ -7,7 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 import { useState } from "react"
 
-import data from "@/app/dashboard/data.json"
+import data from "@/data/data.json"
 
 export default function Page() {
 
@@ -20,7 +20,7 @@ export default function Page() {
   return (
 
     <SidebarProvider>
-
+      {/* @ts-ignore */}
       <AppSidebar variant="inset" changePage={changePage} currentPage={page} />
 
       <SidebarInset>
@@ -39,6 +39,6 @@ export default function Page() {
       </SidebarInset>
 
     </SidebarProvider>
-    
+
   )
 }

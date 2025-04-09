@@ -1,184 +1,176 @@
+
+"use client"
+
 import * as React from "react"
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
+  AudioWaveform,
+  BookOpen,
+  Bot,
+  Command,
+  Frame,
+  GalleryVerticalEnd,
+  Map,
+  PieChart,
+  Settings2,
+  SquareTerminal,
+} from "lucide-react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
+import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
+import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar"
 
+// This is sample data.
 const data = {
-  // use INFO --------------------------------------
   user: {
-    name: "Mobilis Admin",
-    email: "mobilis@gmail.com",
-    avatar: "/mobilis.jpg",
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
   },
-  // use INFO --------------------------------------
+  teams: [
+    {
+      name: "Acme Inc",
+      logo: GalleryVerticalEnd,
+      plan: "Enterprise",
+    },
+    {
+      name: "Acme Corp.",
+      logo: AudioWaveform,
+      plan: "Startup",
+    },
+    {
+      name: "Evil Corp.",
+      logo: Command,
+      plan: "Free",
+    },
+  ],
   navMain: [
     {
-      title: "Dashboard",
-      id: "dashboard",
-      icon: IconDashboard,
-    },
-  ],
-  // use INFO --------------------------------------
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
+      title: "Playground",
+      url: "#",
+      icon: SquareTerminal,
       isActive: true,
-      id: "capture",
       items: [
         {
-          title: "Active Proposals",
-          id: "capture-active",
+          title: "History",
+          url: "#",
         },
         {
-          title: "Archived",
-          id: "capture-archived",
+          title: "Starred",
+          url: "#",
+        },
+        {
+          title: "Settings",
+          url: "#",
         },
       ],
     },
     {
-      title: "Proposal",
-      icon: IconFileDescription,
-      id: "proposal",
+      title: "Models",
+      url: "#",
+      icon: Bot,
       items: [
         {
-          title: "Active Proposals",
-          id: "proposal-active",
+          title: "Genesis",
+          url: "#",
         },
         {
-          title: "Archived",
-          id: "proposal-archived",
+          title: "Explorer",
+          url: "#",
+        },
+        {
+          title: "Quantum",
+          url: "#",
         },
       ],
     },
     {
-      title: "Prompts",
-      icon: IconFileAi,
-      id: "prompts",
+      title: "Documentation",
+      url: "#",
+      icon: BookOpen,
       items: [
         {
-          title: "Active Proposals",
-          id: "prompts-active",
+          title: "Introduction",
+          url: "#",
         },
         {
-          title: "Archived",
-          id: "prompts-archived",
+          title: "Get Started",
+          url: "#",
+        },
+        {
+          title: "Tutorials",
+          url: "#",
+        },
+        {
+          title: "Changelog",
+          url: "#",
         },
       ],
     },
-  ],
-  navSecondary: [
     {
       title: "Settings",
-      id: "settings",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      id: "help",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      id: "search",
-      icon: IconSearch,
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "#",
+        },
+        {
+          title: "Team",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+        {
+          title: "Limits",
+          url: "#",
+        },
+      ],
     },
   ],
-  documents: [
+  projects: [
     {
-      name: "Data Library",
-      id: "library",
-      url: "/library",
-      icon: IconDatabase,
+      name: "Design Engineering",
+      url: "#",
+      icon: Frame,
+    },
+    {
+      name: "Sales & Marketing",
+      url: "#",
+      icon: PieChart,
+    },
+    {
+      name: "Travel",
+      url: "#",
+      icon: Map,
     },
   ],
 }
 
-export function AppSidebar({ onContentChange, changePage, currentPage, ...props }: { onContentChange: (id: string) => void, changePage: (page: string) => void, currentPage: String } & React.ComponentProps<typeof Sidebar>) {
-  const [activeSection, setActiveSection] = React.useState("dashboard")
-
-  const handleSectionChange = (id: string) => {
-    setActiveSection(id);
-    onContentChange(id);
-    changePage(id);
-  }
-
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      {/* MAIN TITLE ONLY --------------------------------------------- */}
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-              onClick={() => handleSectionChange("home")}
-            >
-              <button>
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Mobilis Center</span>
-              </button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
-
       <SidebarContent>
-        {/* TOP SECTION  --------------------------------------------- */}
-        <NavMain
-          items={data.navMain}
-          activeSection={activeSection}
-          onSelect={handleSectionChange}
-        />
-
-        {/* MIDDLE SECTION --------------------------------------------- */}
-        <NavDocuments
-          items={data.documents}
-          activeSection={activeSection}
-          onSelect={handleSectionChange}
-        />
-
-        {/* BOTTOM SECTION  --------------------------------------------- */}
-        <NavSecondary
-          items={data.navSecondary}
-          className="mt-auto"
-          activeSection={activeSection}
-          onSelect={handleSectionChange}
-        />
+        <NavMain items={data.navMain} />
+        <NavProjects projects={data.projects} />
       </SidebarContent>
-
-      {/* USER INFO SECTION  --------------------------------------------- */}
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   )
 }
