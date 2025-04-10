@@ -12,14 +12,17 @@ import {
 } from "@/components/ui/sidebar"
 
 export function NavSecondary({
+  changePage,
   items,
   ...props
 }: {
   items: {
     title: string
     url: string
-    icon: Icon
-  }[]
+    icon: Icon,
+    id: string
+  }[],
+  changePage: (page: string) => void
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
@@ -28,10 +31,10 @@ export function NavSecondary({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild>
-                <a href={item.url}>
+                <button onClick={()=>changePage(item.id)}>
                   <item.icon />
-                  <span>{item.title}</span>
-                </a>
+                  <span >{item.title}</span>
+                </button>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
