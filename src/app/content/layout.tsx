@@ -14,7 +14,7 @@ interface PageContextType {
   setPage: Dispatch<SetStateAction<string>>;
 }
 
-const PageContext = createContext<PageContextType>({ page: "Members", setPage: () => { } });
+const PageContext = createContext<PageContextType>({ page: "Dashboard", setPage: () => { } });
 
 export function usePageContext() {
   return useContext(PageContext);
@@ -22,7 +22,7 @@ export function usePageContext() {
 
 export default function layout({ children }: { children: React.ReactNode }) {
 
-  const [page, setPage] = useState("Members");
+  const [page, setPage] = useState("Dashboard");
 
   const changePage = (page: string) => {
     setPage(page);

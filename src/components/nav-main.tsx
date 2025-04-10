@@ -25,16 +25,16 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
+          <SidebarMenuItem  className="flex items-center gap-2">
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
-            <div onClick={() => changePage(item.id)}>
-              <SidebarMenuItem key={item.title}>
+            <div onClick={() => changePage(item.id)} key={item.id}>
+              <SidebarMenuItem>
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
-                  <span >{item.title}</span>
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </div>

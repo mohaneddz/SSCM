@@ -42,7 +42,7 @@ export function NavDocuments({
       <SidebarGroupLabel>Menus</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <SidebarMenuItem key={item.name}>
+          <SidebarMenuItem key={item.id}>
             <SidebarMenuButton asChild>
               <button onClick={() => changePage(item.id)}>
                 <item.icon />

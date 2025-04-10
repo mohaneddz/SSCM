@@ -8,10 +8,16 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
   --color-background: var(--background);
+  --color-background-dark: var(--dark-blue-1);
+  --color-background-light: var(--light-blue-1);
+
   --color-foreground: var(--foreground);
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
@@ -43,45 +49,53 @@
 
 :root {
   --radius: 0.625rem;
-  --principal-blue: #2fb96c;
+  --principal-green: #2fb96c;
+  --principle-dark-green: #1c8149;
+  --principle-light-green: #2dc772;
+
   --dark-blue-1: #020818;
   --dark-blue-2: #0a1227cd;
+  --light-blue-1: rgb(23, 45, 102);
+  --light-blue-2: #263f85;
   --text-light: #f9f9f9;
   --text-muted: #b3b3b3;
 
   --background: var(--dark-blue-2);
+
   --foreground: var(--text-light);
   --card: var(--dark-blue-1);
   --card-foreground: var(--text-light);
   --popover: var(--dark-blue-1);
   --popover-foreground: var(--text-light);
-  --primary: var(--principal-blue);
+  --primary: var(--principal-green);
+  --primary-light: var(--principal-green);
+  --primary-dark: var(--principal-green);
   --primary-foreground: var(--text-light);
   --secondary: var(--dark-blue-2);
   --secondary-foreground: var(--text-light);
   --muted: var(--dark-blue-2);
   --muted-foreground: var(--text-muted);
-  --accent: var(--principal-blue);
+  --accent: var(--principal-green);
   --accent-foreground: var(--text-light);
-  --destructive: var(--principal-blue); /* Note: Not ideal for UX */
+  --destructive: var(--principal-green); /* Note: Not ideal for UX */
   --border: var(--dark-blue-1);
   --input: var(--dark-blue-1);
-  --ring: var(--principal-blue);
+  --ring: var(--principal-green);
 
-  --chart-1: var(--principal-blue);
+  --chart-1: var(--principal-green);
   --chart-2: var(--dark-blue-2);
   --chart-3: var(--dark-blue-1);
-  --chart-4: var(--principal-blue);
+  --chart-4: var(--principal-green);
   --chart-5: var(--dark-blue-2);
 
   --sidebar: var(--dark-blue-1);
   --sidebar-foreground: var(--text-light);
-  --sidebar-primary: var(--principal-blue);
+  --sidebar-primary: var(--principal-green);
   --sidebar-primary-foreground: var(--text-light);
   --sidebar-accent: var(--dark-blue-2);
   --sidebar-accent-foreground: var(--text-light);
   --sidebar-border: var(--dark-blue-2);
-  --sidebar-ring: var(--principal-blue);
+  --sidebar-ring: var(--principal-green);
 }
 
 .dark {
@@ -91,33 +105,33 @@
   --card-foreground: var(--text-light);
   --popover: var(--dark-blue-2);
   --popover-foreground: var(--text-light);
-  --primary: var(--principal-blue);
+  --primary: var(--principal-green);
   --primary-foreground: var(--text-light);
   --secondary: var(--dark-blue-2);
   --secondary-foreground: var(--text-light);
   --muted: var(--dark-blue-2);
   --muted-foreground: var(--text-muted);
-  --accent: var(--principal-blue);
+  --accent: var(--principal-green);
   --accent-foreground: var(--text-light);
-  --destructive: var(--principal-blue); /* Note: Not ideal for UX */
+  --destructive: var(--principal-green); /* Note: Not ideal for UX */
   --border: var(--dark-blue-2);
   --input: var(--dark-blue-2);
-  --ring: var(--principal-blue);
+  --ring: var(--principal-green);
 
-  --chart-1: var(--principal-blue);
+  --chart-1: var(--principal-green);
   --chart-2: var(--dark-blue-2);
   --chart-3: var(--dark-blue-1);
-  --chart-4: var(--principal-blue);
+  --chart-4: var(--principal-green);
   --chart-5: var(--dark-blue-2);
 
   --sidebar: var(--dark-blue-2);
   --sidebar-foreground: var(--text-light);
-  --sidebar-primary: var(--principal-blue);
+  --sidebar-primary: var(--principal-green);
   --sidebar-primary-foreground: var(--text-light);
   --sidebar-accent: var(--dark-blue-1);
   --sidebar-accent-foreground: var(--text-light);
   --sidebar-border: var(--dark-blue-1);
-  --sidebar-ring: var(--principal-blue);
+  --sidebar-ring: var(--principal-green);
 }
 
 @layer base {

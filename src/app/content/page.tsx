@@ -7,11 +7,12 @@ import { IconLoader } from "@tabler/icons-react";
 
 const Home = dynamic(() => import("@/pages/Home"));
 const Access = dynamic(() => import("@/pages/Access"));
-const Warranties = dynamic(() => import("@/pages/Warranties"));
+const Health = dynamic(() => import("@/pages/Health"));
 const Logs = dynamic(() => import("@/pages/Logs"));
 const Simulation = dynamic(() => import("@/pages/Simulation"));
 const Settings = dynamic(() => import("@/pages/Settings"));
 const Inspections = dynamic(() => import("@/pages/Inspections"));
+const MapWithInfo = dynamic(() => import("@/pages/Map"), { ssr: false });
 
 export default function Page() {
 
@@ -20,11 +21,12 @@ export default function Page() {
     const pages: any = {
         dashboard: Home,
         access: Access,
-        warranties: Warranties,
+        Health: Health,
         logs: Logs,
         simulation: Simulation,
         settings: Settings,
         inspections: Inspections,
+        map: MapWithInfo,
     };
 
     const PageComponent: React.ComponentType = pages[page] || Home;

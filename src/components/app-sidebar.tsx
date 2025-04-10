@@ -8,6 +8,7 @@ import {
   IconReport,
   IconIkosaedr,
   IconSettings,
+  IconMap,
   IconShieldHalfFilled,
 } from "@tabler/icons-react"
 
@@ -33,10 +34,10 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "Map",
       url: "#",
-      icon: IconDashboard,
-      id: "dashboard",
+      icon: IconMap,
+      id: "map",
     },
   ],
   // navClouds: [
@@ -67,16 +68,22 @@ const data = {
   ],
   documents: [
     {
+      name: "Dashboard",
+      url: "#",
+      icon: IconDashboard,
+      id: "dashboard",
+    },
+    {
       name: "Access Control",
       url: "#",
       icon: IconShieldHalfFilled,
       id: "access",
     },
     {
-      name: "Warranties",
+      name: "Health",
       url: "#",
       icon: IconBrandAppleArcade,
-      id: "warranties",
+      id: "Health",
     },
     {
       name: "Logs",
