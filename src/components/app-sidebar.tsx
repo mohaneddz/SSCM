@@ -9,6 +9,9 @@ import {
   IconIkosaedr,
   IconSettings,
   IconMap,
+  IconCloudFilled,
+  IconBoltFilled,
+  IconCloudComputingFilled,
   IconShieldHalfFilled,
 } from "@tabler/icons-react"
 
@@ -92,13 +95,31 @@ const data = {
       id: "logs",
     },
     {
-      name: "Inspections",
+      name: "Control",
       url: "#",
       icon: IconEye,
       id: "Inspection",
     },
     {
-      name: "3D Simulation",
+      name: "Power Draw",
+      url: "#",
+      icon: IconBoltFilled,
+      id: "powerdraw",
+    },
+    {
+      name: "Weather Forecast",
+      url: "#",
+      icon: IconCloudFilled,
+      id: "weather",
+    },
+    {
+      name: "Server",
+      url: "#",
+      icon: IconCloudComputingFilled,
+      id: "server",
+    },
+    {
+      name: "Simulation",
       url: "#",
       icon: IconIkosaedr,
       id: "simulation",

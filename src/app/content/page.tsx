@@ -11,8 +11,11 @@ const Health = dynamic(() => import("@/pages/Health"));
 const Logs = dynamic(() => import("@/pages/Logs"));
 const Simulation = dynamic(() => import("@/pages/Simulation"));
 const Settings = dynamic(() => import("@/pages/Settings"));
-const Inspections = dynamic(() => import("@/pages/Inspections"));
-const MapWithInfo = dynamic(() => import("@/pages/Map"), { ssr: false });
+const Control = dynamic(() => import("@/pages/Control"));
+const Map = dynamic(() => import("@/pages/Map"));
+const Power = dynamic(() => import("@/pages/Power"));
+const Wheather = dynamic(() => import("@/pages/Wheather"));
+
 
 export default function Page() {
 
@@ -25,8 +28,10 @@ export default function Page() {
         logs: Logs,
         simulation: Simulation,
         settings: Settings,
-        inspections: Inspections,
-        map: MapWithInfo,
+        Control: Control,
+        map: Map,
+        power: Power,
+        weather: Wheather,
     };
 
     const PageComponent: React.ComponentType = pages[page] || Home;

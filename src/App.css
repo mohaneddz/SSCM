@@ -44,7 +44,7 @@
 :root {
   --radius: 0.625rem;
   --primary-green: #32ba6b;
-  --dark-blue-1: #020818;
+  --dark-blue-1: rgba(2, 8, 24, 0.616);
   --dark-blue-2: #0a1020;
   --text-light: #f9f9f9;
   --text-muted: #b3b3b3;
