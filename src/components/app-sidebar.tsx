@@ -1,7 +1,7 @@
 import * as React from "react"
 import {
   IconCamera,
-  IconChartBar,
+  IconEye,
   IconDashboard,
   IconBrandAppleArcade,
   IconInnerShadowTop,
@@ -29,7 +29,7 @@ const data = {
   user: {
     name: "Mobilis Admin",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/mobilis.jpg",
   },
   navMain: [
     {
@@ -83,6 +83,12 @@ const data = {
       url: "#",
       icon: IconReport,
       id: "logs",
+    },
+    {
+      name: "Inspections",
+      url: "#",
+      icon: IconEye,
+      id: "Inspection",
     },
     {
       name: "3D Simulation",

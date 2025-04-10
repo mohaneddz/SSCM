@@ -3,6 +3,7 @@
 import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { usePageContext } from "./layout";
+import { IconLoader } from "@tabler/icons-react";
 
 const Home = dynamic(() => import("@/pages/Home"));
 const Access = dynamic(() => import("@/pages/Access"));
@@ -10,7 +11,7 @@ const Warranties = dynamic(() => import("@/pages/Warranties"));
 const Logs = dynamic(() => import("@/pages/Logs"));
 const Simulation = dynamic(() => import("@/pages/Simulation"));
 const Settings = dynamic(() => import("@/pages/Settings"));
-import { IconLoader } from "@tabler/icons-react";
+const Inspections = dynamic(() => import("@/pages/Inspections"));
 
 export default function Page() {
 
@@ -23,6 +24,7 @@ export default function Page() {
         logs: Logs,
         simulation: Simulation,
         settings: Settings,
+        inspections: Inspections,
     };
 
     const PageComponent: React.ComponentType = pages[page] || Home;
