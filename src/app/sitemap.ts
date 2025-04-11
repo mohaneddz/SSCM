@@ -16,5 +16,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/register`,
       lastModified: new Date(),
     },
+    {
+      url:  `${baseUrl}/home`,
+      lastModified: new Date(),
+    }
   ];
 }

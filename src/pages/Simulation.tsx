@@ -8,7 +8,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+ import { cn } from "@/lib/utils/cn";
 import {
   AlertCircle,
   Check,
