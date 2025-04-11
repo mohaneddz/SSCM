@@ -1,10 +1,12 @@
 // src/components/MapWithInfo.tsx (or your main page component)
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import SearchInput from '@/components/search-input'; // Adjust path
 import AlgeriaMap from '@/components/algeria-map';   // Adjust path - ENSURE THIS IS THE POPULATION-BASED VERSION
 import InfoContainer from '@/components/info-container'; // Adjust path
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useTheme } from 'next-themes'; // Optional: for theme-based styling
+import { Button } from "@/components/ui/button";
+import { MapPin, Lock, Check } from 'lucide-react';
 
 // Define or import the LocationData interface
 export interface LocationData {
@@ -55,9 +57,51 @@ const MapWithInfo: React.FC = () => {
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null); // Track selected marker ID
     const [locationData, setLocationData] = useState<LocationData | null>(null); // Data for InfoContainer
     const [selectedWilaya, setSelectedWilaya] = useState<string | null>(null); // Track Wilaya filter
+    const [siteSelectionMode, setSiteSelectionMode] = useState<boolean>(false); // New state for site selection mode
+    const [siteSelected, setSiteSelected] = useState<boolean>(false); // New state to track if a site has been set
 
     const { theme } = useTheme(); // Optional theming
     const isDark = theme === 'dark'; // Example usage
+
+    // Load site selection state from sessionStorage on component mount
+    useEffect(() => {
+        const savedSiteSelected = sessionStorage.getItem('mapSiteSelected');
+        const savedLocationId = sessionStorage.getItem('mapSelectedLocationId');
+        const savedLocationData = sessionStorage.getItem('mapLocationData');
+        
+        if (savedSiteSelected === 'true') {
+            setSiteSelected(true);
+            
+            if (savedLocationId) {
+                setSelectedLocationId(savedLocationId);
+            }
+            
+            if (savedLocationData) {
+                try {
+                    setLocationData(JSON.parse(savedLocationData));
+                } catch (error) {
+                    console.error('Error parsing saved location data:', error);
+                }
+            }
+        }
+    }, []);
+
+    // Save site selection state to sessionStorage
+    useEffect(() => {
+        if (siteSelected) {
+            sessionStorage.setItem('mapSiteSelected', 'true');
+            if (selectedLocationId) {
+                sessionStorage.setItem('mapSelectedLocationId', selectedLocationId);
+            }
+            if (locationData) {
+                sessionStorage.setItem('mapLocationData', JSON.stringify(locationData));
+            }
+        } else {
+            sessionStorage.removeItem('mapSiteSelected');
+            sessionStorage.removeItem('mapSelectedLocationId');
+            sessionStorage.removeItem('mapLocationData');
+        }
+    }, [siteSelected, selectedLocationId, locationData]);
 
     // Handler for text search input
     const handleSearch = useCallback((query: string) => {
@@ -95,18 +139,95 @@ const MapWithInfo: React.FC = () => {
     const handleClearSelection = useCallback(() => {
         setSelectedLocationId(null); // Clear the selected ID
         setLocationData(null);      // Clear the data, hiding the InfoContainer
+        if (siteSelected) {
+            setSiteSelected(false); // Clear site selection if set
+            sessionStorage.removeItem('mapSiteSelected');
+            sessionStorage.removeItem('mapSelectedLocationId');
+            sessionStorage.removeItem('mapLocationData');
+        }
         // The map component will see selectedLocationId is null and reset the marker style
+    }, [siteSelected]);
+
+    // Handler for starting site selection mode
+    const handleStartSiteSelection = useCallback(() => {
+        setSiteSelectionMode(true);
+    }, []);
+
+    // Handler for confirming site selection
+    const handleConfirmSiteSelection = useCallback(() => {
+        if (selectedLocationId && locationData) {
+            setSiteSelected(true);
+            setSiteSelectionMode(false);
+        } else {
+            alert('Please select a location on the map first.');
+        }
+    }, [selectedLocationId, locationData]);
+
+    // Handler for canceling site selection
+    const handleCancelSiteSelection = useCallback(() => {
+        setSiteSelectionMode(false);
     }, []);
 
     return (
         // Main container - adjust padding, background etc. as needed
-        <div className="flex flex-col h-screen w-full p-3 md:p-4 space-y-3 bg-background text-foreground overflow-hidden">
-            {/* Search Input Component */}
-            <div className="flex-shrink-0">
-                <SearchInput
-                    onSearch={handleSearch}
-                    onWilayaSelect={handleWilayaSelect} // Pass the Wilaya handler
-                />
+        <div className="flex flex-col h-full w-full p-3 md:p-4 space-y-3 bg-background text-foreground overflow-hidden">
+            {/* Site Selection Controls */}
+            <div className="flex-shrink-0 flex justify-between items-center">
+                {/* Search Input Component */}
+                <div className={`flex-grow mr-2 ${(!siteSelected && !siteSelectionMode) ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <SearchInput
+                        onSearch={handleSearch}
+                        onWilayaSelect={handleWilayaSelect} // Pass the Wilaya handler
+                        disabled={!siteSelected && !siteSelectionMode}
+                    />
+                </div>
+
+                {/* Site Selection Button */}
+                <div className="flex-shrink-0">
+                    {!siteSelected && !siteSelectionMode && (
+                        <Button 
+                            className="bg-blue-600 hover:bg-blue-700 transition-colors"
+                            onClick={handleStartSiteSelection}
+                        >
+                            <MapPin className="mr-2 h-4 w-4" />
+                            Set Site
+                        </Button>
+                    )}
+                    
+                    {siteSelectionMode && (
+                        <div className="flex space-x-2">
+                            <Button 
+                                variant="outline" 
+                                onClick={handleCancelSiteSelection}
+                            >
+                                Cancel
+                            </Button>
+                            <Button 
+                                className="bg-green-600 hover:bg-green-700 transition-colors"
+                                onClick={handleConfirmSiteSelection}
+                                disabled={!selectedLocationId}
+                            >
+                                Confirm Site
+                            </Button>
+                        </div>
+                    )}
+                    
+                    {siteSelected && (
+                        <div className="flex items-center">
+                            <span className="inline-flex items-center px-3 py-1 rounded-md bg-green-100 text-green-800 text-sm font-medium mr-2">
+                                <Check className="mr-1 h-4 w-4" />
+                                Site Set
+                            </span>
+                            <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={handleClearSelection}
+                            >
+                                Change
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Info Container or Placeholder */}
@@ -120,9 +241,18 @@ const MapWithInfo: React.FC = () => {
                             <CardTitle className="text-sm font-medium">Location Details</CardTitle>
                         </CardHeader>
                         <CardContent className="p-3 text-sm text-muted-foreground">
-                            {selectedWilaya
-                                ? `Filtering by Wilaya: ${selectedWilaya}. Click a pin for details.`
-                                : "Click a pin on the map to view its details or apply a Wilaya filter."}
+                            {!siteSelected && !siteSelectionMode ? (
+                                <div className="flex items-center justify-center py-2">
+                                    <Lock className="text-neutral-400 mr-2 h-4 w-4" />
+                                    <span>Please set a site first to enable all features</span>
+                                </div>
+                            ) : siteSelectionMode ? (
+                                "Click a pin on the map to select a site."
+                            ) : selectedWilaya ? (
+                                `Filtering by Wilaya: ${selectedWilaya}. Click a pin for details.`
+                            ) : (
+                                "Click a pin on the map to view its details or apply a Wilaya filter."
+                            )}
                         </CardContent>
                     </Card>
                 )}
@@ -140,9 +270,35 @@ const MapWithInfo: React.FC = () => {
                         searchQuery={searchQuery}
                         selectedWilaya={selectedWilaya}       // Pass selected Wilaya state
                         selectedLocationId={selectedLocationId} // Pass selected ID for highlighting sync
+                        selectionMode={siteSelectionMode}     // Pass selection mode flag
                     />
                 </div>
             </div>
+            
+            {/* Selection Mode Overlay - shows when in selection mode */}
+            {siteSelectionMode && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-40 pointer-events-none flex items-center justify-center">
+                    <div className="bg-white rounded-lg p-4 shadow-lg max-w-md mx-auto text-center pointer-events-auto">
+                        <h3 className="text-lg font-medium text-gray-900">Site Selection Mode</h3>
+                        <p className="mt-2 text-sm text-gray-500">Click on a location pin to select it as your site.</p>
+                        <div className="mt-4 flex justify-center space-x-4">
+                            <Button 
+                                variant="outline" 
+                                onClick={handleCancelSiteSelection}
+                            >
+                                Cancel
+                            </Button>
+                            <Button 
+                                className="bg-green-600 hover:bg-green-700 transition-colors"
+                                onClick={handleConfirmSiteSelection}
+                                disabled={!selectedLocationId}
+                            >
+                                Confirm Site
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

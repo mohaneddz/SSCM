@@ -28,7 +28,7 @@ export default function Page() {
         logs: Logs,
         simulation: Simulation,
         settings: Settings,
-        Control: Control,
+        control: Control,
         map: Map,
         power: Power,
         weather: Wheather,

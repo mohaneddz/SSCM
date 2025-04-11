@@ -54,7 +54,7 @@ import {
 } from "@/components/ui/select"
 
 // Define the User type
-export type Role = "employee" | "admin";
+export type Role = "employee" | "admin" | "manager";
 
 export type User = {
   user_id: string;
@@ -62,7 +62,7 @@ export type User = {
   email: string;
   name: string;
   rfid_code: string;
-  role: Role;
+  role: Role[]; // Changed to array of Role
   created_at: Date;
   updated_at: Date;
 };
@@ -71,45 +71,47 @@ const generateUserId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-const initialData: User[] = [
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "john.doe@example.com",
-    name: "John Doe",
-    rfid_code: "12345",
-    role: "employee",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "jane.smith@example.com",
-    name: "Jane Smith",
-    rfid_code: "67890",
-    role: "admin",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "peter.jones@example.com",
-    name: "Peter Jones",
-    rfid_code: "98765",
-    role: "employee",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-];
+// function to generate number of random users data 
+const generateRandomUsersData = (num: number): User[] => {
+  const users = [] as User[];
+  const roles: Role[] = ["employee", "admin", "manager"]; // Define available roles
+  for (let i = 0; i < num; i++) {
+    // Randomly determine the number of roles for the user (1 to all roles)
+    const numRoles = Math.floor(Math.random() * roles.length) + 1;
+    const userRoles: Role[] = [];
 
-// --- Edit Dialog Component ---
-interface EditUserDialogProps {
-  user: User | null;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave: (updatedUser: User) => void;
+    // Assign random roles to the user
+    for (let j = 0; j < numRoles; j++) {
+      const randomRole = roles[Math.floor(Math.random() * roles.length)];
+      if (!userRoles.includes(randomRole)) { // Ensure no duplicate roles
+        userRoles.push(randomRole);
+      }
+    }
+
+    const user: User = {
+      user_id: generateUserId(),
+      profile_image: Math.random() > 0.5 ? `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${i % 99}.jpg` : null,
+      email: `user${i}@example.com`,
+      name: `User ${i}`,
+      rfid_code: Math.floor(Math.random() * 1000000000).toString().padStart(10, '0'),
+      role: userRoles, // Assign the array of roles
+      created_at: new Date(Date.now() - Math.floor(Math.random() * 10000000000)),
+      updated_at: new Date()
+    };
+    users.push(user);
+  }
+  return users;
+};
+
+
+const initialData: User[] = generateRandomUsersData(100); // Generate 100 random users
+
+  // --- Edit Dialog Component ---
+  interface EditUserDialogProps {
+    user: User | null;
+isOpen: boolean;
+onOpenChange: (open: boolean) => void;
+onSave: (updatedUser: User) => void;
 }
 
 function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogProps) {
@@ -140,7 +142,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
     }
   };
 
-  const handleRoleChange = (value: User["role"]) => {
+  const handleRoleChange = (value: Role[]) => {
     if (editedUser) {
       setEditedUser({
         ...editedUser,
@@ -180,6 +182,8 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
 
   if (!user || !editedUser) return null;
 
+  const roles: Role[] = ["employee", "admin", "manager"];
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -195,7 +199,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
             <Input id="user_id" name="user_id" value={editedUser.user_id} className="col-span-3" disabled />
           </div>
 
-         <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="profile_image" className="text-right">
               Profile Image
             </Label>
@@ -214,9 +218,9 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
                 onChange={handleImageChange}
                 className="hidden" // Hide the actual input
               />
-               {preview && (
-                  <img src={preview} alt="Profile Preview" className="h-16 w-16 rounded-full" />
-                )}
+              {preview && (
+                <img src={preview} alt="Profile Preview" className="h-16 w-16 rounded-full" />
+              )}
             </div>
           </div>
 
@@ -262,15 +266,25 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
             <Label htmlFor="role" className="text-right">
               Role
             </Label>
-            <Select name="role" value={editedUser.role} onValueChange={handleRoleChange}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="employee">Employee</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="col-span-3">
+              {roles.map((role) => (
+                <div key={role} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={role}
+                    checked={editedUser.role.includes(role)}
+                    onCheckedChange={(checked) => {
+                      const newRoles = checked
+                        ? [...editedUser.role, role]
+                        : editedUser.role.filter((r) => r !== role);
+                      handleRoleChange(newRoles);
+                    }}
+                  />
+                  <Label htmlFor={role} className="capitalize">
+                    {role}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <DialogFooter>
@@ -424,9 +438,9 @@ export default function UserTable() {
             Role <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         ),
-        cell: ({ row }) => <div className="capitalize">{row.getValue("role")}</div>,
+        cell: ({ row }) => <div className="capitalize">{row.getValue("role").join(", ")}</div>, // Display multiple roles
       },
-       {
+      {
         accessorKey: "created_at",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -448,7 +462,7 @@ export default function UserTable() {
           </Button>
         ),
         cell: ({ row }) => new Date(row.getValue("updated_at")).toLocaleDateString(),
-         sortingFn: (rowA, rowB, columnId) => {
+        sortingFn: (rowA, rowB, columnId) => {
           const dateA = rowA.original.updated_at.getTime();
           const dateB = rowB.original.updated_at.getTime();
           return dateA - dateB;
@@ -544,7 +558,7 @@ export default function UserTable() {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border bg-[#21366c0d]">
+      <div className="rounded-md border bg-[#21366c0d] border-input">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

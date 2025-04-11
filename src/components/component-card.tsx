@@ -29,7 +29,7 @@ export default function ComponentCard({ title, image, model, health, estimateTim
     const validityStatus = getValidityStatus(estimateDate);
 
     return (
-        <div className='w-full border border-gray-300 max-h-36 max-w-80 overflow-hidden rounded-lg shadow-lg bg-gradient-to-tr from-primary via-primary/10 via-40% to-primary/5 
+        <div className='w-full border border-gray-800 max-h-36 max-w-80 overflow-hidden rounded-lg shadow-lg bg-gradient-to-tr from-primary via-primary/10 via-40% to-primary/5 
         hover:shadow-xl hover:cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out'>
 
             <div className="flex gap-4 py-2 pt-0 h-full w-full max-h-36 justify-between items-center text-center text-white overflow-y-hidden">

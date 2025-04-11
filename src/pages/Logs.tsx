@@ -70,128 +70,22 @@ const generateEventId = (): string => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-const initialData: Event[] = [
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T10:00:00Z"),
-    event: "User logged in successfully.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T10:15:00Z"),
-    event: "Multiple failed login attempts from IP: 192.168.1.100.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T10:30:00Z"),
-    event: "Unusual data download detected for user ID: 12345.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T10:45:00Z"),
-    event: "File uploaded successfully: report.pdf.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T11:00:00Z"),
-    event: "Suspicious activity detected on account: abcdef.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T11:15:00Z"),
-    event: "Increased server latency observed.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T11:30:00Z"),
-    event: "Database backup completed.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T11:45:00Z"),
-    event: "Potential SQL injection attempt blocked.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T12:00:00Z"),
-    event: "High CPU utilization on web server.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T12:15:00Z"),
-    event: "Scheduled job completed successfully.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T12:30:00Z"),
-    event: "Firewall blocked access from unknown IP range.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T12:45:00Z"),
-    event: "Unexpected spike in network traffic.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T13:00:00Z"),
-    event: "Application updated to version 1.2.3.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T13:15:00Z"),
-    event: "Malware detected in uploaded file.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T13:30:00Z"),
-    event: "Abnormal number of page load failures.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T13:45:00Z"),
-    event: "User password changed successfully.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T14:00:00Z"),
-    event: "DDoS attack detected and mitigated.",
-  },
-  {
-    id: generateEventId(),
-    type: "anomaly",
-    timeAndDate: new Date("2024-01-26T14:15:00Z"),
-    event: "Sudden drop in database connections.",
-  },
-  {
-    id: generateEventId(),
-    type: "event",
-    timeAndDate: new Date("2024-01-26T14:30:00Z"),
-    event: "System reboot initiated.",
-  },
-  {
-    id: generateEventId(),
-    type: "security",
-    timeAndDate: new Date("2024-01-26T14:45:00Z"),
-    event: "Brute-force attack detected and blocked.",
-  },
-];
+// generate number of events with a function 
+const generateEvents = (num: number): Event[] => {
+    const events: Event[] = [];
+    for (let i = 0; i < num; i++) {
+        events.push({
+            id: generateEventId(),
+            type: ["security", "anomaly", "event"][Math.floor(Math.random() * 3)] as EventType,
+            timeAndDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000)), // Random date within the last 10 days
+            event: `Event ${i + 1}`,
+        });
+    }
+    return events;
+};
+
+const initialData: Event[] = generateEvents(100); // Generate 100 events for initial data
+
 
 
 // --- Edit Dialog Component ---
@@ -576,7 +470,7 @@ export default function Logs() {
       </div>
 
       {/* Table Rendering (same as before) */}
-      <div className="rounded-md border bg-[#21366c0d]">
+      <div className="rounded-md border border-input bg-[#21366c0d]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

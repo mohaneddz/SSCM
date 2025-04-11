@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"; // Using Shadcn UI Button for c
 interface SearchInputProps {
     onSearch: (query: string) => void;
     onWilayaSelect?: (wilaya: string | null) => void; // Callback for Wilaya selection
+    disabled?: boolean; // Optional prop to disable the component
 }
 
 // Algeria's 58 wilayas (provinces) - Ensure this list matches GeoJSON and population data keys
@@ -22,14 +23,14 @@ const ALGERIA_WILAYAS = [
     "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
     "Blida", "Bouira", "Tamanrasset", "Tébessa", "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger",
     "Djelfa", "Jijel", "Sétif", "Saïda", "Skikda", "Sidi Bel Abbès", "Annaba", "Guelma",
-    "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara", "Ouargla", "Oran", "El Bayadh",
+    "Constantine", "Médéa", "Mostaganem", "M\'Sila", "Mascara", "Ouargla", "Oran", "El Bayadh",
     "Illizi", "Bordj Bou Arréridj", "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt", "El Oued",
     "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla", "Naâma", "Aïn Témouchent",
     "Ghardaïa", "Relizane", "Timimoun", "Bordj Badji Mokhtar", "Ouled Djellal", "Béni Abbès", // Added 2019 wilayas
-    "In Salah", "In Guezzam", "Touggourt", "Djanet", "El M'ghair", "El Meniaa"
+    "In Salah", "In Guezzam", "Touggourt", "Djanet", "El M\'Ghair", "El Meniaa"
 ].sort(); // Sort alphabetically for better UX in the list
 
-const SearchInput: React.FC<SearchInputProps> = ({ onSearch, onWilayaSelect }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ onSearch, onWilayaSelect, disabled = false }) => {
     const [inputValue, setInputValue] = useState<string>(''); // Controls the text visible in the input field
     const [commandInputValue, setCommandInputValue] = useState<string>(''); // State for filtering within Command *if* using CommandInput
     const [open, setOpen] = useState(false); // Popover open state for Wilaya mode
