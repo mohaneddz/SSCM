@@ -7,6 +7,9 @@ const nextConfig = {
 	  });
 	  return config;
 	},
+	images: {
+		domains: ['nvuvnxcofuguboorzqwa.supabase.co'], // replace with your actual Supabase project domain if different
+	  },
   };
   
   module.exports = nextConfig;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 import { Separator } from '@/components/ui/separator';
 // type 1 : square 
 // type 2 : rectangle vertical 
