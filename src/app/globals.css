@@ -155,7 +155,7 @@
   }
   
   body {
-    @apply bg-background text-foreground text-base lg:text-xl;
+    @apply text-base bg-background text-foreground lg:text-xl;
     -webkit-font-smoothing: antialiased;
   }
 }
