@@ -20,8 +20,10 @@
   
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -30,7 +32,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --color-input: var(--input);
+  --color-input: var(--checkbox);
+  --color-checkbox: var(--checkbox);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -45,49 +48,84 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-bad: var(--bad);
+  --color-good: var(--good);
+  --color-neutral: var(--neutral);
 }
 
+/* Base Variables */
 :root {
-  --radius: 0.625rem;
+  /* Core Colors */
   --principal-green: #2fb96c;
   --principle-dark-green: #1c8149;
   --principle-light-green: #2dc772;
 
+  /* Blues */
   --dark-blue-1: #020818;
   --dark-blue-2: #0a1227cd;
-  --light-blue-1: rgb(23, 45, 102);
-  --light-blue-2: #263f85;
+  --light-blue-1: #172d662c;
+  --light-blue-2: #465fa44d;
+  --light-blue-3: #486fdb4d;
+
+  /* Text Colors */
   --text-light: #f9f9f9;
   --text-muted: #b3b3b3;
 
-  --background: var(--dark-blue-2);
+  /* Status Colors */
+  --bad: #972b2b;
+  --good: #598d59;
+  --neutral: #4b4b4e;
 
+  /* Sizing */
+  --radius: 0.625rem;
+}
+
+/* Theme Configuration */
+:root {
+  /* Radius Variants */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Base Theme */
+  --background: var(--dark-blue-2);
   --foreground: var(--text-light);
+
+  /* Component Colors */
   --card: var(--dark-blue-1);
   --card-foreground: var(--text-light);
   --popover: var(--dark-blue-1);
   --popover-foreground: var(--text-light);
+
+  /* Primary Colors */
   --primary: var(--principal-green);
-  --primary-light: var(--principal-green);
-  --primary-dark: var(--principal-green);
   --primary-foreground: var(--text-light);
+
+  /* Secondary Colors */
   --secondary: var(--dark-blue-2);
   --secondary-foreground: var(--text-light);
+
+  /* UI Elements */
   --muted: var(--dark-blue-2);
   --muted-foreground: var(--text-muted);
   --accent: var(--principal-green);
   --accent-foreground: var(--text-light);
-  --destructive: var(--principal-green); /* Note: Not ideal for UX */
+  --destructive: var(--principal-green);
   --border: var(--dark-blue-1);
   --input: var(--dark-blue-1);
+  --checkbox: var(--light-blue-3);
   --ring: var(--principal-green);
 
+  /* Chart Colors */
   --chart-1: var(--principal-green);
   --chart-2: var(--dark-blue-2);
   --chart-3: var(--dark-blue-1);
   --chart-4: var(--principal-green);
   --chart-5: var(--dark-blue-2);
 
+  /* Sidebar Theme */
   --sidebar: var(--dark-blue-1);
   --sidebar-foreground: var(--text-light);
   --sidebar-primary: var(--principal-green);
@@ -98,122 +136,84 @@
   --sidebar-ring: var(--principal-green);
 }
 
+/* Dark Theme Overrides */
 .dark {
   --background: var(--dark-blue-1);
-  --foreground: var(--text-light);
   --card: var(--dark-blue-2);
-  --card-foreground: var(--text-light);
   --popover: var(--dark-blue-2);
-  --popover-foreground: var(--text-light);
-  --primary: var(--principal-green);
-  --primary-foreground: var(--text-light);
-  --secondary: var(--dark-blue-2);
-  --secondary-foreground: var(--text-light);
-  --muted: var(--dark-blue-2);
-  --muted-foreground: var(--text-muted);
-  --accent: var(--principal-green);
-  --accent-foreground: var(--text-light);
-  --destructive: var(--principal-green); /* Note: Not ideal for UX */
-  --border: var(--dark-blue-2);
-  --input: var(--dark-blue-2);
-  --ring: var(--principal-green);
-
-  --chart-1: var(--principal-green);
-  --chart-2: var(--dark-blue-2);
-  --chart-3: var(--dark-blue-1);
-  --chart-4: var(--principal-green);
-  --chart-5: var(--dark-blue-2);
-
+  --input: var(--light-blue-2);
   --sidebar: var(--dark-blue-2);
-  --sidebar-foreground: var(--text-light);
-  --sidebar-primary: var(--principal-green);
-  --sidebar-primary-foreground: var(--text-light);
   --sidebar-accent: var(--dark-blue-1);
-  --sidebar-accent-foreground: var(--text-light);
   --sidebar-border: var(--dark-blue-1);
-  --sidebar-ring: var(--principal-green);
+  --border: var(--dark-blue-2);
 }
 
+/* Base Styles */
 @layer base {
   * {
     @apply border-border;
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply text-base bg-background text-foreground lg:text-xl;
     -webkit-font-smoothing: antialiased;
-    /* -moz-osx-font-smoothing: grayscale; */
   }
 }
 
+/* Selection Styles */
 ::selection {
-  background-color: #2fb96c;
-  color: white; /* Optional: change text color inside the selection */
+  background-color: var(--principal-green);
+  color: var(--text-light);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background); /* Match the body background */
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #2fb96c;
-  border-radius: 4px; /* Optional: Round the corners of the thumb */
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #248f54; /* Darken on hover */
-}
-
-/* Scrollbar itself */
-::-webkit-scrollbar {
-  width: 8px;  /* Adjust width as needed */
-}
-
-::-webkit-scrollbar {
-	width: 12px;
-	/* Width of the scrollbar */
-}
-
-::-webkit-scrollbar-track {
-	background: #1e085e;
-	/* Background of the scrollbar track */
+  background: var(--dark-blue-1);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #25097f;
-	/* Color of the scrollbar thumb */
-	border-radius: 10px;
-	/* Rounded corners */
+  background: var(--principal-green);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #1f1479;
-	/* Color of the scrollbar thumb on hover */
+  background: var(--principle-dark-green);
 }
 
+/* Firefox Scrollbar */
 * {
-	scrollbar-width: thin;
-	/* Thin scrollbar */
-	scrollbar-color: #2fb96c #020818;
-	/* Color of the scrollbar thumb and track */
+  scrollbar-width: thin;
+  scrollbar-color: var(--principal-green) var(--dark-blue-1);
 }
 
+/* Utility Classes */
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .bg-radial-gradient {
-	background: radial-gradient(circle at center, var(--tw-gradient-from) 0%, var(--tw-gradient-via) 50%, var(--tw-gradient-to) 100%);
+  background: radial-gradient(
+    circle at center,
+    var(--tw-gradient-from) 0%,
+    var(--tw-gradient-via) 50%,
+    var(--tw-gradient-to) 100%
+  );
 }
 
 .navbar::before {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 5%;
-	background-color: var(--sunrise-yellow);
-background: linear-gradient(to right, var(--golden-orange), var(--sunrise-yellow));
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5%;
+  background: linear-gradient(
+    to right,
+    var(--golden-orange),
+    var(--sunrise-yellow)
+  );
 }

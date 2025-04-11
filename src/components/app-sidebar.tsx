@@ -98,13 +98,13 @@ const data = {
       name: "Control",
       url: "#",
       icon: IconEye,
-      id: "Inspection",
+      id: "control",
     },
     {
       name: "Power Draw",
       url: "#",
       icon: IconBoltFilled,
-      id: "powerdraw",
+      id: "power",
     },
     {
       name: "Weather Forecast",

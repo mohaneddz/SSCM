@@ -4,7 +4,8 @@ import L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import { Search } from 'lucide-react';
+import { Search, RefreshCcw } from 'lucide-react';
+import { generateAllCenters } from '@/utils/mobilis-centers';
 
 declare module 'leaflet' {
     export function markerClusterGroup(options?: any): any;
@@ -13,9 +14,11 @@ declare module 'leaflet' {
 interface AlgeriaMapProps {
     zoom: number;
     onZoom: (zoom: number) => void;
-    onLocationClick: (locationId: string, wilaya?: string) => void;
+    onLocationClick: (locationId: string, wilaya?: string, status?: 'normal' | 'warning' | 'alert') => void;
     searchQuery: string;
     selectedWilaya: string | null;
+    selectedLocationId: string | null;
+    selectionMode?: boolean; // Optional prop for site selection mode
 }
 
 // Cache for wilayas data to prevent repeated API calls
@@ -26,19 +29,25 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
     onZoom,
     onLocationClick,
     searchQuery,
-    selectedWilaya
+    selectedWilaya,
+    selectedLocationId,
+    selectionMode = false // Default to false
 }) => {
     const mapRef = useRef<L.Map | null>(null);
     const markersRef = useRef<L.Marker[]>([]);
     const markerClusterRef = useRef<L.MarkerClusterGroup | null>(null);
+    const importantMarkersRef = useRef<L.Marker[]>([]);
     const wilayaLayersRef = useRef<{[key: string]: L.GeoJSON}>({});
     const activeWilayaLayerRef = useRef<L.GeoJSON | null>(null);
-    const markerCacheRef = useRef<Map<number, [number, number][]>>(new Map());
+    const markerCacheRef = useRef<Map<number, any[]>>(new Map());
+    const fixedCoordinatesRef = useRef<Array<{position: [number, number], wilaya: string, status: 'normal' | 'warning' | 'alert'}>>([]);
     const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [wilayaData, setWilayaData] = useState<any>(null);
     const currentlySelectedMarkerRef = useRef<L.Marker | null>(null);
+    const [pointsSource, setPointsSource] = useState<'cache' | 'generated' | null>(null);
+    const [pointCount, setPointCount] = useState<number>(0);
 
     // Function to fetch wilaya data
     const fetchWilayaData = useCallback(async () => {
@@ -70,6 +79,33 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
         }
     }, []);
 
+    // Add a function to clear the points cache
+    const clearPointsCache = useCallback(() => {
+        try {
+            // First, create a backup of the current points if they exist
+            const currentData = localStorage.getItem('mobilis-centers-cache');
+            if (currentData) {
+                const backupDate = new Date().toISOString().replace(/:/g, '-');
+                localStorage.setItem(`mobilis-centers-backup-${backupDate}`, currentData);
+                console.log(`Created backup: mobilis-centers-backup-${backupDate}`);
+            }
+            
+            // Now clear the cache
+            localStorage.removeItem('mobilis-centers-cache');
+            
+            // Show confirmation message
+            alert('Points cache cleared successfully. A backup was created. Refresh the page to regenerate points.');
+            
+            // Ask if user wants to reload the page
+            if (confirm('Would you like to reload the page now to generate new points?')) {
+                window.location.reload();
+            }
+        } catch (err) {
+            console.error('Error clearing cache:', err);
+            alert('Failed to clear cache. Check console for details.');
+        }
+    }, []);
+
     // Initialize map
     useEffect(() => {
         const initMap = async () => {
@@ -80,10 +116,9 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                     zoom: 6,
                     zoomControl: true,
                     attributionControl: false,
-                    minZoom: 4,
+                    minZoom: 6,
                     maxZoom: 10,
                     preferCanvas: true,
-                    zoomSnap: 0.5,
                     zoomDelta: 0.5
                 });
 
@@ -92,49 +127,71 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                     mapRef.current.getContainer().style.background = '#0c1f47';
                 }
 
-                // Fetch wilaya data
-                const data = await fetchWilayaData();
-                
-                if (data && mapRef.current) {
-                    // Create individual wilaya layers
-                    data.features.forEach((feature: any) => {
-                        const wilayaName = feature.properties.name;
-                        wilayaLayersRef.current[wilayaName] = L.geoJSON(feature, {
+                try {
+                    // Generate centers based on population distribution
+                    setLoading(true);
+                    
+                    // Check if we're loading from cache by temporarily storing localStorage status
+                    const hasCache = localStorage.getItem('mobilis-centers-cache') !== null;
+                    
+                    const allCenters = await generateAllCenters();
+                    fixedCoordinatesRef.current = allCenters;
+                    setPointCount(allCenters.length);
+                    
+                    // Set the points source for UI display
+                    setPointsSource(hasCache ? 'cache' : 'generated');
+
+                    // Fetch wilaya data
+                    const data = await fetchWilayaData();
+                    
+                    if (data && mapRef.current) {
+                        // Create individual wilaya layers
+                        data.features.forEach((feature: any) => {
+                            const wilayaName = feature.properties.name;
+                            wilayaLayersRef.current[wilayaName] = L.geoJSON(feature, {
+                                style: {
+                                    color: '#2fb96c',
+                                    weight: 2,
+                                    opacity: 1,
+                                    fillColor: '#2fb96c',
+                                    fillOpacity: 0.2,
+                                    interactive: false
+                                }
+                            });
+                        });
+                        
+                        // Create full Algeria layer
+                        activeWilayaLayerRef.current = L.geoJSON(data, {
                             style: {
                                 color: '#2fb96c',
                                 weight: 2,
                                 opacity: 1,
                                 fillColor: '#2fb96c',
-                                fillOpacity: 0.2
+                                fillOpacity: 0.1,
+                                interactive: false
+                            }
+                        }).addTo(mapRef.current);
+                        
+                        // Define Algeria bounds and fit map
+                        const algeriaBounds: L.LatLngBoundsExpression = [[18, -9], [37, 12]];
+                        mapRef.current.fitBounds(algeriaBounds);
+                        
+                        // Add zoom event listener
+                        mapRef.current.on('zoomend', () => {
+                            if (mapRef.current) {
+                                onZoom(mapRef.current.getZoom());
+                                throttledUpdateMarkers();
                             }
                         });
-                    });
-                    
-                    // Create full Algeria layer
-                    activeWilayaLayerRef.current = L.geoJSON(data, {
-                        style: {
-                            color: '#2fb96c',
-                            weight: 2,
-                            opacity: 1,
-                            fillColor: '#2fb96c',
-                            fillOpacity: 0.1
-                        }
-                    }).addTo(mapRef.current);
-                    
-                    // Define Algeria bounds and fit map
-                    const algeriaBounds: L.LatLngBoundsExpression = [[18, -9], [37, 12]];
-                    mapRef.current.fitBounds(algeriaBounds);
-                    
-                    // Add zoom event listener
-                    mapRef.current.on('zoomend', () => {
-                        if (mapRef.current) {
-                            onZoom(mapRef.current.getZoom());
-                            throttledUpdateMarkers();
-                        }
-                    });
-                    
-                    // Initialize markers
-                    updateMarkers();
+                        
+                        // Initialize markers
+                        updateMarkers();
+                    }
+                } catch (err) {
+                    console.error('Error initializing map:', err);
+                    setError('Failed to initialize map with accurate points. Please refresh the page.');
+                } finally {
+                    setLoading(false);
                 }
             }
         };
@@ -187,7 +244,8 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                     weight: 2,
                     opacity: 1,
                     fillColor: '#2fb96c',
-                    fillOpacity: 0.1
+                    fillOpacity: 0.1,
+                    interactive: false
                 }
             }).addTo(mapRef.current);
             
@@ -258,7 +316,7 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
     const updateMarkers = useCallback(() => {
         if (!mapRef.current || !wilayaData) return;
 
-        // Remove existing marker cluster
+        // Remove existing marker cluster and important markers
         if (markerClusterRef.current) {
             mapRef.current.removeLayer(markerClusterRef.current);
         }
@@ -268,81 +326,123 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
             if (marker) marker.remove();
         });
         markersRef.current = [];
+        
+        // Clear important markers too
+        importantMarkersRef.current.forEach((marker) => {
+            if (marker) marker.remove();
+        });
+        importantMarkersRef.current = [];
 
         const bounds = mapRef.current.getBounds();
-        const roundedZoom = Math.round(zoom);
-        let visibleMarkers: [number, number][] = [];
         
-        // Check cache for markers at this zoom level
-        if (markerCacheRef.current.has(roundedZoom)) {
-            visibleMarkers = markerCacheRef.current.get(roundedZoom)!.filter(
-                ([lat, lng]) => bounds.contains([lat, lng])
-            );
-        } else {
-            // Generate markers appropriate for the zoom level
-            const numMarkers = Math.min(200, Math.round(zoom * zoom * 3));
-            
-            for (let i = 0; i < numMarkers; i++) {
-                const lat = getRandomLat(zoom);
-                const lng = getRandomLng(zoom);
-
-                // Skip if we already have a marker nearby
-                if (visibleMarkers.find((e) => 
-                    Math.abs(e[0] - lat) < 0.1 && Math.abs(e[1] - lng) < 0.1)) continue;
-
-                // Check if point is within visible bounds
-                if (bounds.contains([lat, lng])) {
-                    visibleMarkers.push([lat, lng]);
+        // Add validation and error handling for point data
+        let visibleMarkers: Array<{position: [number, number], wilaya: string, status: 'normal' | 'warning' | 'alert'}> = [];
+        try {
+            visibleMarkers = fixedCoordinatesRef.current.filter(
+                (point) => {
+                    // Verify the point has the proper structure and position property
+                    if (!point || !point.position || !Array.isArray(point.position) || point.position.length < 2) {
+                        console.warn('Invalid point data found:', point);
+                        return false;
+                    }
+                    
+                    // Now it's safe to access position[0] and position[1]
+                    return bounds.contains([point.position[0], point.position[1]]);
                 }
-            }
-            
-            // Cache markers for this zoom level
-            markerCacheRef.current.set(roundedZoom, [...visibleMarkers]);
+            );
+        } catch (error) {
+            console.error('Error filtering visible markers:', error);
+            // Fallback if there's an error
+            visibleMarkers = [];
         }
 
-        // Create marker cluster group
+        // Log information for debugging
+        console.log(`Displaying ${visibleMarkers.length} visible markers out of ${fixedCoordinatesRef.current.length} total`);
+
+        // Create marker cluster group for normal points only
         markerClusterRef.current = L.markerClusterGroup({
             maxClusterRadius: 40,
             chunkedLoading: true,
             zoomToBoundsOnClick: true,
             spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            disableClusteringAtZoom: 10,
+            removeOutsideVisibleBounds: true,
+            animate: true,
+            animateAddingMarkers: false, // Disable animation when adding markers
             iconCreateFunction: function(cluster) {
                 const count = cluster.getChildCount();
                 return L.divIcon({
                     html: `<div style="background-color: #2fb96c; width: ${Math.min(20 + count/2, 40)}px; height: ${Math.min(20 + count/2, 40)}px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 12px; font-weight: bold; box-shadow: 0 0 10px rgba(47, 185, 108, 0.7);">${count}</div>`,
                     className: 'custom-cluster',
-                    iconSize: L.point(40, 40)
+                    iconSize: L.point(40, 40),
+                    iconAnchor: L.point(20, 20)
                 });
             }
         });
 
         // Filter markers by search and wilaya
-        const filteredMarkers = visibleMarkers.filter(([lat, lng]) => {
-            // Skip points not in selected wilaya
-            if (!isPointInSelectedWilaya(lat, lng)) return false;
-            
-            // Filter by search query if present
-            if (searchQuery) {
-                return generateLocationId(lat, lng).toLowerCase().includes(searchQuery.toLowerCase());
-            }
-            
-            return true;
-        });
+        let filteredMarkers: Array<{position: [number, number], wilaya: string, status: 'normal' | 'warning' | 'alert'}> = [];
+        try {
+            filteredMarkers = visibleMarkers.filter((point) => {
+                // Skip invalid points
+                if (!point || !point.position || !Array.isArray(point.position) || point.position.length < 2) {
+                    return false;
+                }
+                
+                // Skip points not in selected wilaya
+                if (!isPointInSelectedWilaya(point.position[0], point.position[1])) return false;
+                
+                // Filter by search query if present
+                if (searchQuery) {
+                    return generateLocationId(point.position[0], point.position[1]).toLowerCase().includes(searchQuery.toLowerCase());
+                }
+                
+                return true;
+            });
+        } catch (error) {
+            console.error('Error filtering markers by criteria:', error);
+            filteredMarkers = [];
+        }
 
         // Add markers to map
-        filteredMarkers.forEach(([lat, lng]) => {
+        filteredMarkers.forEach((point) => {
+            const lat = point.position[0];
+            const lng = point.position[1];
+            const status = point.status;
+            const wilaya = point.wilaya;
             const locationId = generateLocationId(lat, lng);
-            const wilaya = findWilayaFromCoordinates(lat, lng);
+            const isSelected = selectedLocationId === locationId;
+            
+            // Determine marker style based on status and selection
+            const markerColor = isSelected ? '#0066ff' : 
+                               status === 'alert' ? '#ff3333' : 
+                               status === 'warning' ? '#ffcc00' : 
+                               '#2fb96c';
+            
+            // Determine marker size based on status
+            const markerSize = isSelected ? 22 : 
+                              status === 'alert' ? 20 : 
+                              status === 'warning' ? 18 : 
+                              15;
             
             const marker = L.marker([lat, lng], {
                 icon: L.divIcon({
                     className: 'custom-marker',
-                    html: `<div class="marker-pin" style="background-color: #2fb96c; width: 15px; height: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px rgba(47, 185, 108, 0.8); transition: all 0.3s ease;"></div>`,
-                    iconSize: [15, 15],
-                    iconAnchor: [7.5, 7.5],
+                    html: `<div class="marker-pin" style="background-color: ${markerColor}; width: ${markerSize}px; height: ${markerSize}px; border-radius: 50%; cursor: pointer; box-shadow: 0 0 8px ${isSelected ? 'rgba(0, 102, 255, 0.8)' : (status === 'alert' ? 'rgba(255, 51, 51, 0.8)' : status === 'warning' ? 'rgba(255, 204, 0, 0.8)' : 'rgba(47, 185, 108, 0.8)')}; transition: all 0.3s ease; transform: ${isSelected ? 'scale(1.2)' : status !== 'normal' ? 'scale(1.1)' : 'scale(1)'};"></div>`,
+                    iconSize: [markerSize, markerSize],
+                    iconAnchor: [markerSize/2, markerSize/2],
                 }),
                 interactive: true,
                 bubblingMouseEvents: false
+            });
+
+            // Add tooltip to marker with status info
+            marker.bindTooltip(`Location ID: ${locationId}<br>Wilaya: ${wilaya}<br>Status: ${status.charAt(0).toUpperCase() + status.slice(1)}`, {
+                direction: 'top',
+                offset: L.point(0, -10),
+                opacity: 0.9,
+                className: `custom-tooltip custom-tooltip-${status}`
             });
 
             // Click handler
@@ -350,40 +450,91 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                 // Stop propagation
                 L.DomEvent.stopPropagation(e);
                 
-                // Reset previously selected marker
+                // Reset previously selected marker with animation
                 if (currentlySelectedMarkerRef.current) {
                     const prevPinElement = currentlySelectedMarkerRef.current.getElement()?.querySelector('.marker-pin');
                     if (prevPinElement) {
-                        (prevPinElement as HTMLElement).style.backgroundColor = '#2fb96c';
-                        (prevPinElement as HTMLElement).style.width = '15px';
-                        (prevPinElement as HTMLElement).style.height = '15px';
+                        (prevPinElement as HTMLElement).style.transition = 'all 0.3s ease';
+                        // Restore proper color based on status
+                        const prevMarker = markersRef.current.find(m => m === currentlySelectedMarkerRef.current) || 
+                                         importantMarkersRef.current.find(m => m === currentlySelectedMarkerRef.current);
+                        const prevData = fixedCoordinatesRef.current.find(p => 
+                            generateLocationId(p.position[0], p.position[1]) === 
+                            generateLocationId(currentlySelectedMarkerRef.current?.getLatLng().lat || 0, currentlySelectedMarkerRef.current?.getLatLng().lng || 0)
+                        );
+                        const prevStatus = prevData?.status || 'normal';
+                        const prevColor = prevStatus === 'alert' ? '#ff3333' : 
+                                         prevStatus === 'warning' ? '#ffcc00' : 
+                                         '#2fb96c';
+                        const prevSize = prevStatus === 'alert' ? 20 : 
+                                        prevStatus === 'warning' ? 18 : 
+                                        15;
+                        
+                        (prevPinElement as HTMLElement).style.backgroundColor = prevColor;
+                        (prevPinElement as HTMLElement).style.width = `${prevSize}px`;
+                        (prevPinElement as HTMLElement).style.height = `${prevSize}px`;
+                        (prevPinElement as HTMLElement).style.transform = prevStatus !== 'normal' ? 'scale(1.1)' : 'scale(1)';
                     }
                 }
                 
-                // Update current marker
+                // Update current marker with animation
                 const pinElement = marker.getElement()?.querySelector('.marker-pin');
                 if (pinElement) {
-                    (pinElement as HTMLElement).style.backgroundColor = '#ff0000';
+                    (pinElement as HTMLElement).style.transition = 'all 0.3s ease';
+                    (pinElement as HTMLElement).style.backgroundColor = '#0066ff';
                     (pinElement as HTMLElement).style.width = '22px';
                     (pinElement as HTMLElement).style.height = '22px';
+                    (pinElement as HTMLElement).style.transform = 'scale(1.2)';
                 }
                 
                 // Store reference to currently selected marker
                 currentlySelectedMarkerRef.current = marker;
                 
                 // Call the callback with location info
-                onLocationClick(locationId, wilaya);
+                onLocationClick(locationId, wilaya, status);
             });
             
-            markerClusterRef.current!.addLayer(marker);
-            markersRef.current.push(marker);
+            // Store reference if this is the selected marker
+            if (isSelected) {
+                currentlySelectedMarkerRef.current = marker;
+            }
+            
+            // Add marker to appropriate collection
+            if (status === 'normal') {
+                // Normal markers go in clusters
+                markerClusterRef.current!.addLayer(marker);
+                markersRef.current.push(marker);
+            } else {
+                // Important markers (warning/alert) are added directly to the map
+                marker.addTo(mapRef.current!);
+                importantMarkersRef.current.push(marker);
+            }
         });
 
         // Add marker cluster to map
         if (mapRef.current && markerClusterRef.current) {
             mapRef.current.addLayer(markerClusterRef.current);
         }
-    }, [zoom, searchQuery, wilayaData, selectedWilaya, onLocationClick, findWilayaFromCoordinates, isPointInSelectedWilaya]);
+    }, [zoom, searchQuery, wilayaData, selectedWilaya, selectedLocationId, onLocationClick, findWilayaFromCoordinates, isPointInSelectedWilaya]);
+
+    // Add effect to handle selectedLocationId changes
+    useEffect(() => {
+        if (selectedLocationId === null && currentlySelectedMarkerRef.current) {
+            // Reset marker style when selection is cleared
+            const pinElement = currentlySelectedMarkerRef.current.getElement()?.querySelector('.marker-pin');
+            if (pinElement) {
+                (pinElement as HTMLElement).style.transition = 'all 0.3s ease';
+                (pinElement as HTMLElement).style.backgroundColor = '#2fb96c';
+                (pinElement as HTMLElement).style.width = '15px';
+                (pinElement as HTMLElement).style.height = '15px';
+                (pinElement as HTMLElement).style.transform = 'scale(1)';
+            }
+            currentlySelectedMarkerRef.current = null;
+        }
+        
+        // Update markers to reflect the new selection
+        throttledUpdateMarkers();
+    }, [selectedLocationId, throttledUpdateMarkers]);
 
     // Generate random coordinates
     const getRandomLat = (zoom: number): number => {
@@ -401,47 +552,113 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
         return `Mobilis_${lat.toFixed(4)}_${lng.toFixed(4)}`;
     };
 
-    // Show loading state
-    if (loading) {
-        return (
-            <div id="map" className="border rounded-md border-neutral-200 bg-gray-900 flex items-center justify-center" style={{ height: '100%', width: '100%' }}>
-                <div className="text-white flex flex-col items-center gap-2">
-                    <div className="w-8 h-8 border-t-2 border-blue-500 rounded-full animate-spin"></div>
-                    <p>Loading map data...</p>
-                </div>
-            </div>
-        );
-    }
-
-    // Show error state
-    if (error) {
-        return (
-            <div id="map" className="border rounded-md border-neutral-200 bg-gray-900 flex items-center justify-center" style={{ height: '100%', width: '100%' }}>
-                <div className="text-red-400 flex flex-col items-center gap-2 p-4 text-center">
-                    <p>{error}</p>
-                    <button 
-                        onClick={() => fetchWilayaData()}
-                        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    >
-                        Try Again
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div id="map" className="border rounded-md border-neutral-200" style={{ height: '100%', width: '100%', position: 'relative' }}>
+        <div className="relative w-full h-full">
+            <div id="map" className="absolute inset-0 border rounded-md border-neutral-200" style={{ height: '100%', width: '100%' }}>
+                {/* Map will be rendered here */}
+            </div>
+            
+            {/* Points information panel */}
+            {pointsSource && (
+                <div className="absolute bottom-3 left-3 z-[2000] bg-black/70 text-white text-xs rounded-md px-3 py-2 shadow-lg">
+                    <div>
+                        <span className="font-medium">Source:</span> {pointsSource === 'cache' ? 'Cached' : 'Freshly Generated'}
+                    </div>
+                    <div>
+                        <span className="font-medium">Total Points:</span> {pointCount}
+                    </div>
+                    <div className="mt-1 text-[10px]">
+                        <span className="inline-block w-2 h-2 rounded-full bg-[#2fb96c] mr-1"></span> Normal
+                        <span className="ml-2 inline-block w-2 h-2 rounded-full bg-[#ffcc00] mr-1"></span> Warning
+                        <span className="ml-2 inline-block w-2 h-2 rounded-full bg-[#ff3333] mr-1"></span> Alert
+                    </div>
+                </div>
+            )}
+            
+            {/* Cache control button */}
+            <div className="absolute bottom-3 right-3 z-[2000]">
+                <button 
+                    onClick={clearPointsCache}
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full p-2 shadow-lg transition-colors duration-200"
+                    title="Clear points cache"
+                >
+                    <RefreshCcw size={16} />
+                </button>
+            </div>
+            
+            {/* Error message */}
+            {error && (
+                <div className="absolute inset-0 flex items-center justify-center z-[2000] bg-black/50">
+                    <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
+                        <div className="text-red-500 mb-4">
+                            <svg className="w-8 h-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-medium text-center mb-2">Failed to Load Map</h3>
+                        <p className="text-sm text-gray-600 text-center mb-4">{error}</p>
+                        <div className="flex justify-center">
+                            <button 
+                                onClick={() => fetchWilayaData()}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Loading overlay */}
+            {loading && (
+                <div className="absolute inset-0 flex items-center justify-center z-[2000] bg-black/50">
+                    <div className="text-white flex flex-col items-center gap-4 animate-fadeIn">
+                        <div className="relative">
+                            <div className="w-12 h-12 border-t-2 border-r-2 border-blue-500 rounded-full animate-spin"></div>
+                            <div className="absolute inset-0 w-12 h-12 border-b-2 border-l-2 border-blue-300 rounded-full animate-pulse"></div>
+                        </div>
+                        <div className="flex flex-col items-center gap-2">
+                            <p className="text-lg font-medium">Loading Map Data</p>
+                            <p className="text-sm text-gray-400">Please wait while we prepare your visualization</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
             <style jsx>{`
                 :global(.leaflet-control-container) {
-                    display: block;
+                    position: relative;
+                    z-index: 1000;
                 }
                 :global(.leaflet-control-zoom) {
                     margin-right: 15px;
                     margin-bottom: 25px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    z-index: 1000;
                 }
-                :global(.leaflet-tile-pane) {
-                    display: none;
+                :global(.leaflet-pane) {
+                    z-index: 400 !important;
+                }
+                :global(.leaflet-top, .leaflet-bottom) {
+                    z-index: 1000 !important;
+                }
+                :global(.leaflet-marker-pane) {
+                    z-index: 600 !important;
+                }
+                :global(.leaflet-popup-pane) {
+                    z-index: 700 !important;
+                }
+                :global(.leaflet-tooltip-pane) {
+                    z-index: 650 !important;
+                }
+                :global(#map) {
+                    z-index: 1;
+                    position: relative;
+                }
+                :global(.custom-marker) {
+                    z-index: 500;
                 }
                 :global(.custom-marker:hover .marker-pin) {
                     transform: scale(1.2);
@@ -449,12 +666,56 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                 }
                 :global(.leaflet-marker-icon) {
                     cursor: pointer !important;
+                    transition: transform 0.2s ease;
                 }
                 :global(.leaflet-marker-icon.leaflet-interactive) {
                     pointer-events: auto !important;
                 }
                 :global(.leaflet-interactive) {
                     outline: none !important;
+                }
+                :global(.custom-tooltip) {
+                    background-color: rgba(0, 0, 0, 0.8);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 6px;
+                    padding: 8px 12px;
+                    font-size: 12px;
+                    color: white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    z-index: 1500 !important;
+                }
+                :global(.custom-tooltip-warning) {
+                    border-color: rgba(255, 204, 0, 0.5);
+                }
+                :global(.custom-tooltip-alert) {
+                    border-color: rgba(255, 51, 51, 0.5);
+                }
+                :global(.custom-cluster) {
+                    transition: transform 0.2s ease;
+                    cursor: pointer !important;
+                    z-index: 500;
+                }
+                :global(.custom-cluster:hover) {
+                    transform: scale(1.1);
+                }
+                :global(.leaflet-grab) {
+                    cursor: default;
+                }
+                :global(.leaflet-dragging .leaflet-grab) {
+                    cursor: grabbing !important;
+                }
+                :global(.leaflet-container) {
+                    cursor: default;
+                }
+                :global(.marker-pin) {
+                    cursor: pointer !important;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-in-out;
                 }
             `}</style>
         </div>

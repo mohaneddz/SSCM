@@ -1,0 +1,236 @@
+{
+  "wilayas": [
+    {
+      "name": "Adrar",
+      "population": 402197
+    },
+    {
+      "name": "Chlef",
+      "population": 1010000
+    },
+    {
+      "name": "Laghouat",
+      "population": 455602
+    },
+    {
+      "name": "Oum El Bouaghi",
+      "population": 621612
+    },
+    {
+      "name": "Batna",
+      "population": 1119970
+    },
+    {
+      "name": "Béjaïa",
+      "population": 912577
+    },
+    {
+      "name": "Biskra",
+      "population": 721356
+    },
+    {
+      "name": "Béchar",
+      "population": 270061
+    },
+    {
+      "name": "Blida",
+      "population": 1000000
+    },
+    {
+      "name": "Bouira",
+      "population": 695583
+    },
+    {
+      "name": "Tamanrasset",
+      "population": 176637
+    },
+    {
+      "name": "Tébessa",
+      "population": 648703
+    },
+    {
+      "name": "Tlemcen",
+      "population": 949135
+    },
+    {
+      "name": "Tiaret",
+      "population": 846823
+    },
+    {
+      "name": "Tizi Ouzou",
+      "population": 1118990
+    },
+    {
+      "name": "Alger",
+      "population": 2940000
+    },
+    {
+      "name": "Djelfa",
+      "population": 1192000
+    },
+    {
+      "name": "Jijel",
+      "population": 636948
+    },
+    {
+      "name": "Sétif",
+      "population": 1500000
+    },
+    {
+      "name": "Saïda",
+      "population": 330641
+    },
+    {
+      "name": "Skikda",
+      "population": 898680
+    },
+    {
+      "name": "Sidi Bel Abbès",
+      "population": 604744
+    },
+    {
+      "name": "Annaba",
+      "population": 609499
+    },
+    {
+      "name": "Guelma",
+      "population": 482430
+    },
+    {
+      "name": "Constantine",
+      "population": 938475
+    },
+    {
+      "name": "Médéa",
+      "population": 819932
+    },
+    {
+      "name": "Mostaganem",
+      "population": 737118
+    },
+    {
+      "name": "M\'Sila",
+      "population": 990591
+    },
+    {
+      "name": "Mascara",
+      "population": 784073
+    },
+    {
+      "name": "Ouargla",
+      "population": 558558
+    },
+    {
+      "name": "Oran",
+      "population": 1500000
+    },
+    {
+      "name": "El Bayadh",
+      "population": 228624
+    },
+    {
+      "name": "Illizi",
+      "population": 52276
+    },
+    {
+      "name": "Bordj Bou Arréridj",
+      "population": 628475
+    },
+    {
+      "name": "Boumerdès",
+      "population": 802083
+    },
+    {
+      "name": "El Tarf",
+      "population": 408414
+    },
+    {
+      "name": "Tindouf",
+      "population": 49045
+    },
+    {
+      "name": "Tissemsilt",
+      "population": 294476
+    },
+    {
+      "name": "El Oued",
+      "population": 647548
+    },
+    {
+      "name": "Khenchela",
+      "population": 386683
+    },
+    {
+      "name": "Souk Ahras",
+      "population": 438127
+    },
+    {
+      "name": "Tipaza",
+      "population": 591010
+    },
+    {
+      "name": "Mila",
+      "population": 766886
+    },
+    {
+      "name": "Aïn Defla",
+      "population": 766013
+    },
+    {
+      "name": "Naâma",
+      "population": 192891
+    },
+    {
+      "name": "Aïn Témouchent",
+      "population": 371239
+    },
+    {
+      "name": "Ghardaïa",
+      "population": 363598
+    },
+    {
+      "name": "Relizane",
+      "population": 726180
+    },
+    {
+      "name": "Timimoun",
+      "population": 122019
+    },
+    {
+      "name": "Bordj Badji Mokhtar",
+      "population": 16037
+    },
+    {
+      "name": "Ouled Djellal",
+      "population": 174219
+    },
+    {
+      "name": "Béni Abbès",
+      "population": 50063
+    },
+    {
+      "name": "In Salah",
+      "population": 50392
+    },
+    {
+      "name": "In Guezzam",
+      "population": 11072
+    },
+    {
+      "name": "Touggourt",
+      "population": 247221
+    },
+    {
+      "name": "Djanet",
+      "population": 17577
+    },
+    {
+      "name": "El M\'Ghair",
+      "population": 162267
+    },
+    {
+      "name": "El Meniaa",
+      "population": 57276
+    }
+  ]
+} 

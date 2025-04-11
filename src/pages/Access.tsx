@@ -54,7 +54,7 @@ import {
 } from "@/components/ui/select"
 
 // Define the User type
-export type Role = "employee" | "admin";
+export type Role = "employee" | "admin" | "manager";
 
 export type User = {
   user_id: string;
@@ -62,7 +62,7 @@ export type User = {
   email: string;
   name: string;
   rfid_code: string;
-  role: Role;
+  role: Role[]; // Changed to array of Role
   created_at: Date;
   updated_at: Date;
 };
@@ -71,45 +71,47 @@ const generateUserId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-const initialData: User[] = [
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "john.doe@example.com",
-    name: "John Doe",
-    rfid_code: "12345",
-    role: "employee",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "jane.smith@example.com",
-    name: "Jane Smith",
-    rfid_code: "67890",
-    role: "admin",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    user_id: generateUserId(),
-    profile_image: null,
-    email: "peter.jones@example.com",
-    name: "Peter Jones",
-    rfid_code: "98765",
-    role: "employee",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-];
+// function to generate number of random users data 
+const generateRandomUsersData = (num: number): User[] => {
+  const users = [] as User[];
+  const roles: Role[] = ["employee", "admin", "manager"]; // Define available roles
+  for (let i = 0; i < num; i++) {
+    // Randomly determine the number of roles for the user (1 to all roles)
+    const numRoles = Math.floor(Math.random() * roles.length) + 1;
+    const userRoles: Role[] = [];
 
-// --- Edit Dialog Component ---
-interface EditUserDialogProps {
-  user: User | null;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave: (updatedUser: User) => void;
+    // Assign random roles to the user
+    for (let j = 0; j < numRoles; j++) {
+      const randomRole = roles[Math.floor(Math.random() * roles.length)];
+      if (!userRoles.includes(randomRole)) { // Ensure no duplicate roles
+        userRoles.push(randomRole);
+      }
+    }
+
+    const user: User = {
+      user_id: generateUserId(),
+      profile_image: Math.random() > 0.5 ? `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${i % 99}.jpg` : null,
+      email: `user${i}@example.com`,
+      name: `User ${i}`,
+      rfid_code: Math.floor(Math.random() * 1000000000).toString().padStart(10, '0'),
+      role: userRoles, // Assign the array of roles
+      created_at: new Date(Date.now() - Math.floor(Math.random() * 10000000000)),
+      updated_at: new Date()
+    };
+    users.push(user);
+  }
+  return users;
+};
+
+
+const initialData: User[] = generateRandomUsersData(100); // Generate 100 random users
+
+  // --- Edit Dialog Component ---
+  interface EditUserDialogProps {
+    user: User | null;
+isOpen: boolean;
+onOpenChange: (open: boolean) => void;
+onSave: (updatedUser: User) => void;
 }
 
 function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogProps) {
@@ -140,7 +142,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
     }
   };
 
-  const handleRoleChange = (value: User["role"]) => {
+  const handleRoleChange = (value: Role[]) => {
     if (editedUser) {
       setEditedUser({
         ...editedUser,
@@ -180,6 +182,8 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
 
   if (!user || !editedUser) return null;
 
+  const roles: Role[] = ["employee", "admin", "manager"];
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -188,21 +192,21 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
           <DialogDescription>Make changes to the user details here. Click save when you're done.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="user_id" className="text-right">
               User ID
             </Label>
             <Input id="user_id" name="user_id" value={editedUser.user_id} className="col-span-3" disabled />
           </div>
 
-         <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="profile_image" className="text-right">
               Profile Image
             </Label>
-            <div className="col-span-3 flex items-center space-x-4">
+            <div className="flex items-center col-span-3 space-x-4">
               <Button variant="outline" asChild>
                 <Label htmlFor="profile_image_upload" className="cursor-pointer">
-                  <Upload className="mr-2 h-4 w-4" />
+                  <Upload className="w-4 h-4 mr-2" />
                   <span>Upload</span>
                 </Label>
               </Button>
@@ -214,13 +218,13 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
                 onChange={handleImageChange}
                 className="hidden" // Hide the actual input
               />
-               {preview && (
-                  <img src={preview} alt="Profile Preview" className="h-16 w-16 rounded-full" />
-                )}
+              {preview && (
+                <img src={preview} alt="Profile Preview" className="w-16 h-16 rounded-full" />
+              )}
             </div>
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="email" className="text-right">
               Email
             </Label>
@@ -233,7 +237,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
               className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
@@ -245,7 +249,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
               className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="rfid_code" className="text-right">
               RFID Code
             </Label>
@@ -258,19 +262,29 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
               required // Make rfid_code mandatory
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="role" className="text-right">
               Role
             </Label>
-            <Select name="role" value={editedUser.role} onValueChange={handleRoleChange}>
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="employee">Employee</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="col-span-3">
+              {roles.map((role) => (
+                <div key={role} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={role}
+                    checked={editedUser.role.includes(role)}
+                    onCheckedChange={(checked) => {
+                      const newRoles = checked
+                        ? [...editedUser.role, role]
+                        : editedUser.role.filter((r) => r !== role);
+                      handleRoleChange(newRoles);
+                    }}
+                  />
+                  <Label htmlFor={role} className="capitalize">
+                    {role}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <DialogFooter>
@@ -390,14 +404,14 @@ export default function UserTable() {
         accessorKey: "profile_image",
         header: "Profile Image",
         cell: ({ row }) => (row.getValue("profile_image") ? (
-          <img src={row.getValue("profile_image")} alt={row.original.name} className="h-8 w-8 rounded-full" />
+          <img src={row.getValue("profile_image")} alt={row.original.name} className="w-8 h-8 rounded-full" />
         ) : <div>No Image</div>),
       },
       {
         accessorKey: "email",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Email <ArrowUpDown className="ml-2 h-4 w-4" />
+            Email <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
       },
@@ -405,7 +419,7 @@ export default function UserTable() {
         accessorKey: "name",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Name <ArrowUpDown className="ml-2 h-4 w-4" />
+            Name <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
       },
@@ -413,7 +427,7 @@ export default function UserTable() {
         accessorKey: "rfid_code",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            RFID Code <ArrowUpDown className="ml-2 h-4 w-4" />
+            RFID Code <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
       },
@@ -421,16 +435,19 @@ export default function UserTable() {
         accessorKey: "role",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Role <ArrowUpDown className="ml-2 h-4 w-4" />
+            Role <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
-        cell: ({ row }) => <div className="capitalize">{row.getValue("role")}</div>,
+        cell: ({ row }) => {
+          const roles = row.getValue("role") as string[];
+          return <div className="capitalize">{roles.join(", ")}</div>;
+        },
       },
-       {
-        accessorKey: "created_at",
+      {
+        accessorKey: "created_at", 
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Created At <ArrowUpDown className="ml-2 h-4 w-4" />
+            Created At <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
         cell: ({ row }) => new Date(row.getValue("created_at")).toLocaleDateString(),
@@ -444,11 +461,11 @@ export default function UserTable() {
         accessorKey: "updated_at",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Updated At <ArrowUpDown className="ml-2 h-4 w-4" />
+            Updated At <ArrowUpDown className="w-4 h-4 ml-2" />
           </Button>
         ),
         cell: ({ row }) => new Date(row.getValue("updated_at")).toLocaleDateString(),
-         sortingFn: (rowA, rowB, columnId) => {
+        sortingFn: (rowA, rowB, columnId) => {
           const dateA = rowA.original.updated_at.getTime();
           const dateB = rowB.original.updated_at.getTime();
           return dateA - dateB;
@@ -463,9 +480,9 @@ export default function UserTable() {
           return (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
+                <Button variant="ghost" className="w-8 h-8 p-0">
                   <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
+                  <MoreHorizontal className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -475,13 +492,13 @@ export default function UserTable() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleEdit(user)}>
-                  <Edit className="mr-2 h-4 w-4" /> Edit
+                  <Edit className="w-4 h-4 mr-2" /> Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="text-red-600 focus:text-red-700 focus:bg-red-50"
                   onClick={() => handleDelete(user)}
                 >
-                  <Trash className="mr-2 h-4 w-4" /> Delete
+                  <Trash className="w-4 h-4 mr-2" /> Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -523,7 +540,7 @@ export default function UserTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+              Columns <ChevronDown className="w-4 h-4 ml-2" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -544,7 +561,7 @@ export default function UserTable() {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border bg-[#21366c0d]">
+      <div className="rounded-md border bg-[#21366c0d] border-input">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -577,7 +594,7 @@ export default function UserTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end py-4 space-x-2">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
           selected.
