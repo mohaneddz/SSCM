@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-background-dark: var(--dark-blue-1);
+  --color-background-light: var(--light-blue-1);
+
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: #2fb96c;
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--checkbox);
+  --color-checkbox: var(--checkbox);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: #2fb96c;
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-bad: var(--bad);
+  --color-good: var(--good);
+  --color-neutral: var(--neutral);
+}
+
+/* Base Variables */
+:root {
+  /* Core Colors */
+  --principal-green: #2fb96c;
+  --principle-dark-green: #1c8149;
+  --principle-light-green: #2dc772;
+
+  /* Blues */
+  --dark-blue-1: #020818;
+  --dark-blue-2: #0a1227cd;
+  --light-blue-1: #172d662c;
+  --light-blue-2: #465fa44d;
+  --light-blue-3: #486fdb4d;
+
+  /* Text Colors */
+  --text-light: #f9f9f9;
+  --text-muted: #b3b3b3;
+
+  /* Status Colors */
+  --bad: #972b2b;
+  --good: #598d59;
+  --neutral: #4b4b4e;
+
+  /* Sizing */
+  --radius: 0.625rem;
+}
+
+/* Theme Configuration */
+:root {
+  /* Radius Variants */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Base Theme */
+  --background: var(--dark-blue-2);
+  --foreground: var(--text-light);
+
+  /* Component Colors */
+  --card: var(--dark-blue-1);
+  --card-foreground: var(--text-light);
+  --popover: var(--dark-blue-1);
+  --popover-foreground: var(--text-light);
+
+  /* Primary Colors */
+  --primary: var(--principal-green);
+  --primary-foreground: var(--text-light);
+
+  /* Secondary Colors */
+  --secondary: var(--dark-blue-2);
+  --secondary-foreground: var(--text-light);
+
+  /* UI Elements */
+  --muted: var(--dark-blue-2);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--principal-green);
+  --accent-foreground: var(--text-light);
+  --destructive: var(--principal-green);
+  --border: var(--dark-blue-1);
+  --input: var(--dark-blue-1);
+  --checkbox: var(--light-blue-3);
+  --ring: var(--principal-green);
+
+  /* Chart Colors */
+  --chart-1: var(--principal-green);
+  --chart-2: var(--dark-blue-2);
+  --chart-3: var(--dark-blue-1);
+  --chart-4: var(--principal-green);
+  --chart-5: var(--dark-blue-2);
+
+  /* Sidebar Theme */
+  --sidebar: var(--dark-blue-1);
+  --sidebar-foreground: var(--text-light);
+  --sidebar-primary: var(--principal-green);
+  --sidebar-primary-foreground: var(--text-light);
+  --sidebar-accent: var(--dark-blue-2);
+  --sidebar-accent-foreground: var(--text-light);
+  --sidebar-border: var(--dark-blue-2);
+  --sidebar-ring: var(--principal-green);
+}
+
+/* Dark Theme Overrides */
+.dark {
+  --background: var(--dark-blue-1);
+  --card: var(--dark-blue-2);
+  --popover: var(--dark-blue-2);
+  --input: var(--light-blue-2);
+  --sidebar: var(--dark-blue-2);
+  --sidebar-accent: var(--dark-blue-1);
+  --sidebar-border: var(--dark-blue-1);
+  --border: var(--dark-blue-2);
+}
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground text-base lg:text-xl;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Selection Styles */
+::selection {
+  background-color: var(--principal-green);
+  color: var(--text-light);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-blue-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--principal-green);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--principle-dark-green);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--principal-green) var(--dark-blue-1);
+}
+
+/* Utility Classes */
+html {
+  scroll-behavior: smooth;
+}
+
+.bg-radial-gradient {
+  background: radial-gradient(
+    circle at center,
+    var(--tw-gradient-from) 0%,
+    var(--tw-gradient-via) 50%,
+    var(--tw-gradient-to) 100%
+  );
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5%;
+  background: linear-gradient(
+    to right,
+    var(--golden-orange),
+    var(--sunrise-yellow)
+  );
+}
