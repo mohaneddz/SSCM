@@ -17,8 +17,8 @@ const HomePage = async () => {
     
     <div className="w-screen h-screen mx-auto" >
           
-      <section className="grid gap-6 text-center place-content-center place-items-center ">
-        <h1 className="max-w-6xl text-green-500">
+      <section className="grid m-20  gap-6 text-center place-content-center place-items-center ">
+        <h1 className="max-w-6xl text-3xl text-green-500">
           Smart. Secure. Sustainable. Empowering Server Centers with Intelligent Control
         </h1>
 
