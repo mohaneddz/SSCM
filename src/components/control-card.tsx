@@ -13,6 +13,7 @@ export interface ControlCardProps {
     className?: string;
     children?: React.ReactNode;
     onStatusChange?: () => void;
+    onClick?: () => void;
 }
 
 const ControlCard = ({
@@ -22,7 +23,8 @@ const ControlCard = ({
     image,
     className,
     children,
-    onStatusChange
+    onStatusChange,
+    onClick
 }: ControlCardProps) => {
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -41,6 +43,13 @@ const ControlCard = ({
 
     const getStatusColorClass = (status: string) => {
         const baseColor = getStatusColor(status);
+        if (baseColor === 'bad') {
+            return `from-bad via-bad/10 via-40% to-bad/5`;
+        } else if (baseColor === 'neutral') {
+            return `from-neutral via-neutral/10 via-40% to-neutral/5`;
+        } else if (baseColor === 'primary') {
+            return `from-primary via-primary/10 via-40% to-primary/5`;
+        }
         return `from-${baseColor} via-${baseColor}/10 via-40% to-${baseColor}/5`;
     };
 
@@ -59,9 +68,10 @@ const ControlCard = ({
 
     const renderCardContent = () => {
         switch (type) {
+
             case 1: // Square - Image left, text right
                 return (
-                    <div className="flex h-full xs:flex-row">
+                    <div className="flex h-full xs:flex-row hover:cursor-pointer">
                         {/* Left side - Image */}
                         <div className="flex items-center justify-center w-full">
                             <div className="rounded-xl flex items-center justify-center overflow-hidden p-1.5 sm:p-2 md:p-4 h-[70%] xs:h-[80%]">
@@ -79,7 +89,7 @@ const ControlCard = ({
                         <div className="flex flex-col text-center justify-center content-center items-center h-full w-full p-1.5 sm:p-2 md:p-4 ">
                             <div>
                                 <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl mb-1 sm:mb-2 font-bold text-white truncate">{title}</h3>
-                                <p className={cn("text-xs xs:text-sm font-medium", `text-${getStatusColor(status)}`)}>
+                                <p className={cn("text-xs xs:text-sm font-medium lg:text-md", `text-${getStatusColor(status)}`)}>
                                     {status}
                                 </p>
                             </div>
@@ -103,17 +113,25 @@ const ControlCard = ({
                                 )}
                             </div>
                         </div>
-                        
+
                         {/* Bottom - Content */}
                         <div className="flex-grow flex flex-col justify-center p-1.5 sm:p-2 md:p-4 pt-0 h-full gap-3 sm:gap-4 md:gap-8">
+
                             <div className="w-full flex flex-col justify-center lg:text-3xl items-center">
-                                <h3 className="text-sm xs:text-base sm:text-lg  font-bold text-white">{title}</h3>
-                                <p className={cn("text-xs xs:text-sm font-medium", getStatusColor(status))}>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-3xl font-bold text-white">{title}</h3>
+                                <p className={cn("text-xs xs:text-sm font-medium lg:text-md", getStatusColor(status))}>
                                     {status}
                                 </p>
                             </div>
+
                             <Separator className="my-1 sm:my-2 w-[30%] mx-auto bg-gradient-to-r from-gray-200/5 via-gray-200/30 to-gray-200/5" />
-                            {children}
+                            {
+                                children && (
+                                    <div className="w-full flex flex-col justify-center lg:text-3xl items-center">
+                                        {children}
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 );
@@ -124,7 +142,7 @@ const ControlCard = ({
                         {/* Top - Header */}
                         <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 p-1.5 sm:p-2 md:p-4">
                             <div className="w-full flex flex-col justify-center items-center">
-                                <h3 className="text-sm xs:text-base sm:text-lg font-bold text-white text-center">{title}</h3>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-3xl font-bold text-white text-center">{title}</h3>
                                 <p className={cn("text-xs xs:text-sm font-medium", getStatusColor(status))}>
                                     {status}
                                 </p>
@@ -142,14 +160,18 @@ const ControlCard = ({
     // for type 1 : to tr, t2 : to t, t3 : to t
 
     return (
-        <div className={cn(
-            `border border-gray-800 overflow-hidden rounded-lg shadow-lg text-gray-400`,
-            type === 1 ? `bg-gradient-to-tr` : type === 2 ? `bg-gradient-to-b` : `bg-gradient-to-t`,
-            getStatusColorClass(status === 'Controls' ? 'Active' : status),
-            `hover:shadow-xl hover:cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out`,
-            getCardSize(),
-            className
-        )}>
+        <div 
+            className={cn(
+                `border border-gray-800 overflow-hidden rounded-lg shadow-lg text-gray-400`,
+                type === 1 ? `bg-gradient-to-tr` : type === 2 ? `bg-gradient-to-b` : `bg-gradient-to-t`,
+                getStatusColorClass(status === 'Controls' ? 'Active' : status),
+                `hover:shadow-xl hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out`,
+                getCardSize(),
+                className
+            )}
+            onClick={onClick}
+            style={{ cursor: onClick ? 'pointer' : 'default' }}
+        >
             {renderCardContent()}
         </div>
     );
