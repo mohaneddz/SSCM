@@ -14,23 +14,36 @@ import {
 const generatePredictionData = () => {
     const data: Array<{
         hour: string;
-        Temperature: number;
-        Humidity: number;
-        CO2: number;
-        Light: number;
+        'Air Conditioning': number;
+        'Light Bulbs': number;
+        'Curtains': number;
+        'Workers': number;
     }> = [];
     const currentHour = new Date().getHours();
     
     for (let i = 0; i < 24; i++) {
         const hour = (currentHour + i) % 24;
         const isDaytime = hour >= 6 && hour <= 18;
+        const isWorkHours = hour >= 8 && hour <= 17;
         
+        // Air Conditioning: Varies between 20-24°C
+        const temperature = 22 + Math.sin(i * 0.2) * 2;
+        
+        // Light Bulbs: 0-5 bulbs on
+        const lightBulbs = isDaytime ? Math.floor(3 + Math.sin(i * 0.2) * 2) : Math.floor(1 + Math.random());
+        
+        // Curtains: 0 = closed, 1 = open
+        const curtains = isDaytime ? 1 : 0;
+        
+        // Workers: 0-8 workers
+        const workers = isWorkHours ? Math.floor(6 + Math.sin(i * 0.1) * 2) : Math.floor(Math.random() * 2);
+
         data.push({
             hour: `${String(hour).padStart(2, '0')}:00`,
-            Temperature: Math.round(22 + Math.sin(i * 0.2) * 3 + Math.random() * 2),
-            Humidity: Math.round(45 + Math.sin(i * 0.15) * 10 + Math.random() * 5),
-            CO2: Math.round(400 + Math.sin(i * 0.1) * 100 + Math.random() * 50),
-            Light: Math.round(isDaytime ? 800 + Math.sin(i * 0.2) * 200 + Math.random() * 100 : 50 + Math.random() * 50)
+            'Air Conditioning': Math.round(temperature * 10) / 10,
+            'Light Bulbs': lightBulbs,
+            'Curtains': curtains,
+            'Workers': workers
         });
     }
     return data;
@@ -45,7 +58,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 <p className="text-[#f9f9f9] text-sm font-medium mb-1">{label}</p>
                 {payload.map((entry: any, index: number) => (
                     <p key={index} className="text-sm" style={{ color: entry.color }}>
-                        {entry.name}: {entry.value}{entry.name === 'Temperature' ? '°C' : entry.name === 'Humidity' ? '%' : entry.name === 'CO2' ? 'ppm' : 'lux'}
+                        {entry.name}: {
+                            entry.name === 'Air Conditioning' ? `${entry.value}°C` :
+                            entry.name === 'Light Bulbs' ? `${entry.value}/5 bulbs` :
+                            entry.name === 'Curtains' ? (entry.value === 1 ? 'Open' : 'Closed') :
+                            `${entry.value} workers`
+                        }
                     </p>
                 ))}
             </div>
@@ -56,13 +74,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function SectionPredictionChart() {
     return (
-        <Card className="mt-4 p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm">
-
+        <Card className="p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm">
             <CardHeader>
-                <CardTitle className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Environmental Predictions</CardTitle>
+                <CardTitle className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">System Predictions</CardTitle>
                 <CardDescription className="text-[#b3b3b3]">Next 24 hours forecast</CardDescription>
             </CardHeader>
-
             <CardContent>
                 <div className="h-[260px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -91,7 +107,7 @@ export default function SectionPredictionChart() {
                             <Legend iconType="circle" />
                             <Line
                                 type="monotone"
-                                dataKey="Temperature"
+                                dataKey="Air Conditioning"
                                 stroke="#2fb96c"
                                 strokeWidth={2}
                                 dot={false}
@@ -99,7 +115,7 @@ export default function SectionPredictionChart() {
                             />
                             <Line
                                 type="monotone"
-                                dataKey="Humidity"
+                                dataKey="Light Bulbs"
                                 stroke="#465fa4"
                                 strokeWidth={2}
                                 dot={false}
@@ -107,7 +123,7 @@ export default function SectionPredictionChart() {
                             />
                             <Line
                                 type="monotone"
-                                dataKey="CO2"
+                                dataKey="Curtains"
                                 stroke="#972b2b"
                                 strokeWidth={2}
                                 dot={false}
@@ -115,7 +131,7 @@ export default function SectionPredictionChart() {
                             />
                             <Line
                                 type="monotone"
-                                dataKey="Light"
+                                dataKey="Workers"
                                 stroke="#598d59"
                                 strokeWidth={2}
                                 dot={false}
@@ -125,20 +141,18 @@ export default function SectionPredictionChart() {
                     </ResponsiveContainer>
                 </div>
             </CardContent>
-
             <CardFooter>
                 <div className="flex w-full items-start gap-2 text-sm">
                     <div className="grid gap-2">
                         <div className="flex items-center gap-2 font-medium leading-none text-[#f9f9f9]">
-                            Trending up by 5.2% this hour <TrendingUp className="h-4 w-4 text-[#2fb96c]" />
+                            System operating normally <TrendingUp className="h-4 w-4 text-[#2fb96c]" />
                         </div>
                         <div className="flex items-center gap-2 leading-none text-[#b3b3b3]">
-                            Showing predicted values for the next 24 hours
+                            Showing predicted system states for the next 24 hours
                         </div>
                     </div>
                 </div>
             </CardFooter>
-
         </Card>
     );
 } 
