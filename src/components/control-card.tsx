@@ -118,7 +118,7 @@ const ControlCard = ({
                         <div className="flex-grow flex flex-col justify-center p-1.5 sm:p-2 md:p-4 pt-0 h-full gap-3 sm:gap-4 md:gap-8">
 
                             <div className="w-full flex flex-col justify-center lg:text-3xl items-center">
-                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-3xl font-bold text-white">{title}</h3>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-white text-center">{title}</h3>
                                 <p className={cn("text-xs xs:text-sm font-medium lg:text-md", getStatusColor(status))}>
                                     {status}
                                 </p>

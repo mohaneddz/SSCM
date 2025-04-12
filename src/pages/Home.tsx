@@ -3,6 +3,7 @@
 import SectionCards from "@/components/section-cards"
 import SectionCharts from "@/components/section-charts"
 import SectionMiniCards from "@/components/section-mini-cards"
+import SectionPredictionChart from "@/components/section-prediction-chart"
 import { Card } from "@/components/ui/card"
 
 const data = [
@@ -90,6 +91,9 @@ export default function Home() {
           <Card className={`${cardStyle} bg-gradient-to-br from-[#172d662c] to-[#02081800]`}>
             <SectionMiniCards />
           </Card>
+
+          {/* Prediction Chart */}
+          <SectionPredictionChart />
         </div>
       </div>
     </div>
