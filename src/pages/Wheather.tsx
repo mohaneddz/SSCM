@@ -7,12 +7,12 @@ import { IconSun, IconCloud, IconCloudRain, IconCloudStorm, IconWindmill, IconSu
 
 // Helper function to get weather icon based on conditions
 const getWeatherIcon = (temp: number, cloudCover: number, precipitation: number) => {
-  if (precipitation > 20) return <IconCloudStorm size={24} className="text-black dark:text-[#f9f9f9]" />;
-  if (precipitation > 10) return <IconCloudRain size={24} className="text-black dark:text-[#f9f9f9]" />;
-  if (cloudCover > 70) return <IconCloud size={24} className="text-black dark:text-[#f9f9f9]" />;
-  if (cloudCover > 30) return <IconCloudFog size={24} className="text-black dark:text-[#f9f9f9]" />;
-  if (temp > 25) return <IconSunHigh size={24} className="text-black dark:text-[#f9f9f9]" />;
-  return <IconSun size={24} className="text-black dark:text-[#f9f9f9]" />;
+  if (precipitation > 20) return <IconCloudStorm size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
+  if (precipitation > 10) return <IconCloudRain size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
+  if (cloudCover > 70) return <IconCloud size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
+  if (cloudCover > 30) return <IconCloudFog size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
+  if (temp > 25) return <IconSunHigh size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
+  return <IconSun size={24} className="text-slate-600 dark:text-[#f9f9f9]" />;
 };
 
 // determine wilaya (province) name from coordinates
@@ -280,17 +280,19 @@ export default function Weather() {
               <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
               <XAxis
                 dataKey="hour"
-                stroke="#f9f9f9"
+                stroke="var(--text-light)"
                 fontSize={11}
                 axisLine={{ stroke: '#f9f9f940' }}
                 tickLine={false}
+                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
               />
               <YAxis
-                stroke="#f9f9f9"
+                stroke="var(--text-light)"
                 fontSize={11}
                 axisLine={{ stroke: '#f9f9f940' }}
                 tickLine={false}
                 unit="°"
+                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend iconType="circle" />
@@ -386,7 +388,7 @@ export default function Weather() {
                   y="50%"
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className=" dark:fill-[#f9f9f9] text-2xl font-bold"
+                  className="fill-slate-600 dark:fill-[#f9f9f9] text-2xl font-bold"
                 >
                   {uvData[0].value}
                 </text>
@@ -404,18 +406,20 @@ export default function Weather() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
                 <XAxis
                   dataKey="hour"
-                  stroke="#f9f9f9"
+                  stroke="var(--text-light)"
                   fontSize={11}
                   axisLine={{ stroke: '#f9f9f940' }}
                   tickLine={false}
+                  tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
                   interval={2}
                 />
                 <YAxis
-                  stroke="#f9f9f9"
+                  stroke="var(--text-light)"
                   fontSize={11}
                   axisLine={{ stroke: '#f9f9f940' }}
                   tickLine={false}
                   unit="%"
+                  tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar
@@ -437,19 +441,21 @@ export default function Weather() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
                 <XAxis
                   dataKey="hour"
-                  stroke="#f9f9f9"
+                  stroke="var(--text-light)"
                   fontSize={11}
                   axisLine={{ stroke: '#f9f9f940' }}
                   tickLine={false}
+                  tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
                   interval={2}
                 />
                 <YAxis
-                  stroke="#f9f9f9"
+                  stroke="var(--text-light)"
                   fontSize={11}
                   axisLine={{ stroke: '#f9f9f940' }}
                   tickLine={false}
                   domain={[1000, 1030]}
                   unit="hPa"
+                  tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[#f9f9f9]' }}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Line

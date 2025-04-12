@@ -12,7 +12,7 @@ type SiteConfig = {
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const siteConfig: SiteConfig = {
-  name: "Next Level UI",
+  name: "Mobilis Admin",
   description:
     "Blazing-fast, interactive app built with latest web tech (Next.js 14). Modern design (Shadcn, Tailwind CSS). Open-source & yours to explore!",
   url: baseUrl,

@@ -8,19 +8,28 @@ export default function ComponentCard({ title, image, model, health, estimateTim
     const twoYearsFromNow = new Date();
     twoYearsFromNow.setFullYear(twoYearsFromNow.getFullYear() + 1);
 
-    const estimateDate = estimateTime ? new Date(estimateTime) : null;
+    // Calculate estimated time based on health percentage if estimateTime is not provided
+    // Formula: this year + (percentage of state * 3)
+    let estimateDate: Date | null = null;
+    if (estimateTime) {
+        estimateDate = new Date(estimateTime);
+    } else if (health !== undefined) {
+        estimateDate = new Date();
+        // Add (health percentage * 3) years to current date
+        estimateDate.setFullYear(estimateDate.getFullYear() + (health * 3 / 100));
+    }
 
     const getHealthStatus = (health?: number) => {
         if (health === undefined) return { text: "Unknown", color: "text-gray-500" };
-        if (health > 75) return { olor: "text-green-500" };
-        if (health > 35) return { color: "text-amber-600" };
+        if (health > 60) return { color: "text-green-500", text: "Good" };
+        if (health > 35) return { color: "text-amber-600", text: "Medium" };
         return { text: "Low", color: "text-red-500" };
     };
 
     const getValidityStatus = (date: Date | null) => {
         if (!date) return { text: "Unknown", color: "text-gray-500" };
-        if (date > twoYearsFromNow) return { color: "text-green-500" };
-        if (date > oneYearFromNow) return { color: "text-amber-500" };
+        if (date > twoYearsFromNow) return { color: "text-green-500", text: "Good" };
+        if (date > oneYearFromNow) return { color: "text-amber-500", text: "Medium" };
         return { text: "Critical", color: "text-red-500" };
     };
 
@@ -49,8 +58,8 @@ export default function ComponentCard({ title, image, model, health, estimateTim
 
                     <p className="text-sm text-muted-foreground dark:text-gray-400">{model}</p>
                     <p className="text-sm text-foreground dark:text-white">State: <span className={healthStatus.color}>{health}% {healthStatus.text}</span></p>
-                    <p className="text-sm text-foreground dark:text-white">Valid Until: <span className={validityStatus.color}>{estimateTime}</span></p>
-
+                    {/* estimated time : this year + (percentage of state * 3) */}
+                    <p className="text-sm text-foreground dark:text-white">Valid Until: <span className={validityStatus.color}>{estimateDate?.toLocaleDateString() || 'Unknown'}</span></p>
                 </div>
 
             </div>

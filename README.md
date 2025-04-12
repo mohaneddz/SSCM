@@ -28,22 +28,7 @@ This system provides a real-time monitoring and control platform for server cent
 - **Data Visualization**: Recharts  
 - **Design**: Tailwind CSS  
 - **Features**:
-  - Interactive map of callrooms  
-  ![Alt text](im/image.png)
-
-  - Real-time temperature and humidity charts  
-    ![Alt text](im/image2.png)
-    ![Alt text](im/image3.png)
-
-
-  - System status indicators (alerts, anomalies)  
-      ![Alt text](im/image4.png)
-
-  - Remote management controls 
-      ![Alt text](im/image5.png)
-
-  - User login, profile editing, and access management
-      ![Alt text](im/image6.png)
+- **Interactive** map of callrooms  
 
 ---
 
@@ -60,4 +45,133 @@ This system provides a real-time monitoring and control platform for server cent
 ### Remote Control
 - Admins can activate/deactivate devices (fans, alarms)  
 - Secure commands sent via MQTT to Raspberry Pi controllers
+
+---
+
+## Illustrations
+
+
+
+## System Components Illustrations
+
+### Hardware Components
+
+#### Sensors
+| Component | Image | Description |
+|-----------|-------|-------------|
+| Temperature & Humidity Sensor | ![DHT11](/public/components/DHT11.png) | Monitors environmental conditions in server rooms |
+| Motion Sensor | ![Motion Sensor](/public/components/motion_sensor.png) | Detects unauthorized movement in restricted areas |
+| RFID Reader | ![RFID](/public/components/rfid.png) | Controls access to server rooms |
+| Camera | ![Camera](/public/components/camera.png) | Provides visual monitoring of server rooms |
+
+#### Actuators
+| Component | Image | Description |
+|-----------|-------|-------------|
+| Relay | ![Relay](/public/components/raly.png) | Controls high-voltage devices |
+| Motor | ![Motor](/public/components/motor.png) | Powers mechanical components |
+| Servo Motor | ![Servo Motor](/public/components/servo_motor.png) | Provides precise positioning control |
+| Ventilation | ![Ventilation](/public/components/ventilation.png) | Maintains optimal temperature in server rooms |
+
+#### Control Systems
+| Component | Image | Description |
+|-----------|-------|-------------|
+| Microcontroller | ![Microcontroller](/public/components/microcontroller.png) | Central processing unit for sensor data |
+| Air Conditioner Control | ![Air Conditioner](/public/control/air-conditionair.png) | Regulates temperature in server rooms |
+| Door Control | ![Door](/public/control/door.png) | Manages secure access to facilities |
+| Lighting Control | ![Lighting](/public/control/lamp1.png) | Manages room illumination |
+| Lighting (Alternate) | ![Lighting 2](/public/control/lamp2.png) | Secondary lighting systems |
+| Lighting (Warning) | ![Lighting 3](/public/control/lamp3.png) | Alert indicator lights |
+| Lighting (Emergency) | ![Lighting 4](/public/control/lamp4.png) | Emergency lighting systems |
+| Lighting (Status) | ![Lighting 5](/public/control/lamp5.png) | Status indicator lights |
+| Curtains Control | ![Curtains](/public/control/curtains.png) | Controls room darkening for optimal conditions |
+| Fire Safety | ![Fire Extinguisher](/public/control/distinguisher.png) | Automated fire suppression systems |
+
+#### System Operations
+| Function | Image | Description |
+|----------|-------|-------------|
+| Backup Systems | ![Backup](/public/control/backup.png) | Data and system backup management |
+| System Restart | ![Restart](/public/control/restart.png) | Remote reboot functionality |
+| System Shutdown | ![Shutdown](/public/control/shutdown.png) | Controlled power-down procedures |
+
+---
+
+## Project Screenshots Gallery
+
+### Dashboard & Monitoring Views
+![Dashboard Landing Page](/screenshots/0.png)
+*Landing page of the NEST application with main navigation*
+
+![Dashboard Overview](/screenshots/1.png)
+*Dashboard overview with temperature and system status cards*
+
+![Server Room Map](/screenshots/2.png)
+*Map view showing server room locations with status indicators*
+
+![Power Monitoring](/screenshots/3.png)
+*Power consumption monitoring with usage graphs and analytics*
+
+![Server Metrics](/screenshots/4.png)
+*Server performance metrics with CPU, memory, and network charts*
+
+![Health Monitoring](/screenshots/5.png)
+*Health monitoring page showing component status indicators*
+
+### Control & Management Screens
+![Environmental Control](/screenshots/6.png)
+*Control panel for managing server room environmental systems*
+
+![Device Management](/screenshots/7.png)
+*Device management interface for sensors and actuators*
+
+![System Logs](/screenshots/8.png)
+*System logs and event records with filtering capabilities*
+
+![User Management](/screenshots/9.png)
+*User management and access control settings*
+
+![Surveillance View](/screenshots/10.png)
+*Surveillance view showing camera feeds from monitored areas*
+
+![Weather Conditions](/screenshots/11.png)
+*Weather conditions and environmental forecasting*
+
+### Configuration & Simulation
+![Floor Plan](/screenshots/12.png)
+*Floor plan simulation showing device placement*
+
+![Device Configuration](/screenshots/13.png)
+*Device configuration dialog for sensor settings*
+
+![System Settings](/screenshots/14.png)
+*System settings and global configuration options*
+
+![Alert Configuration](/screenshots/15.png)
+*Alert configuration for temperature and security thresholds*
+
+![Network Topology](/screenshots/16.png)
+*Network topology map showing connectivity between devices*
+
+![Scheduling](/screenshots/17.png)
+*Scheduling interface for automated system operations*
+
+### Analytics & Reports
+![Historical Analytics](/screenshots/18.png)
+*Historical performance analytics with trend visualization*
+
+![Power Usage Report](/screenshots/19.png)
+*Power usage report with efficiency recommendations*
+
+![Security Reports](/screenshots/20.png)
+*Security incident reports and audit logs*
+
+![System Health Report](/screenshots/21.png)
+*System health report with component status history*
+
+![Environmental Reports](/screenshots/22.png)
+*Environmental conditions report showing temperature trends*
+
+![User Activity Dashboard](/screenshots/23.png)
+*User activity dashboard showing login and action history*
+
+---
 

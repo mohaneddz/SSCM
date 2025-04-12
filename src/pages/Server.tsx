@@ -5,7 +5,15 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { useState, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Server as ServerIcon, Cpu, Thermometer, Zap } from 'lucide-react';
 
+// Define CSS variables for styling, including color schemes for both light and dark modes
 const cardStyle = "p-3 border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[var(--card-gradient-from)] before:via-[var(--card-gradient-via)] before:to-[var(--card-gradient-to)] before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
+
+// Define chart theme colors
+const chartTheme = {
+  axisColor: "var(--axis-color)",
+  textColor: "var(--text-color)",
+  gridColor: "#172d662c",
+};
 
 // Type definitions
 interface RequestData {
@@ -157,7 +165,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-[#020818] border border-[#172d662c] shadow-xl px-3 py-2 rounded-lg">
-        <p className="dark:text-[#f9f9f9] text-sm font-medium mb-1">{label}</p>
+        <p className="text-[#f9f9f9] text-sm font-medium mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-[#2fb96c] text-sm font-bold">
             {entry.name}: {entry.value}
@@ -183,7 +191,25 @@ export default function Server() {
   );
 
   return (
-    <div className="flex flex-1 flex-col p-4 gap-4">
+    <div className="flex flex-1 flex-col p-4 gap-4"
+         style={{
+           '--card-gradient-from': '#ffffff10',
+           '--card-gradient-via': '#ffffff05',
+           '--card-gradient-to': 'transparent',
+           '--card-bg-from': '#2fb96c20',
+           
+           '--card-bg-to': '#02081800',
+           '--text-color': '#000000',
+           '--axis-color': '#000000',
+         } as React.CSSProperties}
+         data-theme={typeof window !== 'undefined' && window.document.documentElement.classList.contains('dark') ? 'dark' : 'light'}>
+      <style jsx global>{`
+        .dark [data-theme="light"],
+        [data-theme="dark"] {
+          --text-color: #f9f9f9;
+          --axis-color: #f9f9f9;
+        }
+      `}</style>
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className={`${cardStyle} bg-gradient-to-br from-[var(--card-bg-from)] to-[var(--card-bg-to)]`}>
@@ -261,12 +287,12 @@ export default function Server() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Performance Metrics */}
           <Card className={cardStyle}>
-            <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider mb-4">Performance Metrics</h3>
+            <h3 className="text-xs font-medium text-slate-700 dark:text-[#b3b3b3] uppercase tracking-wider mb-4">Performance Metrics</h3>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={performanceData}>
-                  <PolarGrid stroke="#172d662c" />
-                  <PolarAngleAxis dataKey="metric" stroke="#f9f9f9" />
+                  <PolarGrid stroke={chartTheme.gridColor} />
+                  <PolarAngleAxis dataKey="metric" stroke={chartTheme.axisColor} />
                   <Radar name="Performance" dataKey="value" stroke="#2fb96c" fill="#2fb96c" fillOpacity={0.3} />
                 </RadarChart>
               </ResponsiveContainer>
@@ -279,9 +305,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={weeklyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="day" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="day" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="requests" fill="#2fb96c" name="Requests" />
@@ -327,9 +353,9 @@ export default function Server() {
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={temperatureData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                <XAxis dataKey="hour" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="°C" />
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                <XAxis dataKey="hour" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="°C" />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Line type="monotone" dataKey="cpu" stroke="#2fb96c" name="CPU" />
@@ -348,9 +374,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={memoryData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="time" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="GB" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="time" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="GB" />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="used" stackId="a" fill="#2fb96c" name="Used" />
@@ -367,9 +393,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={networkData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="time" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="Mbps" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="time" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="Mbps" />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Line type="monotone" dataKey="incoming" stroke="#2fb96c" name="Incoming" />
@@ -385,9 +411,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={networkData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="time" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="MB/s" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="time" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="MB/s" />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Line type="monotone" dataKey="incoming" stroke="#2fb96c" name="Read" />
@@ -406,9 +432,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={networkData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="time" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="ms" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="time" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} unit="ms" />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Line type="monotone" dataKey="incoming" stroke="#2fb96c" name="Average" />
@@ -424,9 +450,9 @@ export default function Server() {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={requestData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
-                  <XAxis dataKey="date" stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
-                  <YAxis stroke="#f9f9f9" fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} />
+                  <XAxis dataKey="date" stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
+                  <YAxis stroke={chartTheme.axisColor} fontSize={11} axisLine={{ stroke: '#f9f9f940' }} tickLine={false} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="requests" fill="#2fb96c" name="Requests" />

@@ -105,7 +105,7 @@ export default function CameraViewer() {
             {mainStreamActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             {mainStreamActive ? 'Stop Camera' : 'Start Camera'}
           </button>
-          <button className="flex items-center gap-1 px-3 py-1 rounded-md bg-light-slate hover:bg-light-slate-dark text-white">
+          <button className="flex items-center gap-1 px-3 py-1 rounded-md bg-light-slate hover:bg-light-slate-dark dark:text-white">
             <RefreshCw className="w-4 h-4" />
             Refresh Feeds
           </button>
@@ -187,7 +187,7 @@ export default function CameraViewer() {
                   </div>
                 </div>
                 <div className="p-3 bg-slate-800 bg-opacity-30 rounded-md">
-                  <h4 className="font-medium mb-1">Secondary Feeds</h4>
+                  <h4 className="font-medium mb-1 text-white">Secondary Feeds</h4>
                   <div className="text-sm text-slate-400">
                     <p>Source: camera.mp4</p>
                     <p>Status: Active</p>

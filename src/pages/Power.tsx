@@ -302,14 +302,14 @@ export default function Power() {
                                 fontSize={11}
                                 axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
-                                tick={{ fill: 'var(--text-light)' }}
+                                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[var(--text-light)]' }}
                             />
                             <YAxis
                                 stroke="var(--text-light)"
                                 fontSize={11}
                                 axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
-                                tick={{ fill: 'var(--text-light)' }}
+                                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[var(--text-light)]' }}
                                 unit="kWh"
                             />
                             <Tooltip content={<CustomTooltip />} />
@@ -477,14 +477,14 @@ export default function Power() {
                                 fontSize={11}
                                 axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
-                                tick={{ fill: 'var(--text-light)' }}
+                                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[var(--text-light)]' }}
                             />
                             <YAxis
                                 stroke="var(--text-light)"
                                 fontSize={11}
                                 axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
-                                tick={{ fill: 'var(--text-light)' }}
+                                tick={{ fill: 'var(--foreground, #000000)', className: 'dark:fill-[var(--text-light)]' }}
                                 unit="kWh"
                             />
                             <Tooltip content={<CustomTooltip />} />

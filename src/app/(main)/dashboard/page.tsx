@@ -45,7 +45,7 @@ export default function Page() {
             <Suspense fallback={
                 // loading animation
                 <div className="flex items-center justify-center w-full h-full">
-                    <IconLoader className="animate-spin" size={30} color="#000" />
+                    <IconLoader className="animate-spin" size={30} color="#64748b" />
                 </div>
             }>
                 <PageComponent />
