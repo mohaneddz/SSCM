@@ -56,13 +56,13 @@ const ControlCard = ({
     const getCardSize = () => {
         switch (type) {
             case 1: // Square
-                return 'w-full aspect-[9/7] xs:aspect-[9/8] sm:aspect-[9/9]';
+                return 'w-full ';
             case 2: // Vertical Rectangle
                 return 'w-full row-span-2';
             case 3: // Horizontal Rectangle
-                return 'w-full col-span-2 aspect-[18/7] xs:aspect-[18/8] sm:aspect-[18/9]';
+                return 'w-full col-span-2 ';
             default:
-                return 'w-full aspect-square';
+                return 'w-full';
         }
     };
 
@@ -88,7 +88,7 @@ const ControlCard = ({
                         {/* Right side - Content */}
                         <div className="flex flex-col text-center justify-center content-center items-center h-full w-full p-1.5 sm:p-2 md:p-4 ">
                             <div>
-                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl mb-1 sm:mb-2 font-bold text-white truncate">{title}</h3>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl mb-1 sm:mb-2 font-bold text-black dark:text-white truncate">{title}</h3>
                                 <p className={cn("text-xs xs:text-sm font-medium lg:text-md", `text-${getStatusColor(status)}`)}>
                                     {status}
                                 </p>
@@ -118,7 +118,7 @@ const ControlCard = ({
                         <div className="flex-grow flex flex-col justify-center p-1.5 sm:p-2 md:p-4 pt-0 h-full gap-3 sm:gap-4 md:gap-8">
 
                             <div className="w-full flex flex-col justify-center lg:text-3xl items-center">
-                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-white text-center">{title}</h3>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-black dark:text-white text-center">{title}</h3>
                                 <p className={cn("text-xs xs:text-sm font-medium lg:text-md", getStatusColor(status))}>
                                     {status}
                                 </p>
@@ -140,9 +140,9 @@ const ControlCard = ({
                 return (
                     <div className="flex flex-col h-full">
                         {/* Top - Header */}
-                        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 p-1.5 sm:p-2 md:p-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 p-1.5 sm:p-2 ">
                             <div className="w-full flex flex-col justify-center items-center">
-                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-3xl font-bold text-white text-center">{title}</h3>
+                                <h3 className="text-sm xs:text-base sm:text-lg lg:text-3xl font-bold text-black dark:text-white text-center">{title}</h3>
                                 <p className={cn("text-xs xs:text-sm font-medium", getStatusColor(status))}>
                                     {status}
                                 </p>

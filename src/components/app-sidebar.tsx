@@ -31,9 +31,10 @@ import {
 
 const data = {
   user: {
-    name: "Mobilis Admin",
+    name: "Mobilisa Admin",
     email: "m@example.com",
     avatar: "/mobilis.jpg",
+    link: "/profile",
   },
   navMain: [
     {

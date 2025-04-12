@@ -126,7 +126,7 @@ export default function Control() {
                     image="/control/air-conditionair.png"
                 >
                     <div className="flex flex-col items-center gap-4">
-                        <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl mb-1 sm:mb-2 font-bold text-white truncate">Level</h3>
+                        <h3 className="text-sm xs:text-base sm:text-lg lg:text-2xl mb-1 sm:mb-2 font-bold text-black dark:text-white truncate">Level</h3>
                         <div className="flex gap-2">
                             {[...Array(3)].map((_, i) => (
                                 <div
@@ -198,22 +198,22 @@ export default function Control() {
                     <div className="flex justify-around items-center gap-16 backdrop-blur-lg py-4 px-12 border border-gray-800 rounded-lg">
                         <div className="flex flex-col gap-2 items-center truncate" >
                             <IconPower 
-                                size={50} 
-                                className="text-white hover:text-red-500 transition-colors cursor-pointer" 
+                                size={40} 
+                                className="text-black dark:text-white hover:text-red-500 transition-colors cursor-pointer" 
                             />
                             <Button onClick={handleShutdown} className="hover:cursor-pointer hover:brightness-70 hover:scale-105 transition-all duration-300">Shutdown</Button>
                         </div>
                         <div className="flex flex-col gap-2 items-center truncate" >
                             <IconRefresh 
-                                size={50} 
-                                className="text-white hover:text-yellow-500 transition-colors cursor-pointer" 
+                                size={40} 
+                                className="text-black dark:text-white hover:text-yellow-500 transition-colors cursor-pointer" 
                             />
                             <Button onClick={handleRestart} className="hover:cursor-pointer hover:brightness-70 hover:scale-105 transition-all duration-300">Restart</Button>
                         </div>
                         <div className="flex flex-col gap-2 items-center truncate">
                             <IconDatabase 
-                                size={50} 
-                                className="text-white hover:text-blue-500 transition-colors cursor-pointer" 
+                                size={40} 
+                                className="text-black dark:text-white hover:text-blue-500 transition-colors cursor-pointer" 
                                 
                             />
                             <Button onClick={handleBackup} className="hover:cursor-pointer hover:brightness-70 hover:scale-105 transition-all duration-300">Backup</Button>

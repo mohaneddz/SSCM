@@ -7,12 +7,12 @@ import { IconSun, IconCloud, IconCloudRain, IconCloudStorm, IconWindmill, IconSu
 
 // Helper function to get weather icon based on conditions
 const getWeatherIcon = (temp: number, cloudCover: number, precipitation: number) => {
-  if (precipitation > 20) return <IconCloudStorm size={24} className="text-[#f9f9f9]" />;
-  if (precipitation > 10) return <IconCloudRain size={24} className="text-[#f9f9f9]" />;
-  if (cloudCover > 70) return <IconCloud size={24} className="text-[#f9f9f9]" />;
-  if (cloudCover > 30) return <IconCloudFog size={24} className="text-[#f9f9f9]" />;
-  if (temp > 25) return <IconSunHigh size={24} className="text-[#f9f9f9]" />;
-  return <IconSun size={24} className="text-[#f9f9f9]" />;
+  if (precipitation > 20) return <IconCloudStorm size={24} className="text-black dark:text-[#f9f9f9]" />;
+  if (precipitation > 10) return <IconCloudRain size={24} className="text-black dark:text-[#f9f9f9]" />;
+  if (cloudCover > 70) return <IconCloud size={24} className="text-black dark:text-[#f9f9f9]" />;
+  if (cloudCover > 30) return <IconCloudFog size={24} className="text-black dark:text-[#f9f9f9]" />;
+  if (temp > 25) return <IconSunHigh size={24} className="text-black dark:text-[#f9f9f9]" />;
+  return <IconSun size={24} className="text-black dark:text-[#f9f9f9]" />;
 };
 
 // Simulated weather data (replace with actual API data)
@@ -115,10 +115,10 @@ export default function Weather() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Current Weather - Algiers</h2>
-              <div className="mt-4 flex items-center gap-4">
+              <div className="mt-4 flex items-center text-bgap-4">
                 {getWeatherIcon(todayData.temp, todayData.cloudCover, todayData.precipitation)}
                 <div>
-                  <span className="text-4xl font-bold text-[#f9f9f9]">{todayData.temp}°</span>
+                  <span className="text-4xl font-bold dark:text-[#f9f9f9]">{todayData.temp}°</span>
                   <span className="text-[#b3b3b3] ml-2">Feels like {todayData.temp + 2}°</span>
                 </div>
               </div>
@@ -137,17 +137,17 @@ export default function Weather() {
             <div className="flex flex-col items-center p-2 rounded-lg bg-[#172d662c]">
               <IconGauge size={20} className="text-[#2fb96c]" />
               <span className="text-[#b3b3b3] text-xs mt-1">Pressure</span>
-              <span className="text-[#f9f9f9] font-bold">{todayData.pressure}hPa</span>
+              <span className="text-slate-700 dark:text-[#f9f9f9] font-bold">{todayData.pressure}hPa</span>
             </div>
             <div className="flex flex-col items-center p-2 rounded-lg bg-[#172d662c]">
               <IconDroplet size={20} className="text-[#2fb96c]" />
               <span className="text-[#b3b3b3] text-xs mt-1">Humidity</span>
-              <span className="text-[#f9f9f9] font-bold">{todayData.humidity}%</span>
+              <span className="text-slate-700 dark:text-[#f9f9f9] font-bold">{todayData.humidity}%</span>
             </div>
             <div className="flex flex-col items-center p-2 rounded-lg bg-[#172d662c]">
               <IconEye size={20} className="text-[#2fb96c]" />
               <span className="text-[#b3b3b3] text-xs mt-1">Visibility</span>
-              <span className="text-[#f9f9f9] font-bold">{todayData.visibility}km</span>
+              <span className="text-slate-700 dark:text-[#f9f9f9] font-bold">{todayData.visibility}km</span>
             </div>
           </div>
         </Card>
@@ -165,14 +165,14 @@ export default function Weather() {
                   : 'bg-[#172d662c] hover:bg-[#172d6640]'
                 }`}
               style={{
-                boxShadow: day.isToday ? '0 0 20px rgba(47, 185, 108, 0.1)' : 'none'
+                boxShadow: day.isToday ? '0 0 20px rgba(47, 185, 108, 0.1)' : 'none ',
               }}
             >
-              <span className={`text-sm font-medium ${day.isToday ? 'text-[#2fb96c]' : 'text-[#f9f9f9]'
+              <span className={`text-sm font-medium ${day.isToday ? 'text-[#2fb96c]' : 'dark:text-[#f9f9f9]'
                 }`}>{day.day.slice(0, 3)}</span>
               <span className="text-[#b3b3b3] text-xs">{day.date}</span>
               {getWeatherIcon(day.temp, day.cloudCover, day.precipitation)}
-              <span className={`text-2xl font-bold my-2 ${day.isToday ? 'text-[#2fb96c]' : 'text-[#f9f9f9]'
+              <span className={`text-2xl font-bold my-2 ${day.isToday ? 'text-[#2fb96c]' : 'dark:text-[#f9f9f9]'
                 }`}>{day.temp}°</span>
               <div className="flex gap-2 text-xs">
                 <span className="text-[#2fb96c]">{day.tempMax}°</span>
@@ -276,7 +276,7 @@ export default function Weather() {
 
         {/* UV Index */}
         <Card className={cardStyle}>
-          <h2 className="text-xs font-medium px-1 text-[#b3b3b3] uppercase tracking-wider">UV Index</h2>
+          <h2 className="text-xs font-medium px-1text-[#b3b3b3] uppercase tracking-wider">UV Index</h2>
           <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
               <RadialBarChart
@@ -306,7 +306,7 @@ export default function Weather() {
                   y="50%"
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-[#f9f9f9] text-2xl font-bold"
+                  className=" dark:fill-[#f9f9f9] text-2xl font-bold"
                 >
                   {uvData[0].value}
                 </text>

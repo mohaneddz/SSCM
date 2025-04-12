@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { useState, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Server as ServerIcon, Cpu, Thermometer, Zap } from 'lucide-react';
 
-const cardStyle = "p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
+const cardStyle = "p-3 border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[var(--card-gradient-from)] before:via-[var(--card-gradient-via)] before:to-[var(--card-gradient-to)] before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
 
 // Type definitions
 interface RequestData {
@@ -157,7 +157,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-[#020818] border border-[#172d662c] shadow-xl px-3 py-2 rounded-lg">
-        <p className="text-[#f9f9f9] text-sm font-medium mb-1">{label}</p>
+        <p className="dark:text-[#f9f9f9] text-sm font-medium mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-[#2fb96c] text-sm font-bold">
             {entry.name}: {entry.value}
@@ -186,14 +186,14 @@ export default function Server() {
     <div className="flex flex-1 flex-col p-4 gap-4">
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className={`${cardStyle} bg-gradient-to-br from-[#2fb96c20] to-[#02081800]`}>
+        <Card className={`${cardStyle} bg-gradient-to-br from-[var(--card-bg-from)] to-[var(--card-bg-to)]`}>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <ServerIcon className="text-[#2fb96c]" />
               <h3 className="text-xs font-medium text-slate-700 dark:text-[#b3b3b3] uppercase tracking-wider">Total Requests</h3>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-[#f9f9f9]">{totalRequests.toLocaleString()}</span>
+              <span className="text-2xl font-bold dark:text-[#f9f9f9]">{totalRequests.toLocaleString()}</span>
               <span className="text-sm font-medium text-[#2fb96c]">
                 <TrendingUp className="inline-block mr-1" />
                 +12.5%
@@ -210,7 +210,7 @@ export default function Server() {
               <h3 className="text-xs font-medium text-slate-700  dark:text-[#b3b3b3] uppercase tracking-wider">CPU Usage</h3>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-[#f9f9f9]">75%</span>
+              <span className="text-2xl font-bold dark:text-[#f9f9f9]">75%</span>
               <span className="text-sm font-medium text-[#972b2b]">
                 <TrendingUp className="inline-block mr-1" />
                 +5.2%
@@ -227,7 +227,7 @@ export default function Server() {
               <h3 className="text-xs font-medium text-slate-700  dark:text-[#b3b3b3] uppercase tracking-wider">Temperature</h3>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-[#f9f9f9]">45°C</span>
+              <span className="text-2xl font-bold dark:text-[#f9f9f9]">45°C</span>
               <span className="text-sm font-medium text-[#2fb96c]">
                 <TrendingDown className="inline-block mr-1" />
                 -2.1%
@@ -244,7 +244,7 @@ export default function Server() {
               <h3 className="text-xs font-medium text-slate-700 dark:text-[#b3b3b3] uppercase tracking-wider">Power Draw</h3>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-[#f9f9f9]">1.2kW</span>
+              <span className="text-2xl font-bold dark:text-[#f9f9f9]">1.2kW</span>
               <span className="text-sm font-medium text-[#2fb96c]">
                 <TrendingDown className="inline-block mr-1" />
                 -3.5%
@@ -302,14 +302,14 @@ export default function Server() {
                     <PolarGrid gridType="circle" />
                     <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
                     <RadialBar background dataKey="usage" cornerRadius={0} fill="#2fb96c" />
-                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="text-[#f9f9f9] text-lg font-bold">
+                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="dark:text-[#f9f9f9] text-lg font-bold">
                       {Math.round(resourceData.reduce((acc, curr) => acc + curr.usage, 0) / resourceData.length)}%
                     </text>
                   </RadialBarChart>
                 </ResponsiveContainer>
               </div>
               <div className="flex flex-col gap-2 text-sm mt-4">
-                <div className="flex items-center gap-2 font-medium leading-none text-[#f9f9f9]">
+                <div className="flex items-center gap-2 font-medium leading-none dark:text-[#f9f9f9]">
                   <TrendingUp className="h-4 w-4 text-[#2fb96c]" />
                   Trending up by 5.2% this month
                 </div>

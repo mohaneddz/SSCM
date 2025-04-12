@@ -41,7 +41,7 @@ const ProfilePage = async () => {
   }
 
   return (
-    <div className="relative max-w-xl mx-auto mt-10 p-6 bg-[#111827] rounded-2xl shadow-2xl space-y-6 border border-gray-700 overflow-hidden">
+    <div className="relative max-w-xl mx-auto mt-10 p-6 dark:bg-[#111827] rounded-2xl shadow-2xl space-y-6 border border-gray-700 overflow-hidden">
       
       <svg
         className="absolute inset-0 w-full h-full opacity-10 fill-current text-gray-800 pointer-events-none"
@@ -53,7 +53,7 @@ const ProfilePage = async () => {
 
       <Link
         href="/dashboard"
-        className="absolute top-4 left-4 text-gray-400 hover:text-gray-200 transition-colors duration-200 z-10"
+        className="absolute top-4 left-4 p-4 rounded-full bg-slate-300 hover:slate-500 text-gray-400 hover:text-gray-200 transition-colors duration-200 z-10"
         aria-label="Go back"
       >
         <IconArrowLeft size={24} stroke={1.5} />
@@ -81,15 +81,15 @@ const ProfilePage = async () => {
       <div className="space-y-4 divide-y divide-gray-700 relative z-10">
         <div className="flex justify-between py-3">
           <span className="text-gray-400 font-medium">Email:</span>
-          <span className="text-gray-200">{user.email}</span>
+          <span className="dark:text-gray-200">{user.email}</span>
         </div>
         <div className="flex justify-between py-3">
           <span className="text-gray-400 font-medium">RFID Code:</span>
-          <span className="text-gray-200">{data.rfid_code || "N/A"}</span>
+          <span className="dark:text-gray-200">{data.rfid_code || "N/A"}</span>
         </div>
         <div className="flex justify-between py-3">
           <span className="text-gray-400 font-medium">Role:</span>
-          <span className="text-gray-200">{data.role || "N/A"}</span>
+          <span className="dark:text-gray-200">{data.role || "N/A"}</span>
         </div>
       </div>
     </div>

@@ -298,16 +298,18 @@ export default function Power() {
                             <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
                             <XAxis
                                 dataKey="date"
-                                stroke="#f9f9f9"
+                                stroke="var(--text-light)"
                                 fontSize={11}
-                                axisLine={{ stroke: '#f9f9f940' }}
+                                axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
+                                tick={{ fill: 'var(--text-light)' }}
                             />
                             <YAxis
-                                stroke="#f9f9f9"
+                                stroke="var(--text-light)"
                                 fontSize={11}
-                                axisLine={{ stroke: '#f9f9f940' }}
+                                axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
+                                tick={{ fill: 'var(--text-light)' }}
                                 unit="kWh"
                             />
                             <Tooltip content={<CustomTooltip />} />
@@ -429,7 +431,7 @@ export default function Power() {
 
                 {/* Yearly Trend */}
                 <Card className={cardStyle}>
-                    <h2 className="text-xs font-medium px-1 text-[#b3b3b3] uppercase tracking-wider">Yearly Trend</h2>
+                    <h2 className="text-xs font-medium px-1 dark:text-[#b3b3b3] uppercase tracking-wider">Yearly Trend</h2>
                     <div className="h-[200px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={yearlyData}>
@@ -471,16 +473,18 @@ export default function Power() {
                             <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
                             <XAxis
                                 dataKey="hour"
-                                stroke="#f9f9f9"
+                                stroke="var(--text-light)"
                                 fontSize={11}
-                                axisLine={{ stroke: '#f9f9f940' }}
+                                axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
+                                tick={{ fill: 'var(--text-light)' }}
                             />
                             <YAxis
-                                stroke="#f9f9f9"
+                                stroke="var(--text-light)"
                                 fontSize={11}
-                                axisLine={{ stroke: '#f9f9f940' }}
+                                axisLine={{ stroke: 'var(--light-blue-1)' }}
                                 tickLine={false}
+                                tick={{ fill: 'var(--text-light)' }}
                                 unit="kWh"
                             />
                             <Tooltip content={<CustomTooltip />} />
