@@ -1,4 +1,5 @@
-import { createClient } from "../@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
+
 
 const ProfilePage = async () => {
   const supabase = createClient();
