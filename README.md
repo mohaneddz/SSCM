@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Server Center Monitoring & Control System Documentation
 
-## Getting Started
+## Overview
+This system provides a real-time monitoring and control platform for server centers (callrooms). It is built using Raspberry Pi hardware, secure MQTT communication, and a modern web dashboard built with Next.js. The platform enables continuous tracking, real-time visualization, and remote management of environmental and security parameters within each server room.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## System Architecture
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Hardware Layer
+- **Device**: Raspberry Pi  
+- **Sensors**: Temperature, humidity, motion, smoke detectors  
+- **Actuators**: Fans, alarms, LEDs (for visual indicators)  
+- **Connectivity**: Devices connect to the network and communicate via the MQTT protocol
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Communication Layer
+- **Protocol**: MQTT (Message Queuing Telemetry Transport)  
+- **Security**: Encrypted transmission (TLS/SSL)  
+- **Broker**: Secure and private MQTT broker handling publish/subscribe events
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Backend Services
+- **Database**: Supabase (PostgreSQL)  
+- **Authentication**: Supabase Auth  
+- **Realtime Updates**: Supabase Realtime or MQTT-integrated updates
 
-## Learn More
+### 4. Web Dashboard (Frontend)
+- **Framework**: Next.js  
+- **Data Visualization**: Recharts  
+- **Design**: Tailwind CSS  
+- **Features**:
+  - Interactive map of callrooms  
+  ![Alt text](im/image.png)
 
-To learn more about Next.js, take a look at the following resources:
+  - Real-time temperature and humidity charts  
+    ![Alt text](im/image2.png)
+    ![Alt text](im/image3.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  - System status indicators (alerts, anomalies)  
+      ![Alt text](im/image4.png)
 
-## Deploy on Vercel
+  - Remote management controls 
+      ![Alt text](im/image5.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  - User login, profile editing, and access management
+      ![Alt text](im/image6.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Features
+
+### Callroom Map Interface
+- Displays each callroom’s location and live status  
+- Color-coded indicators for temperature and alert levels
+
+### Realtime Sensor Monitoring
+- Displays live temperature, humidity, and other sensor data  
+- Charted using Recharts with real-time updates
+
+### Remote Control
+- Admins can activate/deactivate devices (fans, alarms)  
+- Secure commands sent via MQTT to Raspberry Pi controllers
+
