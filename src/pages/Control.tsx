@@ -102,9 +102,9 @@ export default function Control() {
     };
 
     return (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-full mt-8">
             <Toaster position="top-right" />
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-[65rem] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-[50rem] mx-auto">
                 <ControlCard
                     title="Door System"
                     type={1}
@@ -141,14 +141,14 @@ export default function Control() {
                                 className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
                                 disabled={acLevel === 0}
                             >
-                                <IconChevronDown size={20} />
+                                <IconChevronDown size={10} />
                             </button>
                             <button
                                 onClick={handleAcIncrease}
                                 className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
                                 disabled={acLevel === 3}
                             >
-                                <IconChevronUp size={20} />
+                                <IconChevronUp size={10} />
                             </button>
                         </div>
                     </div>
@@ -160,7 +160,7 @@ export default function Control() {
                     status={`Controls`}
                 >
                     <div className="flex flex-col gap-2">
-                        <div className="flex justify-around items-center gap-16 backdrop-blur-lg py-4 px-12 border border-gray-800 rounded-lg">
+                        <div className="flex justify-around items-center gap-8 backdrop-blur-lg py-4 px-12 border border-gray-800 rounded-lg">
                             {
                                 Array.from({ length: 5 }).map((_, index) => (
                                     <div key={index} className="flex flex-col gap-2">

@@ -1,40 +1,44 @@
 import { Card } from "@/components/ui/card";
-import { IconTemperature, IconDroplets, IconGauge, IconSun } from "@tabler/icons-react";
+import { IconAirConditioning, IconBulb, IconWindow, IconUsers } from "@tabler/icons-react";
 
 const cardStyle = "p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
 
 const miniCards = [
   {
-    title: "Temperature",
-    value: "25.5°",
-    change: "+2.5°",
-    trend: "up",
-    icon: IconTemperature,
-    color: "#2fb96c"
+    title: "Air Conditioning",
+    value: "22°C",
+    change: "Cooling",
+    trend: "active",
+    icon: IconAirConditioning,
+    color: "#2fb96c",
+    status: "active"
   },
   {
-    title: "Humidity",
-    value: "45%",
-    change: "-5%",
-    trend: "down",
-    icon: IconDroplets,
-    color: "#465fa4"
+    title: "Light Bulbs",
+    value: "3/5",
+    change: "60%",
+    trend: "on",
+    icon: IconBulb,
+    color: "#465fa4",
+    status: "partial"
   },
   {
-    title: "CO2",
-    value: "450ppm",
-    change: "+50ppm",
-    trend: "up",
-    icon: IconGauge,
-    color: "#972b2b"
+    title: "Curtains",
+    value: "Closed",
+    change: "Auto",
+    trend: "closed",
+    icon: IconWindow,
+    color: "#972b2b",
+    status: "closed"
   },
   {
-    title: "Light",
-    value: "850lux",
-    change: "-150lux",
-    trend: "down",
-    icon: IconSun,
-    color: "#598d59"
+    title: "Workers Inside",
+    value: "8",
+    change: "Present",
+    trend: "present",
+    icon: IconUsers,
+    color: "#598d59",
+    status: "present"
   }
 ];
 
@@ -58,13 +62,26 @@ export default function SectionMiniCards() {
                     {card.value}
                   </span>
                   <span className={`text-sm font-medium ${
-                    card.trend === 'up' ? 'text-[#972b2b]' : 'text-[#598d59]'
+                    card.status === 'active' || card.status === 'present' 
+                      ? 'text-[#2fb96c]' 
+                      : card.status === 'partial'
+                      ? 'text-[#465fa4]'
+                      : 'text-[#972b2b]'
                   }`}>
                     {card.change}
                   </span>
                 </div>
               </div>
-              <Icon size={24} className="text-[#b3b3b3]" />
+              <Icon 
+                size={24} 
+                className={`${
+                  card.status === 'active' || card.status === 'present'
+                    ? 'text-[#2fb96c]'
+                    : card.status === 'partial'
+                    ? 'text-[#465fa4]'
+                    : 'text-[#972b2b]'
+                }`}
+              />
             </div>
           </Card>
         );

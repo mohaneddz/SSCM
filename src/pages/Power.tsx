@@ -171,6 +171,40 @@ const renderActiveShape = (props: any) => {
     );
 };
 
+// Add prediction data generation
+const generatePredictionData = () => {
+    const data: Array<{
+        hour: string;
+        Prediction: number;
+        Historical: number;
+    }> = [];
+    const currentHour = new Date().getHours();
+    
+    for (let i = 0; i < 24; i++) {
+        const hour = (currentHour + i) % 24;
+        const isPeakHour = hour >= 9 && hour <= 17;
+        const isEveningHour = hour >= 18 && hour <= 22;
+        
+        let basePrediction;
+        if (isPeakHour) {
+            basePrediction = 400 + Math.random() * 200;
+        } else if (isEveningHour) {
+            basePrediction = 300 + Math.random() * 150;
+        } else {
+            basePrediction = 150 + Math.random() * 100;
+        }
+
+        data.push({
+            hour: `${String(hour).padStart(2, '0')}:00`,
+            Prediction: Math.floor(basePrediction),
+            Historical: Math.floor(basePrediction * 0.9 + Math.random() * 50)
+        });
+    }
+    return data;
+};
+
+const predictionData = generatePredictionData();
+
 export default function Power() {
     const [activeSource, setActiveSource] = useState(sourcesData[0].name);
     const activeIndex = useMemo(
@@ -318,7 +352,7 @@ export default function Power() {
                                     activeShape={renderActiveShape}
                                 >
                                     {sourcesData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<CustomTooltip />} />
@@ -342,7 +376,7 @@ export default function Power() {
                                     dataKey="subject"
                                     stroke="#f9f9f9"
                                     fontSize={11}
-                                    tick={false}
+                                    tick={{ fill: '#f9f9f9' }}
                                 />
                                 <Radar
                                     name="Efficiency"
@@ -427,6 +461,59 @@ export default function Power() {
                     </div>
                 </Card>
             </div>
+
+            {/* Prediction Chart */}
+            <Card className={cardStyle}>
+                <h2 className="text-xs font-medium px-1 text-[#b3b3b3] uppercase tracking-wider">Power Consumption Prediction</h2>
+                <div className="h-[260px] mt-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={predictionData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#172d662c" />
+                            <XAxis
+                                dataKey="hour"
+                                stroke="#f9f9f9"
+                                fontSize={11}
+                                axisLine={{ stroke: '#f9f9f940' }}
+                                tickLine={false}
+                            />
+                            <YAxis
+                                stroke="#f9f9f9"
+                                fontSize={11}
+                                axisLine={{ stroke: '#f9f9f940' }}
+                                tickLine={false}
+                                unit="kWh"
+                            />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Legend iconType="circle" />
+                            <Line
+                                type="monotone"
+                                dataKey="Prediction"
+                                stroke="#2fb96c"
+                                strokeWidth={2}
+                                dot={false}
+                                activeDot={{ r: 6, fill: '#2fb96c', stroke: '#f9f9f9' }}
+                            />
+                            <Line
+                                type="monotone"
+                                dataKey="Historical"
+                                stroke="#465fa44d"
+                                strokeDasharray="5 5"
+                                dot={false}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+                <div className="flex w-full items-start gap-2 text-sm mt-4">
+                    <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none text-[#f9f9f9]">
+                            Trending up by 5.2% this hour <IconTrendingUp className="h-4 w-4 text-[#2fb96c]" />
+                        </div>
+                        <div className="flex items-center gap-2 leading-none text-[#b3b3b3]">
+                            Showing predicted vs historical consumption for the next 24 hours
+                        </div>
+                    </div>
+                </div>
+            </Card>
         </div>
     );
 }

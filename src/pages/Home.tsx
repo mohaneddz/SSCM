@@ -7,6 +7,49 @@ import SectionCharts from "@/components/section-charts";
 import SectionMiniCards from "@/components/section-mini-cards";
 
 const supabase = createClient();
+import SectionPredictionChart from "@/components/section-prediction-chart"
+import { Card } from "@/components/ui/card"
+
+const cardStyle = "p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
+
+const data = [
+  {
+    "name": "Air Conditioning",
+    "value": "22°C",
+    "trend": "Cooling",
+    "trendIcon": "active",
+    "eval": "good",
+    "description": "Temperature is optimal",
+    "footer": "System active"
+  },
+  {
+    "name": "Light Bulbs",
+    "value": "3/5",
+    "trend": "60%",
+    "trendIcon": "partial",
+    "eval": "neutral",
+    "description": "3 bulbs are currently on",
+    "footer": "Energy efficient"
+  },
+  {
+    "name": "Curtains",
+    "value": "Closed",
+    "trend": "Auto",
+    "trendIcon": "closed",
+    "eval": "good",
+    "description": "Curtains are closed",
+    "footer": "Auto mode active"
+  },
+  {
+    "name": "Workers Inside",
+    "value": "8",
+    "trend": "Present",
+    "trendIcon": "present",
+    "eval": "good",
+    "description": "8 workers in the building",
+    "footer": "Normal occupancy"
+  }
+]
 
 export default function Home() {
   const [cardData, setCardData] = useState<any[]>([]);
@@ -18,85 +61,55 @@ export default function Home() {
         .select("*")
         .eq("device_id", "1399e453-7ed3-4189-88e1-77a465056a45")
         .order("Timestamp", { ascending: false })
-        .limit(2);
+        .limit(1);
 
       if (error) {
         console.error("Error fetching readings:", error.message);
         return;
       }
 
-      if (!data || data.length < 2) {
-        console.warn("Not enough data for trend calculation.");
-        return;
-      }
+      const reading = data?.[0] ?? {};
 
-      const [latest, previous] = data;
-
-      const getTrend = (current: number | null, prev: number | null) => {
-        if (current != null && prev != null && prev !== 0) {
-          const diff = ((current - prev) / prev) * 100;
-          const trend = diff.toFixed(1) + "%";
-          return {
-            trend,
-            trendIcon: diff > 0 ? "up" : diff < 0 ? "down" : "neutral"
-          };
-        }
-        return { trend: "0%", trendIcon: "neutral" };
-      };
-
-      const temperature = latest?.IndoorTemperature ?? 25.5;
-      const humidity = latest?.Humidity ?? 25.5;
-      const co2 = latest?.CO2Level ?? 1000;
-      const light = latest?.LightLevel ?? 1000;
-
-      const cards = [
+      const updatedCards = [
         {
           name: "Temperature",
-          value: `${temperature}°`,
-          ...getTrend(
-            temperature,
-            typeof previous?.IndoorTemperature === "number" ? previous.IndoorTemperature : null
-          ),
+          value: reading.IndoorTemperature != null ? `${reading.IndoorTemperature}°` : "25.5°",
+          trend: "+12.5%",
+          trendIcon: "up",
           eval: "bad",
           description: "Temperature is going up",
           footer: "Care is needed"
         },
         {
           name: "Humidity",
-          value: `${humidity}%`,
-          ...getTrend(
-            humidity,
-            typeof previous?.Humidity === "number" ? previous.Humidity : null
-          ),
+          value: reading.Humidity != null ? `${reading.Humidity}%` : "25.5%",
+          trend: "-5%",
+          trendIcon: "down",
           eval: "good",
           description: "Humidity is going down",
           footer: "In a normal range"
         },
         {
           name: "CO2 Level",
-          value: `${co2} ppm`,
-          ...getTrend(
-            co2,
-            typeof previous?.CO2Level === "number" ? previous.CO2Level : null
-          ),
+          value: reading.CO2Level != null ? `${reading.CO2Level} ppm` : "1000 ppm",
+          trend: "+5%",
+          trendIcon: "up",
           eval: "neutral",
           description: "CO2 level is going up",
           footer: "Care is needed"
         },
         {
           name: "Light",
-          value: `${light} lux`,
-          ...getTrend(
-            light,
-            typeof previous?.LightLevel === "number" ? previous.LightLevel : null
-          ),
+          value: reading.LightLevel != null ? `${reading.LightLevel} lux` : "1000 lux",
+          trend: "-5%",
+          trendIcon: "down",
           eval: "bad",
           description: "Light is going down",
           footer: "In a normal range"
         }
       ];
 
-      setCardData(cards);
+      setCardData(updatedCards);
     };
 
     fetchLatestReadings();
@@ -104,15 +117,52 @@ export default function Home() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="@container/main flex flex-1 flex-col gap-2">
-        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <SectionCards data={cardData} />
-
-          <div className="px-4 lg:px-6">
-            <SectionCharts />
-            <SectionMiniCards />
-          </div>
+      <div className="@container/main flex flex-1 flex-col gap-4 p-4">
+        {/* Main Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {data.map((item, index) => (
+            <Card
+              key={index}
+              className={`${cardStyle} ${index === 0
+                  ? 'bg-gradient-to-br from-[#2fb96c20] to-[#02081800]'
+                  : 'hover:bg-[#172d6640] transition-all duration-300'
+                }`}
+            >
+              <div className="flex flex-col gap-2">
+                <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">{item.name}</h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-[#f9f9f9]">{item.value}</span>
+                  <span className={`text-sm font-medium ${item.trendIcon === 'active' || item.trendIcon === 'present'
+                      ? 'text-[#2fb96c]'
+                      : item.trendIcon === 'partial'
+                        ? 'text-[#465fa4]'
+                        : 'text-[#972b2b]'
+                    }`}>
+                    {item.trend}
+                  </span>
+                </div>
+                <p className="text-[#b3b3b3] text-sm">{item.description}</p>
+                <div className="mt-2 text-xs font-medium text-[#b3b3b3]">{item.footer}</div>
+              </div>
+            </Card>
+          ))}
         </div>
+
+        <div className="grid grid-cols-1 gap-4">
+
+          {/* Charts Section */}
+          <Card className={cardStyle}>
+            <SectionCharts />
+          </Card>
+        </div>
+
+        {/* Mini Cards Section */}
+        <Card className={`${cardStyle} bg-gradient-to-br from-[#172d662c] to-[#02081800]`}>
+          <SectionMiniCards />
+        </Card>
+
+        {/* Prediction Chart */}
+        <SectionPredictionChart />
       </div>
     </div>
   );
