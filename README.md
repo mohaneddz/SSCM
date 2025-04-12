@@ -32,6 +32,10 @@ This system provides a real-time monitoring and control platform for server cent
   ![Alt text](im/image.png)
 
   - Real-time temperature and humidity charts  
+    ![Alt text](im/image2.png)
+    ![Alt text](im/image3.png)
+
+
   - System status indicators (alerts, anomalies)  
   - Remote management controls (fan toggle, alarm trigger)  
   - User login, profile editing, and access management
