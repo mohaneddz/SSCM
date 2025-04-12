@@ -16,6 +16,7 @@ const Map = dynamic(() => import("@/pages/Map"));
 const Power = dynamic(() => import("@/pages/Power"));
 const Wheather = dynamic(() => import("@/pages/Wheather"));
 const Server = dynamic(() => import("@/pages/Server"));
+const Surveillance = dynamic(() => import("@/pages/Surveillance"));
 
 export default function Page() {
 
@@ -32,7 +33,8 @@ export default function Page() {
         map: Map,
         power: Power,
         weather: Wheather,
-        server: Server
+        server: Server,
+        surveillance: Surveillance,
     };
 
     const PageComponent: React.ComponentType = pages[page] || Home;
