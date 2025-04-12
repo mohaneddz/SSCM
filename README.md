@@ -29,6 +29,8 @@ This system provides a real-time monitoring and control platform for server cent
 - **Design**: Tailwind CSS  
 - **Features**:
   - Interactive map of callrooms  
+  ![Alt text](im/image.png)
+
   - Real-time temperature and humidity charts  
   - System status indicators (alerts, anomalies)  
   - Remote management controls (fan toggle, alarm trigger)  
