@@ -144,7 +144,7 @@ export default function SectionPredictionChart() {
             <CardFooter>
                 <div className="flex w-full items-start gap-2 text-sm">
                     <div className="grid gap-2">
-                        <div className="flex items-center gap-2 font-medium leading-none text-[#f9f9f9]">
+                        <div className="flex items-center gap-2 font-medium leading-none dark:text-[#f9f9f9]">
                             System operating normally <TrendingUp className="h-4 w-4 text-[#2fb96c]" />
                         </div>
                         <div className="flex items-center gap-2 leading-none text-[#b3b3b3]">

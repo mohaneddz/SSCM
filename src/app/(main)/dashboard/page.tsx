@@ -41,7 +41,7 @@ export default function Page() {
 
     return (
 
-        <div className="w-full h-full">
+        <div className="w-full h-full ">
             <Suspense fallback={
                 // loading animation
                 <div className="flex items-center justify-center w-full h-full">

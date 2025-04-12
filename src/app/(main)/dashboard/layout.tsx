@@ -35,10 +35,10 @@ export default function layout({ children }: { children: React.ReactNode }) {
       
       <SidebarProvider>
 
-        <AppSidebar variant="inset" changePage={changePage}/>
+        <AppSidebar variant="inset" changePage={changePage} page={page}/>
 
         <SidebarInset>
-          <SiteHeader />
+          <SiteHeader page={page}/>
             {children}
         </SidebarInset>
 

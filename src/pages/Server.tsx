@@ -190,7 +190,7 @@ export default function Server() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <ServerIcon className="text-[#2fb96c]" />
-              <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Total Requests</h3>
+              <h3 className="text-xs font-medium text-slate-700 dark:text-[#b3b3b3] uppercase tracking-wider">Total Requests</h3>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-[#f9f9f9]">{totalRequests.toLocaleString()}</span>
@@ -207,7 +207,7 @@ export default function Server() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Cpu className="text-[#2fb96c]" />
-              <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">CPU Usage</h3>
+              <h3 className="text-xs font-medium text-slate-700  dark:text-[#b3b3b3] uppercase tracking-wider">CPU Usage</h3>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-[#f9f9f9]">75%</span>
@@ -224,7 +224,7 @@ export default function Server() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Thermometer className="text-[#2fb96c]" />
-              <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Temperature</h3>
+              <h3 className="text-xs font-medium text-slate-700  dark:text-[#b3b3b3] uppercase tracking-wider">Temperature</h3>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-[#f9f9f9]">45°C</span>
@@ -241,7 +241,7 @@ export default function Server() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <Zap className="text-[#2fb96c]" />
-              <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Power Draw</h3>
+              <h3 className="text-xs font-medium text-slate-700 dark:text-[#b3b3b3] uppercase tracking-wider">Power Draw</h3>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-[#f9f9f9]">1.2kW</span>

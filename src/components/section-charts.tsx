@@ -69,7 +69,7 @@ export default function SectionCharts() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">{dataType}</h2>
-          <div className="flex gap-2 p-1 rounded-lg bg-[var(--dark-blue-1)]/50 backdrop-blur-sm">
+          <div className="flex gap-2 p-1 rounded-lg dark:bg-[var(--dark-blue-1)]/50 backdrop-blur-sm">
             {Object.keys(dataTypes).map((type) => (
               <button
                 key={type}
@@ -83,7 +83,7 @@ export default function SectionCharts() {
             ))}
           </div>
         </div>
-        <div className="flex gap-2 p-1 rounded-lg bg-[var(--dark-blue-1)]/50 backdrop-blur-sm">
+        <div className="flex gap-2 p-1 rounded-lg dark:bg-[var(--dark-blue-1)]/50 backdrop-blur-sm">
           {[
             { label: 'Last 3 months', value: '3m' },
             { label: 'Last 30 days', value: '30d' },

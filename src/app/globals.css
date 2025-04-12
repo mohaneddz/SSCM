@@ -81,7 +81,7 @@
   --radius: 0.625rem;
 }
 
-/* Theme Configuration */
+/* Light Theme Configuration */
 :root {
   /* Radius Variants */
   --radius-sm: calc(var(--radius) - 4px);
@@ -89,63 +89,86 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Base Theme */
-  --background: var(--dark-blue-2);
-  --foreground: var(--text-light);
+  /* Base Theme - Light Mode Defaults */
+  --background: #f9f9f9;
+  --foreground: #333333;
 
   /* Component Colors */
-  --card: var(--dark-blue-1);
-  --card-foreground: var(--text-light);
-  --popover: var(--dark-blue-1);
-  --popover-foreground: var(--text-light);
+  --card: #ffffff;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
 
   /* Primary Colors */
   --primary: var(--principal-green);
-  --primary-foreground: var(--text-light);
+  --primary-foreground: #ffffff;
 
   /* Secondary Colors */
-  --secondary: var(--dark-blue-2);
-  --secondary-foreground: var(--text-light);
+  --secondary: #f1f1f1;
+  --secondary-foreground: #333333;
 
   /* UI Elements */
-  --muted: var(--dark-blue-2);
-  --muted-foreground: var(--text-muted);
+  --muted: #f1f1f1;
+  --muted-foreground: #737373;
   --accent: var(--principal-green);
-  --accent-foreground: var(--text-light);
-  --destructive: var(--principal-green);
-  --border: var(--dark-blue-1);
-  --input: var(--dark-blue-1);
-  --checkbox: var(--light-blue-3);
+  --accent-foreground: #ffffff;
+  --destructive: #ff4d4d;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --checkbox: #e4e4e7;
   --ring: var(--principal-green);
 
   /* Chart Colors */
   --chart-1: var(--principal-green);
-  --chart-2: var(--dark-blue-2);
-  --chart-3: var(--dark-blue-1);
+  --chart-2: #d1d5db;
+  --chart-3: #9ca3af;
   --chart-4: var(--principal-green);
-  --chart-5: var(--dark-blue-2);
+  --chart-5: #6b7280;
 
   /* Sidebar Theme */
-  --sidebar: var(--dark-blue-1);
-  --sidebar-foreground: var(--text-light);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #333333;
   --sidebar-primary: var(--principal-green);
-  --sidebar-primary-foreground: var(--text-light);
-  --sidebar-accent: var(--dark-blue-2);
-  --sidebar-accent-foreground: var(--text-light);
-  --sidebar-border: var(--dark-blue-2);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f1f1;
+  --sidebar-accent-foreground: #333333;
+  --sidebar-border: #e4e4e7;
   --sidebar-ring: var(--principal-green);
 }
 
 /* Dark Theme Overrides */
 .dark {
   --background: var(--dark-blue-1);
+  --foreground: var(--text-light);
+  
   --card: var(--dark-blue-2);
+  --card-foreground: var(--text-light);
+  
   --popover: var(--dark-blue-2);
+  --popover-foreground: var(--text-light);
+  
+  --primary: var(--principal-green);
+  --primary-foreground: var(--text-light);
+  
+  --secondary: var(--dark-blue-2);
+  --secondary-foreground: var(--text-light);
+  
+  --muted: var(--dark-blue-2);
+  --muted-foreground: var(--text-muted);
+  
+  --accent: var(--principal-green);
+  --accent-foreground: var(--text-light);
+  
+  --destructive: var(--principal-green);
+  --border: var(--dark-blue-2);
   --input: var(--light-blue-2);
+  --checkbox: var(--light-blue-3);
+  --ring: var(--principal-green);
+  
   --sidebar: var(--dark-blue-2);
+  --sidebar-foreground: var(--text-light);
   --sidebar-accent: var(--dark-blue-1);
   --sidebar-border: var(--dark-blue-1);
-  --border: var(--dark-blue-2);
 }
 
 /* Base Styles */
@@ -204,16 +227,53 @@ html {
   );
 }
 
+/* Theme Toggle Animation Styles */
+.dropdown-menu-content {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sun and Moon animations */
+.sun-moon-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dropdown Menu Item Hover Effect */
+.dropdown-menu-item {
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu-item:hover {
+  background-color: var(--light-blue-1);
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle-btn {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--principal-green);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 2px solid var(--principal-green);
+  outline-offset: 2px;
+}
+
+/* Remove previous navbar gradient that doesn't relate to theme toggle */
 .navbar::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5%;
-  background: linear-gradient(
-    to right,
-    var(--golden-orange),
-    var(--sunrise-yellow)
-  );
+  content: none;
 }

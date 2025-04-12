@@ -58,7 +58,7 @@ export default function SectionMiniCards() {
                   {card.title}
                 </h3>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-[#f9f9f9]">
+                  <span className="text-2xl font-bold dark:text-[#f9f9f9]">
                     {card.value}
                   </span>
                   <span className={`text-sm font-medium ${

@@ -29,20 +29,20 @@ export default function ComponentCard({ title, image, model, health, estimateTim
     const validityStatus = getValidityStatus(estimateDate);
 
     return (
-        <div className='w-full border border-gray-800 max-h-36 max-w-80 overflow-hidden rounded-lg shadow-lg bg-gradient-to-tr from-primary via-primary/10 via-40% to-primary/5 
-        hover:shadow-xl hover:cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out'>
+        <div className={`w-full border border-gray-800 max-h-36 max-w-80 overflow-hidden rounded-lg shadow-lg bg-gradient-to-tr from-primary via-primary/10 via-40% to-primary/5` +
+            `hover:shadow-xl hover:cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 ease-in-out`}>
 
             <div className="flex gap-4 py-2 pt-0 h-full w-full max-h-36 justify-between items-center text-center text-white overflow-y-hidden">
 
                 <Image src={image} alt={title} width={100} height={100} className="-bottom-8 -left-3 scale-110 rotate-45 relative w-min" />
 
-                <div className="flex flex-col gap-1 p-4 py-2 h-full w-max justify-center items-center text-center text-white">
+                <div className="flex flex-col gap-1 p-4 py-2 h-full w-max justify-center items-center text-center">
 
-                    <h2 className="text-lg font-bold">{title}</h2>
+                    <h2 className="text-lg font-bold text-foreground dark:text-white">{title}</h2>
 
-                    <p className="text-sm text-gray-500">{model}</p>
-                    <p className="text-sm">State: <span className={healthStatus.color}>{health}% {healthStatus.text}</span></p>
-                    <p className="text-sm">Valid Until: <span className={validityStatus.color}>{estimateTime}</span></p>
+                    <p className="text-sm text-muted-foreground dark:text-gray-400">{model}</p>
+                    <p className="text-sm text-foreground dark:text-white">State: <span className={healthStatus.color}>{health}% {healthStatus.text}</span></p>
+                    <p className="text-sm text-foreground dark:text-white">Valid Until: <span className={validityStatus.color}>{estimateTime}</span></p>
 
                 </div>
 

@@ -9,9 +9,7 @@ export default function RootLayout({
   return (
     <>
       <Navbar />
-
-      <main className="container w-full h-full p-4 wflex-1 sm:p-6">{children}</main>
-
+      <main className=" min-w-screen max-w-screen overflow-x-hidden h-full p-4 sm:p-6">{children}</main>
       <Footer />
     </>
   );

@@ -134,7 +134,7 @@ export default function Home() {
               <div className="flex flex-col gap-2">
                 <h3 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">{item.name}</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-[#f9f9f9]">{item.value}</span>
+                  <span className="text-2xl font-bold dark:text-[#f9f9f9]">{item.value}</span>
                   <span className={`text-sm font-medium flex items-center gap-1 ${
                     item.eval === 'good' 
                       ? 'text-[#2fb96c]' 

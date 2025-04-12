@@ -256,7 +256,7 @@ export default function Power() {
                             <div className="mt-4 flex items-center gap-4">
                                 <IconBolt size={24} className="text-[#2fb96c]" />
                                 <div>
-                                    <span className="text-4xl font-bold text-[#f9f9f9]">{currentMonthEstimate}</span>
+                                    <span className="text-4xl font-bold dark:text-[#f9f9f9]">{currentMonthEstimate}</span>
                                     <span className="text-[#b3b3b3] ml-2">kWh</span>
                                 </div>
                             </div>

@@ -106,12 +106,12 @@ const generateRandomUsersData = (num: number): User[] => {
 
 const initialData: User[] = generateRandomUsersData(100); // Generate 100 random users
 
-  // --- Edit Dialog Component ---
-  interface EditUserDialogProps {
-    user: User | null;
-isOpen: boolean;
-onOpenChange: (open: boolean) => void;
-onSave: (updatedUser: User) => void;
+// --- Edit Dialog Component ---
+interface EditUserDialogProps {
+  user: User | null;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSave: (updatedUser: User) => void;
 }
 
 function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogProps) {
@@ -444,7 +444,7 @@ export default function UserTable() {
         },
       },
       {
-        accessorKey: "created_at", 
+        accessorKey: "created_at",
         header: ({ column }) => (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Created At <ArrowUpDown className="w-4 h-4 ml-2" />
@@ -529,7 +529,7 @@ export default function UserTable() {
   });
 
   return (
-    <div className="mx-8">
+    <div className="mx-8 overflow-x-hidden">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter users..."

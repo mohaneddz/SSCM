@@ -1,6 +1,6 @@
 import * as React from "react"
 import {
-  IconCamera,
+  IconEyeFilled,
   IconEye,
   IconDashboard,
   IconBrandAppleArcade,
@@ -119,6 +119,12 @@ const data = {
       id: "server",
     },
     {
+      name: "Surveillance",
+      url: "#",
+      icon: IconEyeFilled,
+      id: "surveillance",
+    },
+    {
       name: "Simulation",
       url: "#",
       icon: IconIkosaedr,
@@ -127,7 +133,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({ changePage, ...props }: React.ComponentProps<typeof Sidebar> & { changePage: (page: string) => void }) {
+export function AppSidebar({page, changePage, ...props }: React.ComponentProps<typeof Sidebar> & { page: string, changePage: (page: string) => void }) {
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -147,8 +153,8 @@ export function AppSidebar({ changePage, ...props }: React.ComponentProps<typeof
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} changePage={changePage}/>
-        <NavDocuments items={data.documents} changePage={changePage} />
+        <NavMain items={data.navMain} changePage={changePage} page={page}/>
+        <NavDocuments items={data.documents} changePage={changePage} page={page}/>
         <NavSecondary items={data.navSecondary} className="mt-auto" changePage={changePage} />
       </SidebarContent>
       <SidebarFooter>

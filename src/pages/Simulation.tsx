@@ -348,10 +348,10 @@ export default function Simulation() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-black p-4">
+    <div className="relative w-full h-full dark:bg-black p-4 overflow">
       <Toaster richColors />
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-white">Floor Plan Simulation</h1>
+        <h1 className="text-2xl font-bold dark:text-white">Floor Plan Simulation</h1>
         
         <div className="flex items-center gap-2">
           {/* Mode Toggle */}
@@ -410,7 +410,7 @@ export default function Simulation() {
       </div>
       
       {/* Mode Description */}
-      <div className={`mb-4 p-2 rounded ${mode === 'edit' ? 'bg-amber-600/20 text-amber-300' : 'bg-blue-600/20 text-blue-300'}`}>
+      <div className={`mb-4 p-2 rounded ${mode === 'edit' ? 'bg-amber-600/20 text-amber-800 dark:text-amber-300' : 'text-blue-800 bg-blue-600/20 dark:text-blue-300'}`}>
         {mode === 'edit' 
           ? "Edit Mode: Click on the floor plan to add devices. Drag to move devices. Use the device menu to edit or delete."
           : "Read Mode: Click on devices to view their details."

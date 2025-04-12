@@ -6,6 +6,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { Search, RefreshCcw } from 'lucide-react';
 import { generateAllCenters } from '@/utils/mobilis-centers';
+import { useTheme } from 'next-themes';
 
 declare module 'leaflet' {
     export function markerClusterGroup(options?: any): any;
@@ -33,6 +34,7 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
     selectedLocationId,
     selectionMode = false // Default to false
 }) => {
+    const { theme } = useTheme(); // Get current theme
     const mapRef = useRef<L.Map | null>(null);
     const markersRef = useRef<L.Marker[]>([]);
     const markerClusterRef = useRef<L.MarkerClusterGroup | null>(null);
@@ -122,9 +124,9 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                     zoomDelta: 0.5
                 });
 
-                // Set the background color
+                // Set the background color based on theme
                 if (mapRef.current) {
-                    mapRef.current.getContainer().style.background = '#0c1f47';
+                    mapRef.current.getContainer().style.background = theme === 'dark' ? '#081024' : '#f9f9f9';
                 }
 
                 try {
@@ -207,7 +209,14 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                 clearTimeout(updateTimeoutRef.current);
             }
         };
-    }, [fetchWilayaData]);
+    }, [fetchWilayaData, theme]); // Add theme as a dependency
+
+    // Add effect to update map background when theme changes
+    useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.getContainer().style.background = theme === 'dark' ? '#081024' : '#f9f9f9';
+        }
+    }, [theme]);
 
     // Handle wilaya selection changes
     useEffect(() => {

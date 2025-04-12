@@ -18,9 +18,9 @@ export default function Health() {
       case "rfid":
         return "/components/RFID.png";
       case "relay":
-        return "/components/Relay.png";
+        return "/components/raly.png";
       case "servo motor":
-        return "/components/servo.png";
+        return "/components/servo_motor.png";
       case "motion sensor":
         return "/components/motion_sensor.png";
       case "dht11":
@@ -66,7 +66,7 @@ export default function Health() {
 
   return (
     <div className="justify-center items-center text-center text-white">
-      <h1 className="my-8 text-xl font-black">Items Health State</h1>
+      <h1 className="my-8 text-xl font-black text-foreground dark:text-white">Items Health State</h1>
 
       <div className="flex justify-center items-center mb-4">
         <Input

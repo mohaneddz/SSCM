@@ -3,7 +3,18 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, MapPin as WilayaIcon, AlertTriangle, CheckCircle, Zap, Users, Hash } from 'lucide-react'; // Using specific icons for status
-import { LocationData } from './MapWithInfo'; // Adjust import path
+
+// Define LocationData interface directly in this file
+interface LocationData {
+  id: string;
+  name: string;
+  wilaya: string;
+  latitude: number;
+  longitude: number;
+  status: 'normal' | 'warning' | 'alert';
+  workers: number;
+  powerConsumption: number;
+}
 
 interface InfoContainerProps {
     data: LocationData | null; // Can be null if nothing selected
@@ -33,7 +44,7 @@ const InfoContainer: React.FC<InfoContainerProps> = ({ data, onClear }) => {
     return (
         <Card className="bg-card border-border relative shadow-lg animate-fade-in"> {/* Add subtle animation */}
             <CardHeader className="pb-2 pt-3 pr-10"> {/* Adjust padding */}
-                <CardTitle className="text-base font-semibold text-card-foreground leading-tight" title={data.name}>
+                <CardTitle className="text-xs font-semibold text-card-foreground leading-tight" title={data.name}>
                     {/* Truncate long names if necessary */}
                     {data.name.length > 40 ? `${data.name.substring(0, 37)}...` : data.name}
                 </CardTitle>
@@ -48,34 +59,34 @@ const InfoContainer: React.FC<InfoContainerProps> = ({ data, onClear }) => {
                     <X size={16} />
                 </Button>
             </CardHeader>
-            <CardContent className="text-sm text-muted-foreground space-y-1.5 pt-1 pb-3"> {/* Adjusted padding/spacing */}
+            <CardContent className="text-xs text-muted-foreground space-y-1.5 pt-1 pb-3"> {/* Adjusted padding/spacing */}
                 {/* Wilaya */}
                  <div className="flex items-center space-x-2">
-                     <WilayaIcon size={14} className="text-primary flex-shrink-0" />
+                     <WilayaIcon size={12} className="text-primary flex-shrink-0" />
                      <p><strong className="text-foreground font-medium">Wilaya:</strong> {data.wilaya || 'N/A'}</p>
                  </div>
 
                  {/* Status */}
                  <div className="flex items-center space-x-2">
-                     <StatusIcon size={14} className={`${statusColor} flex-shrink-0`} />
+                     <StatusIcon size={12} className={`${statusColor} flex-shrink-0`} />
                      <p><strong className="text-foreground font-medium">Status:</strong> <span className={statusColor}>{statusText}</span></p>
                  </div>
 
                  {/* Workers */}
                 <div className="flex items-center space-x-2">
-                    <Users size={14} className="opacity-80 flex-shrink-0"/>
+                    <Users size={12} className="opacity-80 flex-shrink-0"/>
                     <p><strong className="text-foreground font-medium">Workers:</strong> {data.workers}</p>
                 </div>
                  {/* Power Consumption */}
                  <div className="flex items-center space-x-2">
-                    <Zap size={14} className="opacity-80 flex-shrink-0"/>
+                    <Zap size={12} className="opacity-80 flex-shrink-0"/>
                     <p><strong className="text-foreground font-medium">Power:</strong> {data.powerConsumption.toFixed(2)} MW</p> {/* Format number */}
                 </div>
 
                  {/* Optional: Display ID */}
                  <div className="flex items-center space-x-2 pt-1 opacity-70">
-                     <Hash size={14} className="flex-shrink-0"/>
-                     <p className="text-xs truncate" title={data.id}>ID: {data.id}</p>
+                     <Hash size={12} className="flex-shrink-0"/>
+                     <p className="text-[10px] truncate" title={data.id}>ID: {data.id}</p>
                  </div>
 
                  {/* Optional: Display Lat/Lng if needed */}

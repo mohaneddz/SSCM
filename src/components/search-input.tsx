@@ -132,6 +132,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, onWilayaSelect, dis
 
     return (
         <div className="w-full space-y-2">
+            
             {/* Mode Switch Buttons using Shadcn UI Button */}
             <div className="flex items-center gap-2">
                 <Button

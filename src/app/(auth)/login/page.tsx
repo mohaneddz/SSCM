@@ -6,8 +6,8 @@ import LoginForm from "./_components/login-form";
 
 const LoginPage = () => {
   return (
-    <section className="container flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6 transform transition-transform duration-300 hover:scale-105">
+    <section className=" flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300 p-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg pt-12 p-6 space-y-6 transform transition-transform duration-300 hover:scale-105">
         <Button variant="outline" asChild>
           <Link href="/" className={cn("absolute left-4 top-4 flex items-center text-gray-600 dark:text-gray-200")}>
             <ChevronLeftCircle className="mr-2 h-5 w-5" />
