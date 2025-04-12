@@ -17,13 +17,13 @@
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  
+
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  
+
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -54,60 +54,47 @@
   --color-neutral: var(--neutral);
 }
 
-/* Base Variables */
 :root {
-  /* Core Colors */
   --principal-green: #2fb96c;
   --principle-dark-green: #1c8149;
   --principle-light-green: #2dc772;
 
-  /* Blues */
   --dark-blue-1: #020818;
   --dark-blue-2: #0a1227cd;
   --light-blue-1: #172d662c;
   --light-blue-2: #465fa44d;
   --light-blue-3: #486fdb4d;
 
-  /* Text Colors */
   --text-light: #f9f9f9;
   --text-muted: #b3b3b3;
 
-  /* Status Colors */
   --bad: #972b2b;
   --good: #598d59;
   --neutral: #4b4b4e;
 
-  /* Sizing */
   --radius: 0.625rem;
 }
 
-/* Light Theme Configuration */
 :root {
-  /* Radius Variants */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Base Theme - Light Mode Defaults */
   --background: #f9f9f9;
   --foreground: #333333;
 
-  /* Component Colors */
   --card: #ffffff;
   --card-foreground: #333333;
   --popover: #ffffff;
   --popover-foreground: #333333;
 
-  /* Primary Colors */
   --primary: var(--principal-green);
   --primary-foreground: #ffffff;
 
-  /* Secondary Colors */
   --secondary: #f1f1f1;
   --secondary-foreground: #333333;
 
-  /* UI Elements */
   --muted: #f1f1f1;
   --muted-foreground: #737373;
   --accent: var(--principal-green);
@@ -118,14 +105,12 @@
   --checkbox: #e4e4e7;
   --ring: var(--principal-green);
 
-  /* Chart Colors */
   --chart-1: var(--principal-green);
   --chart-2: #d1d5db;
   --chart-3: #9ca3af;
   --chart-4: var(--principal-green);
   --chart-5: #6b7280;
 
-  /* Sidebar Theme */
   --sidebar: #ffffff;
   --sidebar-foreground: #333333;
   --sidebar-primary: var(--principal-green);
@@ -136,60 +121,56 @@
   --sidebar-ring: var(--principal-green);
 }
 
-/* Dark Theme Overrides */
 .dark {
   --background: var(--dark-blue-1);
   --foreground: var(--text-light);
-  
+
   --card: var(--dark-blue-2);
   --card-foreground: var(--text-light);
-  
+
   --popover: var(--dark-blue-2);
   --popover-foreground: var(--text-light);
-  
+
   --primary: var(--principal-green);
   --primary-foreground: var(--text-light);
-  
+
   --secondary: var(--dark-blue-2);
   --secondary-foreground: var(--text-light);
-  
+
   --muted: var(--dark-blue-2);
   --muted-foreground: var(--text-muted);
-  
+
   --accent: var(--principal-green);
   --accent-foreground: var(--text-light);
-  
+
   --destructive: var(--principal-green);
   --border: var(--dark-blue-2);
   --input: var(--light-blue-2);
   --checkbox: var(--light-blue-3);
   --ring: var(--principal-green);
-  
+
   --sidebar: var(--dark-blue-2);
   --sidebar-foreground: var(--text-light);
   --sidebar-accent: var(--dark-blue-1);
   --sidebar-border: var(--dark-blue-1);
 }
 
-/* Base Styles */
 @layer base {
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply text-base bg-background text-foreground lg:text-xl;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Selection Styles */
 ::selection {
   background-color: var(--principal-green);
   color: var(--text-light);
 }
 
-/* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -207,13 +188,11 @@
   background: var(--principle-dark-green);
 }
 
-/* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--principal-green) var(--dark-blue-1);
 }
 
-/* Utility Classes */
 html {
   scroll-behavior: smooth;
 }
@@ -227,7 +206,6 @@ html {
   );
 }
 
-/* Theme Toggle Animation Styles */
 .dropdown-menu-content {
   animation: fadeIn 0.2s ease-out;
 }
@@ -243,12 +221,10 @@ html {
   }
 }
 
-/* Sun and Moon animations */
 .sun-moon-transition {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dropdown Menu Item Hover Effect */
 .dropdown-menu-item {
   transition: background-color 0.2s ease;
 }
@@ -257,7 +233,6 @@ html {
   background-color: var(--light-blue-1);
 }
 
-/* Theme Toggle Button Styles */
 .theme-toggle-btn {
   position: relative;
   overflow: hidden;
@@ -273,7 +248,14 @@ html {
   outline-offset: 2px;
 }
 
-/* Remove previous navbar gradient that doesn't relate to theme toggle */
 .navbar::before {
   content: none;
+}
+
+.navbar {
+  @apply bg-card;
+}
+
+.dark .navbar {
+  @apply bg-card;
 }

@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Edit, Trash, Upload } from "lucide-react" // Import Upload icon
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Edit, Trash, Upload } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -53,7 +53,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-// Define the User type
 export type Role = "employee" | "admin" | "manager";
 
 export type User = {
@@ -62,7 +61,7 @@ export type User = {
   email: string;
   name: string;
   rfid_code: string;
-  role: Role[]; // Changed to array of Role
+  role: Role[];
   created_at: Date;
   updated_at: Date;
 };
@@ -71,19 +70,16 @@ const generateUserId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-// function to generate number of random users data 
 const generateRandomUsersData = (num: number): User[] => {
   const users = [] as User[];
-  const roles: Role[] = ["employee", "admin", "manager"]; // Define available roles
+  const roles: Role[] = ["employee", "admin", "manager"];
   for (let i = 0; i < num; i++) {
-    // Randomly determine the number of roles for the user (1 to all roles)
     const numRoles = Math.floor(Math.random() * roles.length) + 1;
     const userRoles: Role[] = [];
 
-    // Assign random roles to the user
     for (let j = 0; j < numRoles; j++) {
       const randomRole = roles[Math.floor(Math.random() * roles.length)];
-      if (!userRoles.includes(randomRole)) { // Ensure no duplicate roles
+      if (!userRoles.includes(randomRole)) {
         userRoles.push(randomRole);
       }
     }
@@ -94,7 +90,7 @@ const generateRandomUsersData = (num: number): User[] => {
       email: `user${i}@example.com`,
       name: `User ${i}`,
       rfid_code: Math.floor(Math.random() * 1000000000).toString().padStart(10, '0'),
-      role: userRoles, // Assign the array of roles
+      role: userRoles,
       created_at: new Date(Date.now() - Math.floor(Math.random() * 10000000000)),
       updated_at: new Date()
     };
@@ -104,9 +100,8 @@ const generateRandomUsersData = (num: number): User[] => {
 };
 
 
-const initialData: User[] = generateRandomUsersData(100); // Generate 100 random users
+const initialData: User[] = generateRandomUsersData(100);
 
-// --- Edit Dialog Component ---
 interface EditUserDialogProps {
   user: User | null;
   isOpen: boolean;
@@ -122,8 +117,8 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
   React.useEffect(() => {
     if (user) {
       setEditedUser({ ...user });
-      setSelectedImage(null); // Reset image selection when a new user is loaded
-      setPreview(user.profile_image || null); // Set initial preview from user data
+      setSelectedImage(null);
+      setPreview(user.profile_image || null);
 
     } else {
       setEditedUser(null);
@@ -162,18 +157,15 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
       reader.readAsDataURL(file);
     } else {
       setSelectedImage(null);
-      setPreview(editedUser?.profile_image || null); // Retain old URL if available
+      setPreview(editedUser?.profile_image || null);
     }
   };
 
   const handleSaveClick = () => {
     if (editedUser) {
-      // In a real application, you would upload the selectedImage to a server here
-      // and get a URL to store in the profile_image field. For this example, we'll
-      // just pass the preview as the profile_image.
       const updatedUser = {
         ...editedUser,
-        profile_image: preview, // Store preview URL (or real URL from server)
+        profile_image: preview,
       };
       onSave(updatedUser);
       onOpenChange(false);
@@ -216,7 +208,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
                 name="profile_image"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="hidden" // Hide the actual input
+                className="hidden"
               />
               {preview && (
                 <img src={preview} alt="Profile Preview" className="w-16 h-16 rounded-full" />
@@ -259,7 +251,7 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
               value={editedUser.rfid_code}
               onChange={handleInputChange}
               className="col-span-3"
-              required // Make rfid_code mandatory
+              required
             />
           </div>
           <div className="grid items-center grid-cols-4 gap-4">
@@ -302,7 +294,6 @@ function EditUserDialog({ user, isOpen, onOpenChange, onSave }: EditUserDialogPr
   );
 }
 
-// --- Delete Confirmation Dialog Component ---
 interface DeleteConfirmationDialogProps {
   user: User | null;
   isOpen: boolean;
@@ -336,7 +327,6 @@ function DeleteConfirmationDialog({ user, isOpen, onOpenChange, onConfirm }: Del
   );
 }
 
-// --- Main Table Component ---
 export default function UserTable() {
   const [data, setData] = React.useState<User[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -532,9 +522,9 @@ export default function UserTable() {
     <div className="mx-8 overflow-x-hidden">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter users..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          placeholder="Filter by email..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("email")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>
@@ -561,37 +551,39 @@ export default function UserTable() {
         </DropdownMenu>
       </div>
 
-      <div className="rounded-md border bg-[#21366c0d] border-input">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+      <div className="flex justify-center py-4">
+        <div className="rounded-md border bg-[#21366c0d] border-input w-max ">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <div className="flex items-center justify-end py-4 space-x-2">

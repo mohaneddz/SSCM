@@ -67,21 +67,21 @@ export type Event = {
 };
 
 const generateEventId = (): string => {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
 // generate number of events with a function 
 const generateEvents = (num: number): Event[] => {
-    const events: Event[] = [];
-    for (let i = 0; i < num; i++) {
-        events.push({
-            id: generateEventId(),
-            type: ["security", "anomaly", "event"][Math.floor(Math.random() * 3)] as EventType,
-            timeAndDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000)), // Random date within the last 10 days
-            event: `Event ${i + 1}`,
-        });
-    }
-    return events;
+  const events: Event[] = [];
+  for (let i = 0; i < num; i++) {
+    events.push({
+      id: generateEventId(),
+      type: ["security", "anomaly", "event"][Math.floor(Math.random() * 3)] as EventType,
+      timeAndDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000)), // Random date within the last 10 days
+      event: `Event ${i + 1}`,
+    });
+  }
+  return events;
 };
 
 const initialData: Event[] = generateEvents(100); // Generate 100 events for initial data
@@ -104,7 +104,7 @@ function EditEventDialog({ event, isOpen, onOpenChange, onSave }: EditEventDialo
     if (event) {
       setEditedEvent({ ...event });
     } else {
-        setEditedEvent(null); // Reset if dialog is closed or no event
+      setEditedEvent(null); // Reset if dialog is closed or no event
     }
   }, [event, isOpen]); // Depend on isOpen to reset when closed
 
@@ -118,8 +118,8 @@ function EditEventDialog({ event, isOpen, onOpenChange, onSave }: EditEventDialo
     }
   };
 
-    const handleTypeChange = (value: EventType) => {
-     if (editedEvent) {
+  const handleTypeChange = (value: EventType) => {
+    if (editedEvent) {
       setEditedEvent({
         ...editedEvent,
         type: value,
@@ -127,15 +127,15 @@ function EditEventDialog({ event, isOpen, onOpenChange, onSave }: EditEventDialo
     }
   }
 
-    const handleTimeAndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (editedEvent) {
-            const newDate = new Date(event.target.value);
-            setEditedEvent({
-                ...editedEvent,
-                timeAndDate: newDate,
-            });
-        }
-    };
+  const handleTimeAndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (editedEvent) {
+      const newDate = new Date(event.target.value);
+      setEditedEvent({
+        ...editedEvent,
+        timeAndDate: newDate,
+      });
+    }
+  };
 
   const handleSaveClick = () => {
     if (editedEvent) {
@@ -162,34 +162,34 @@ function EditEventDialog({ event, isOpen, onOpenChange, onSave }: EditEventDialo
             </Label>
             <Input id="id" name="id" value={editedEvent.id} className="col-span-3" disabled />
           </div>
-           <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="type" className="text-right">
               Type
             </Label>
-             <Select name="type" value={editedEvent.type} onValueChange={handleTypeChange}>
-                <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="security">Security</SelectItem>
-                    <SelectItem value="anomaly">Anomaly</SelectItem>
-                    <SelectItem value="event">Event</SelectItem>
-                </SelectContent>
+            <Select name="type" value={editedEvent.type} onValueChange={handleTypeChange}>
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="security">Security</SelectItem>
+                <SelectItem value="anomaly">Anomaly</SelectItem>
+                <SelectItem value="event">Event</SelectItem>
+              </SelectContent>
             </Select>
           </div>
-           <div className="grid grid-cols-4 items-center align-baseline gap-4 text-center">
-                <Label htmlFor="timeAndDate" className="text-right">
-                    Time and Date
-                </Label>
-                <Input
-                    id="timeAndDate"
-                    name="timeAndDate"
-                    type="datetime-local"
-                    value={editedEvent.timeAndDate ? editedEvent.timeAndDate.toISOString().slice(0, 16) : ""}
-                    onChange={handleTimeAndDateChange}
-                    className="col-span-3"
-                />
-            </div>
+          <div className="grid grid-cols-4 items-center align-baseline gap-4 text-center">
+            <Label htmlFor="timeAndDate" className="text-right">
+              Time and Date
+            </Label>
+            <Input
+              id="timeAndDate"
+              name="timeAndDate"
+              type="datetime-local"
+              value={editedEvent.timeAndDate ? editedEvent.timeAndDate.toISOString().slice(0, 16) : ""}
+              onChange={handleTimeAndDateChange}
+              className="col-span-3"
+            />
+          </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="event" className="text-right">
@@ -206,8 +206,8 @@ function EditEventDialog({ event, isOpen, onOpenChange, onSave }: EditEventDialo
 
         </div>
         <DialogFooter>
-           <DialogClose asChild>
-             <Button type="button" variant="outline">Cancel</Button>
+          <DialogClose asChild>
+            <Button type="button" variant="outline">Cancel</Button>
           </DialogClose>
           <Button type="button" onClick={handleSaveClick}>Save changes</Button>
         </DialogFooter>
@@ -226,29 +226,29 @@ interface DeleteConfirmationDialogProps {
 }
 
 function DeleteConfirmationDialog({ event, isOpen, onOpenChange, onConfirm }: DeleteConfirmationDialogProps) {
-    if (!event) return null;
+  if (!event) return null;
 
-    return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete the event
-                        record for <span className="font-medium">{event.event}</span> (ID: {event.id}).
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                     <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button variant="destructive" onClick={() => { onConfirm(); onOpenChange(false); }}>
-                        Delete
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    );
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete the event
+            record for <span className="font-medium">{event.event}</span> (ID: {event.id}).
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button variant="destructive" onClick={() => { onConfirm(); onOpenChange(false); }}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 
@@ -280,128 +280,128 @@ export default function Logs() {
   };
 
   const handleSaveEdit = (updatedEvent: Event) => {
-        setData(prevData =>
-            prevData.map(row => {
-                if (row.id === updatedEvent.id) {
-                    return {
-                        ...row,
-                        type: updatedEvent.type,
-                        timeAndDate: updatedEvent.timeAndDate,
-                        event: updatedEvent.event
-                    };
-                }
-                return row;
-            })
-        );
-        setCurrentRow(null); // Reset current row
-    };
+    setData(prevData =>
+      prevData.map(row => {
+        if (row.id === updatedEvent.id) {
+          return {
+            ...row,
+            type: updatedEvent.type,
+            timeAndDate: updatedEvent.timeAndDate,
+            event: updatedEvent.event
+          };
+        }
+        return row;
+      })
+    );
+    setCurrentRow(null); // Reset current row
+  };
 
   const handleConfirmDelete = () => {
     if (currentRow) {
       setData(prevData => prevData.filter(row => row.id !== currentRow.id));
     }
-     setCurrentRow(null); // Reset current row
+    setCurrentRow(null); // Reset current row
   };
 
 
   // --- Define Columns within the component to access handlers ---
-   const columns: ColumnDef<Event>[] = React.useMemo(() => [
-        {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
+  const columns: ColumnDef<Event>[] = React.useMemo(() => [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "type",
+      header: "Type",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("type")}</div>
+      ),
+    },
+    {
+      accessorKey: "timeAndDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Time and Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
       },
-      {
-        accessorKey: "type",
-        header: "Type",
-        cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("type")}</div>
-        ),
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("timeAndDate"));
+        return <div>{date.toLocaleString()}</div>; // Format the date as needed
       },
-      {
-        accessorKey: "timeAndDate",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Time and Date
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          )
-        },
-        cell: ({ row }) => {
-          const date = new Date(row.getValue("timeAndDate"));
-          return <div>{date.toLocaleString()}</div>; // Format the date as needed
-        },
+    },
+    {
+      accessorKey: "event",
+      header: () => <div className="text-left">Event</div>,
+      cell: ({ row }) => {
+        return <div className="text-left font-medium">{row.getValue("event")}</div>
       },
-      {
-        accessorKey: "event",
-        header: () => <div className="text-left">Event</div>,
-        cell: ({ row }) => {
-          return <div className="text-left font-medium">{row.getValue("event")}</div>
-        },
-      },
-      {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          const event = row.original
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const event = row.original
 
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(event.id)}
-                >
-                  Copy event ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {/* Edit Action */}
-                <DropdownMenuItem onClick={() => handleEdit(event)}>
-                   <Edit className="mr-2 h-4 w-4" /> Edit
-                </DropdownMenuItem>
-                {/* Delete Action */}
-                 <DropdownMenuItem
-                    className="text-red-600 focus:text-red-700 focus:bg-red-50"
-                    onClick={() => handleDelete(event)}
-                 >
-                    <Trash className="mr-2 h-4 w-4" /> Delete
-                </DropdownMenuItem>
-                {/* Add back other items if needed */}
-                {/* <DropdownMenuItem>View customer</DropdownMenuItem>
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(event.id)}
+              >
+                Copy event ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {/* Edit Action */}
+              <DropdownMenuItem onClick={() => handleEdit(event)}>
+                <Edit className="mr-2 h-4 w-4" /> Edit
+              </DropdownMenuItem>
+              {/* Delete Action */}
+              <DropdownMenuItem
+                className="text-red-600 focus:text-red-700 focus:bg-red-50"
+                onClick={() => handleDelete(event)}
+              >
+                <Trash className="mr-2 h-4 w-4" /> Delete
+              </DropdownMenuItem>
+              {/* Add back other items if needed */}
+              {/* <DropdownMenuItem>View customer</DropdownMenuItem>
                 <DropdownMenuItem>View event details</DropdownMenuItem> */}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )
-        },
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
       },
-    ], [handleEdit, handleDelete]); // Add dependencies if needed, though handlers defined above should be stable if not recreated unnecessarily
+    },
+  ], [handleEdit, handleDelete]); // Add dependencies if needed, though handlers defined above should be stable if not recreated unnecessarily
 
   // --- React Table Instance ---
   const table = useReactTable({
@@ -470,55 +470,57 @@ export default function Logs() {
       </div>
 
       {/* Table Rendering (same as before) */}
-      <div className="rounded-md border border-input bg-[#21366c0d]">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
+      <div className="flex w-full justify-center">
+        <div className="rounded-md w-[70vw] border border-input bg-[#21366c0d]">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                      </TableHead>
+                    )
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Pagination and Row Selection Info (same as before) */}
