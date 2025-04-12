@@ -37,8 +37,13 @@ This system provides a real-time monitoring and control platform for server cent
 
 
   - System status indicators (alerts, anomalies)  
-  - Remote management controls (fan toggle, alarm trigger)  
+      ![Alt text](im/image4.png)
+
+  - Remote management controls 
+      ![Alt text](im/image5.png)
+
   - User login, profile editing, and access management
+      ![Alt text](im/image6.png)
 
 ---
 
