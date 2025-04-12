@@ -6,14 +6,14 @@ import { X, MapPin as WilayaIcon, AlertTriangle, CheckCircle, Zap, Users, Hash }
 
 // Define LocationData interface directly in this file
 interface LocationData {
-  id: string;
-  name: string;
-  wilaya: string;
-  latitude: number;
-  longitude: number;
-  status: 'normal' | 'warning' | 'alert';
-  workers: number;
-  powerConsumption: number;
+    id: string;
+    name: string;
+    wilaya: string;
+    latitude: number;
+    longitude: number;
+    status: 'normal' | 'warning' | 'alert';
+    workers: number;
+    powerConsumption: number;
 }
 
 interface InfoContainerProps {
@@ -34,12 +34,26 @@ const getStatusDisplay = (status: 'normal' | 'warning' | 'alert') => {
     }
 };
 
+// Extract latitude and longitude from the data.id string
+const extractLatLongFromId = (id) => {
+    const parts = id.split('_');
+    if (parts.length === 3) {
+        const latitude = parseFloat(parts[1]);
+        const longitude = parseFloat(parts[2]);
+        return { latitude, longitude };
+    }
+    return { latitude: null, longitude: null };
+};
+
 const InfoContainer: React.FC<InfoContainerProps> = ({ data, onClear }) => {
     if (!data) {
         return null; // Don't render if no data
     }
 
     const { text: statusText, color: statusColor, Icon: StatusIcon } = getStatusDisplay(data.status);
+
+    // Use the extracted latitude and longitude for display
+    const { latitude, longitude } = extractLatLongFromId(data.id);
 
     return (
         <Card className="bg-card border-border relative shadow-lg animate-fade-in"> {/* Add subtle animation */}
@@ -48,8 +62,8 @@ const InfoContainer: React.FC<InfoContainerProps> = ({ data, onClear }) => {
                     {/* Truncate long names if necessary */}
                     {data.name.length > 40 ? `${data.name.substring(0, 37)}...` : data.name}
                 </CardTitle>
-                 {/* Close button positioned top-right */}
-                 <Button
+                {/* Close button positioned top-right */}
+                <Button
                     variant="ghost"
                     size="icon"
                     className="absolute top-1.5 right-1.5 h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full"
@@ -61,36 +75,43 @@ const InfoContainer: React.FC<InfoContainerProps> = ({ data, onClear }) => {
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground space-y-1.5 pt-1 pb-3"> {/* Adjusted padding/spacing */}
                 {/* Wilaya */}
-                 <div className="flex items-center space-x-2">
-                     <WilayaIcon size={12} className="text-primary flex-shrink-0" />
-                     <p><strong className="text-foreground font-medium">Wilaya:</strong> {data.wilaya || 'N/A'}</p>
-                 </div>
-
-                 {/* Status */}
-                 <div className="flex items-center space-x-2">
-                     <StatusIcon size={12} className={`${statusColor} flex-shrink-0`} />
-                     <p><strong className="text-foreground font-medium">Status:</strong> <span className={statusColor}>{statusText}</span></p>
-                 </div>
-
-                 {/* Workers */}
                 <div className="flex items-center space-x-2">
+                    <WilayaIcon size={12} className="text-primary flex-shrink-0" />
+                    <p><strong className="text-foreground font-medium">Wilaya:</strong> {data.wilaya || 'N/A'}</p>
+                </div>
+
+                {/* Latitude */}
+                <div className="flex items-center space-x-2">
+                    <Hash size={12} className="text-primary flex-shrink-0" />
+                    <p><strong className="text-foreground font-medium">Latitude:</strong> {latitude !== null ? latitude.toFixed(4) : 'N/A'}</p>
+                </div>
+
+                {/* Longitude */}
+                <div className="flex items-center space-x-2">
+                    <Hash size={12} className="text-primary flex-shrink-0" />
+                    <p><strong className="text-foreground font-medium">Longitude:</strong> {longitude !== null ? longitude.toFixed(4) : 'N/A'}</p>
+                </div>
+
+                {/* Status */}
+                <div className="flex items-center space-x-2">
+                    <StatusIcon size={12} className={`${statusColor} flex-shrink-0`} />
+                    <p><strong className="text-foreground font-medium">Status:</strong> <span className={statusColor}>{statusText}</span></p>
+                </div>
+
+                {/* Workers */}
+                {/* <div className="flex items-center space-x-2">
                     <Users size={12} className="opacity-80 flex-shrink-0"/>
                     <p><strong className="text-foreground font-medium">Workers:</strong> {data.workers}</p>
-                </div>
-                 {/* Power Consumption */}
-                 <div className="flex items-center space-x-2">
-                    <Zap size={12} className="opacity-80 flex-shrink-0"/>
-                    <p><strong className="text-foreground font-medium">Power:</strong> {data.powerConsumption.toFixed(2)} MW</p> {/* Format number */}
+                </div> */}
+
+
+                {/* Optional: Display ID */}
+                <div className="flex items-center space-x-2 pt-1 opacity-70">
+                    <p className="text-[10px] truncate" title={data.id}><strong>ID:</strong> <span className={statusColor}>{data.id}</span></p>
                 </div>
 
-                 {/* Optional: Display ID */}
-                 <div className="flex items-center space-x-2 pt-1 opacity-70">
-                     <Hash size={12} className="flex-shrink-0"/>
-                     <p className="text-[10px] truncate" title={data.id}>ID: {data.id}</p>
-                 </div>
-
-                 {/* Optional: Display Lat/Lng if needed */}
-                 {/* <div className="flex items-center space-x-2 pt-1 opacity-70 text-xs">
+                {/* Optional: Display Lat/Lng if needed */}
+                {/* <div className="flex items-center space-x-2 pt-1 opacity-70 text-xs">
                     <p>Lat: {data.latitude.toFixed(5)}</p>
                     <p>Lng: {data.longitude.toFixed(5)}</p>
                  </div> */}

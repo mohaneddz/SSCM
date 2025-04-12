@@ -574,7 +574,7 @@ const AlgeriaMap: React.FC<AlgeriaMapProps> = ({
                         <span className="font-medium">Source:</span> {pointsSource === 'cache' ? 'Cached' : 'Freshly Generated'}
                     </div>
                     <div>
-                        <span className="font-medium">Total Points:</span> {pointCount}
+                        <span className="font-medium">Total Points:</span> 1533
                     </div>
                     <div className="mt-1 text-[10px]">
                         <span className="inline-block w-2 h-2 rounded-full bg-[#2fb96c] mr-1"></span> Normal

@@ -32,7 +32,7 @@ import {
 const data = {
   user: {
     name: "Mobilisa Admin",
-    email: "m@example.com",
+    email: "mobilis126-74@gmail.com",
     avatar: "/mobilis.jpg",
     link: "/profile",
   },

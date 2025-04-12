@@ -15,8 +15,54 @@ const getWeatherIcon = (temp: number, cloudCover: number, precipitation: number)
   return <IconSun size={24} className="text-black dark:text-[#f9f9f9]" />;
 };
 
+// determine wilaya (province) name from coordinates
+const getLocationName = (latitude: number, longitude: number): string => {
+  // Coordinates for Algiers
+  if (latitude >= 36.65 && latitude <= 36.85 && longitude >= 2.95 && longitude <= 3.25) {
+    return 'Alger';
+  }
+  // Coordinates for Oran
+  else if (latitude >= 35.60 && latitude <= 35.80 && longitude >= -0.70 && longitude <= -0.50) {
+    return 'Oran';
+  }
+  // Coordinates for Constantine
+  else if (latitude >= 36.25 && latitude <= 36.45 && longitude >= 6.55 && longitude <= 6.75) {
+    return 'Constantine';
+  }
+  // Coordinates for other major cities...
+  else if (latitude >= 36.85 && latitude <= 37.05 && longitude >= 7.70 && longitude <= 7.90) {
+    return 'Annaba';
+  }
+  else if (latitude >= 36.40 && latitude <= 36.60 && longitude >= 2.75 && longitude <= 2.95) {
+    return 'Blida';
+  }
+  // Default case when coordinates don't match any specific region
+  return 'Unknown Location';
+};
+
+// Save latitude and longitude to local storage
+const saveUserLocation = (latitude, longitude) => {
+    localStorage.setItem('userLatitude', latitude.toString());
+    localStorage.setItem('userLongitude', longitude.toString());
+};
+
+// Retrieve latitude and longitude from local storage
+const getUserLocation = () => {
+    const latitude = localStorage.getItem('userLatitude');
+    const longitude = localStorage.getItem('userLongitude');
+
+    if (latitude && longitude) {
+        return {
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude)
+        };
+    }
+
+    return null;
+};
+
 // Simulated weather data (replace with actual API data)
-const generateWeatherData = () => {
+const generateWeatherData = (lat, lon) => { // Added lat and lon parameters
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const today = new Date();
 
@@ -24,7 +70,7 @@ const generateWeatherData = () => {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
 
-    // Algiers typical weather patterns
+    // Algiers typical weather patterns (modify as needed, based on location)
     const baseTemp = 22 + Math.sin(i * Math.PI / 3.5) * 5;
     const humidity = 65 + Math.cos(i * Math.PI / 3) * 15;
     const cloudCover = Math.round(Math.random() * 100);
@@ -99,13 +145,47 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function Weather() {
-  const [weatherData] = useState(generateWeatherData());
+  const [weatherData, setWeatherData] = useState([]); // Changed to useState to allow for setting the data
   const [hourlyData] = useState(generateHourlyData());
   const [windData] = useState(generateWindData());
   const [uvData] = useState(generateUVData());
-
+  const [location, setLocation] = useState({ latitude: 36.7525, longitude: 3.04197 }); // Default Algiers
   const cardStyle = "p-3 bg-[#020818] border-0 shadow-lg relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-br before:from-[#ffffff10] before:via-[#ffffff05] before:to-transparent before:rounded-lg before:-z-10 before:pointer-events-none backdrop-blur-sm";
-  const todayData = weatherData[0];
+
+  useEffect(() => {
+    const storedLocation = getUserLocation();
+
+    if (storedLocation) {
+      setLocation(storedLocation);
+    } else {
+        // Set default location and save it
+        saveUserLocation(36.7525, 3.04197);
+        setLocation({ latitude: 36.7525, longitude: 3.04197 });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (location.latitude && location.longitude) {
+
+        const fetchWeatherData = async () => {
+            const simulatedData = generateWeatherData(location.latitude, location.longitude);
+            setWeatherData(simulatedData);
+
+        };
+      fetchWeatherData();
+    }
+
+  }, [location.latitude, location.longitude]); //  dependency array makes this run when location changes.
+
+    //If weather data is not loaded yet, then we need to prevent rendering, or render some loading info.
+    if (!weatherData || weatherData.length === 0) {
+        return <div>Loading weather data...</div>
+    }
+
+    const todayData = weatherData[0];
+    
+    // Get the location name from current coordinates
+    const locationName = getLocationName(location.latitude, location.longitude);
 
   return (
     <div className="flex flex-1 flex-col p-4 gap-4">
@@ -114,7 +194,7 @@ export default function Weather() {
         <Card className={`${cardStyle} bg-gradient-to-br from-[#2fb96c20] to-[#02081800]`}>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Current Weather - Algiers</h2>
+              <h2 className="text-xs font-medium text-[#b3b3b3] uppercase tracking-wider">Current Weather - {locationName}</h2>
               <div className="mt-4 flex items-center text-bgap-4">
                 {getWeatherIcon(todayData.temp, todayData.cloudCover, todayData.precipitation)}
                 <div>

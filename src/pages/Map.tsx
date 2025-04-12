@@ -6,7 +6,7 @@ import InfoContainer from '@/components/info-container'; // Adjust path
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useTheme } from 'next-themes'; // Optional: for theme-based styling
 import { Button } from "@/components/ui/button";
-import { MapPin, Lock, Check } from 'lucide-react';
+import { MapPin, Lock, Check, Hash } from 'lucide-react';
 
 // Define or import the LocationData interface
 export interface LocationData {
@@ -51,15 +51,44 @@ const generateLocationData = (locationId: string, wilaya: string, status: 'norma
     };
 };
 
+// Extract latitude and longitude from the ID
+const extractLatLongFromId = (id) => {
+  const parts = id.split('_');
+  if (parts.length === 3) {
+    const latitude = parseFloat(parts[1]);
+    const longitude = parseFloat(parts[2]);
+    return { latitude, longitude };
+  }
+  return { latitude: null, longitude: null };
+};
+
+// Use the ID to define latitude and longitude
+const id = "Mobilis_33.7442_1.0365";
+const { latitude, longitude } = extractLatLongFromId(id);
+
+const locationData = {
+  latitude: 36.7525, // Roll back
+  longitude: 3.04197, // Roll back
+};
+
+const locationDetails = {
+  latitude: latitude !== null ? latitude.toFixed(4) : 'N/A',
+  longitude: longitude !== null ? longitude.toFixed(4) : 'N/A',
+};
+
+// Update icons for latitude and longitude
+const LatitudeIcon = () => <Hash size={12} className="text-primary" />;
+const LongitudeIcon = () => <Hash size={12} className="text-primary" />;
 
 const MapWithInfo: React.FC = () => {
+
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [zoomLevel, setZoomLevel] = useState<number>(6); // Initial zoom
-    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null); // Track selected marker ID
-    const [locationData, setLocationData] = useState<LocationData | null>(null); // Data for InfoContainer
-    const [selectedWilaya, setSelectedWilaya] = useState<string | null>(null); // Track Wilaya filter
-    const [siteSelectionMode, setSiteSelectionMode] = useState<boolean>(false); // New state for site selection mode
-    const [siteSelected, setSiteSelected] = useState<boolean>(false); // New state to track if a site has been set
+    const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null); 
+    const [locationData, setLocationData] = useState<LocationData | null>(null);
+    const [selectedWilaya, setSelectedWilaya] = useState<string | null>(null);
+    const [siteSelectionMode, setSiteSelectionMode] = useState<boolean>(false);
+    const [siteSelected, setSiteSelected] = useState<boolean>(false); 
 
     const { theme } = useTheme(); // Optional theming
     const isDark = theme === 'dark'; // Example usage
@@ -131,30 +160,31 @@ const MapWithInfo: React.FC = () => {
     // Receives data directly from the map component
     const handleLocationClick = useCallback((locationId: string, wilaya: string, status: 'normal' | 'warning' | 'alert') => {
         setSelectedLocationId(locationId); // Set the ID of the clicked marker
-        // Generate the detailed data object for the InfoContainer
         const newLocationData = generateLocationData(locationId, wilaya, status);
-        setLocationData(newLocationData); // Update state to show the InfoContainer
+        setLocationData(newLocationData); 
+        
+        // Save the selected location's coordinates to localStorage for the Weather component
+        if (newLocationData.latitude && newLocationData.longitude) {
+            localStorage.setItem('userLatitude', newLocationData.latitude.toString());
+            localStorage.setItem('userLongitude', newLocationData.longitude.toString());
+        }
     }, []);
 
-    // Handler for clearing the selection (called by InfoContainer close button)
     const handleClearSelection = useCallback(() => {
-        setSelectedLocationId(null); // Clear the selected ID
-        setLocationData(null);      // Clear the data, hiding the InfoContainer
+        setSelectedLocationId(null); 
+        setLocationData(null);     
         if (siteSelected) {
-            setSiteSelected(false); // Clear site selection if set
+            setSiteSelected(false);
             sessionStorage.removeItem('mapSiteSelected');
             sessionStorage.removeItem('mapSelectedLocationId');
             sessionStorage.removeItem('mapLocationData');
         }
-        // The map component will see selectedLocationId is null and reset the marker style
     }, [siteSelected]);
 
-    // Handler for starting site selection mode
     const handleStartSiteSelection = useCallback(() => {
         setSiteSelectionMode(true);
     }, []);
 
-    // Handler for confirming site selection
     const handleConfirmSiteSelection = useCallback(() => {
         if (selectedLocationId && locationData) {
             setSiteSelected(true);
@@ -164,7 +194,6 @@ const MapWithInfo: React.FC = () => {
         }
     }, [selectedLocationId, locationData]);
 
-    // Handler for canceling site selection
     const handleCancelSiteSelection = useCallback(() => {
         setSiteSelectionMode(false);
     }, []);

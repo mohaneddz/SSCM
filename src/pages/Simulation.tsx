@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { useTheme } from "next-themes";
 import { Tooltip } from '@/components/ui/tooltip';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -31,6 +32,7 @@ interface DeviceInfo {
 }
 
 export default function Simulation() {
+  const { theme } = useTheme(); // Get current theme
   const [selectedDevice, setSelectedDevice] = useState<DeviceInfo | null>(null);
   const [mode, setMode] = useState<'read' | 'edit'>('read');
   const [devices, setDevices] = useState<DeviceInfo[]>([
@@ -171,7 +173,7 @@ export default function Simulation() {
   const handleDeviceClick = (device: DeviceInfo, e: React.MouseEvent) => {
     // Stop propagation to prevent container click handler from firing
     e.stopPropagation();
-    
+
     if (mode === 'read') {
       setSelectedDevice(device);
     } else {
@@ -183,7 +185,7 @@ export default function Simulation() {
   // Add a new device at click position
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (mode !== 'edit') return;
-    
+
     // Ignore clicks on devices
     if ((e.target as HTMLElement).closest('[data-device]')) return;
 
@@ -211,22 +213,22 @@ export default function Simulation() {
   // Handle device dragging in edit mode
   const handleDeviceDragStart = (device: DeviceInfo, e: React.MouseEvent) => {
     if (mode !== 'edit') return;
-    
+
     e.preventDefault();
     e.stopPropagation(); // Prevent container click
     setIsDragging(true);
-    
+
     const startX = e.clientX;
     const startY = e.clientY;
     const initialPosition = { ...device.position };
-    
+
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!containerRef.current) return;
-      
+
       const rect = containerRef.current.getBoundingClientRect();
       const deltaX = moveEvent.clientX - startX;
       const deltaY = moveEvent.clientY - startY;
-      
+
       // Update device position
       setDevices(prev => prev.map(d => {
         if (d.id === device.id) {
@@ -236,17 +238,30 @@ export default function Simulation() {
             ...d,
             position: { x: newX, y: newY }
           };
-        }
+        } const getLocationName = async (latitude: number, longitude: number): Promise<string> => {
+          const apiKey = 'YOUR_OPENCAGE_API_KEY';
+          const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.results[0]?.formatted || 'Unknown location';
+          } catch (error) {
+            console.error('Error fetching location:', error);
+            return 'Error fetching location';
+          }
+        };
+
         return d;
       }));
     };
-    
+
     const handleMouseUp = () => {
       setIsDragging(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-    
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
@@ -273,11 +288,11 @@ export default function Simulation() {
     if (dialogMode === 'add') {
       setDevices([...devices, editDevice]);
     } else {
-      setDevices(devices.map(device => 
+      setDevices(devices.map(device =>
         device.id === editDevice.id ? editDevice : device
       ));
     }
-    
+
     setIsDialogOpen(false);
   };
 
@@ -306,9 +321,9 @@ export default function Simulation() {
   const exportLayout = () => {
     const dataStr = JSON.stringify(devices, null, 2);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-    
+
     const exportFileDefaultName = `floor-plan-layout-${new Date().toISOString().slice(0, 10)}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -340,7 +355,7 @@ export default function Simulation() {
       }
     };
     reader.readAsText(file);
-    
+
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -352,7 +367,7 @@ export default function Simulation() {
       <Toaster richColors />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold dark:text-white">Floor Plan Simulation</h1>
-        
+
         <div className="flex items-center gap-2">
           {/* Mode Toggle */}
           <Tabs value={mode} onValueChange={(value) => setMode(value as 'read' | 'edit')} className="bg-gray-800 rounded-lg">
@@ -367,30 +382,30 @@ export default function Simulation() {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          
+
           {/* Save/Load Buttons - Only visible in edit mode */}
           {mode === 'edit' && (
             <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={saveLayout}
                 className="flex items-center gap-1 text-green-400 border-green-500"
               >
                 <Save size={16} />
                 Save
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={exportLayout}
                 className="flex items-center gap-1"
               >
                 Export
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={importLayout}
                 className="flex items-center gap-1"
               >
@@ -408,17 +423,17 @@ export default function Simulation() {
           )}
         </div>
       </div>
-      
+
       {/* Mode Description */}
       <div className={`mb-4 p-2 rounded ${mode === 'edit' ? 'bg-amber-600/20 text-amber-800 dark:text-amber-300' : 'text-blue-800 bg-blue-600/20 dark:text-blue-300'}`}>
-        {mode === 'edit' 
+        {mode === 'edit'
           ? "Edit Mode: Click on the floor plan to add devices. Drag to move devices. Use the device menu to edit or delete."
           : "Read Mode: Click on devices to view their details."
         }
       </div>
-      
+
       {/* Floor Plan Container */}
-      <div 
+      <div
         ref={containerRef}
         className="relative w-full max-w-4xl h-[600px] mx-auto border-2 border-gray-700 rounded-lg cursor-default overflow-hidden"
         onClick={handleContainerClick}
@@ -426,14 +441,16 @@ export default function Simulation() {
       >
         {/* Floor Plan Background with Image */}
         <div className="absolute inset-0">
-          {/* Dark overlay for better visibility */}
-          <div className="absolute inset-0 bg-[#02060e] bg-opacity-30 z-10"></div>
+          {/* Dark overlay for better visibility - use gray background in light mode */}
+          <div className="absolute inset-0 bg-[#02060e] dark:bg-opacity-30 bg-opacity-0 z-10" 
+               style={{ backgroundColor: theme === 'dark' ? '#02060e' : '#ffffff' }}>
+          </div>
           
           {/* Floor Plan Image */}
           <div className="w-full h-full relative z-20">
-            <Image 
-              src="/plan.svg" 
-              alt="Floor Plan" 
+            <Image
+              src={theme === 'dark' ? "/plan-dark.svg" : "/plan-light.svg"}
+              alt="Floor Plan"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 50vw"
               style={{ objectFit: "contain" }}
@@ -442,16 +459,15 @@ export default function Simulation() {
             />
           </div>
         </div>
-        
+
         {/* Device Markers */}
         {devices.map((device) => (
           <div
             key={device.id}
             data-device={device.id}
-            className={`absolute cursor-pointer transform z-30 -translate-x-1/2 -translate-y-1/2 ${
-              device.type === 'sensor' ? 'text-blue-500' : 'text-green-500'
-            } ${isDragging ? 'pointer-events-none' : ''} ${mode === 'edit' ? 'hover:scale-110' : ''}`}
-            style={{ 
+            className={`absolute cursor-pointer transform z-30 -translate-x-1/2 -translate-y-1/2 ${device.type === 'sensor' ? 'text-blue-500' : 'text-green-500'
+              } ${isDragging ? 'pointer-events-none' : ''} ${mode === 'edit' ? 'hover:scale-110' : ''}`}
+            style={{
               left: device.position.x,
               top: device.position.y,
               cursor: mode === 'edit' ? 'move' : 'pointer'
@@ -460,10 +476,10 @@ export default function Simulation() {
             onMouseDown={mode === 'edit' ? (e) => handleDeviceDragStart(device, e) : undefined}
           >
             <div className="w-4 h-4 rounded-full bg-current animate-pulse" />
-            <div className="absolute top-[-20px] left-1/2 transform -translate-x-1/2 text-xs text-white whitespace-nowrap">
+            <div className="absolute top-[-20px] left-1/2 transform -translate-x-1/2 text-xs dark:text-white whitespace-nowrap">
               {device.name}
             </div>
-            
+
             {/* Edit mode controls */}
             {mode === 'edit' && selectedDevice?.id === device.id && (
               <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1" onClick={(e) => e.stopPropagation()}>
@@ -519,12 +535,12 @@ export default function Simulation() {
           <DialogHeader>
             <DialogTitle>{dialogMode === 'add' ? 'Add New Device' : 'Edit Device'}</DialogTitle>
             <DialogDescription className="text-gray-400">
-              {dialogMode === 'add' 
-                ? 'Add a new device to the floor plan.' 
+              {dialogMode === 'add'
+                ? 'Add a new device to the floor plan.'
                 : 'Edit device details and location.'}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">Name</Label>
@@ -535,11 +551,11 @@ export default function Simulation() {
                 className="col-span-3 bg-gray-700 text-white border-gray-600"
               />
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="type" className="text-right">Type</Label>
-              <Select 
-                value={editDevice?.type || 'sensor'} 
+              <Select
+                value={editDevice?.type || 'sensor'}
                 onValueChange={(value) => updateEditDevice('type', value as 'sensor' | 'actuator')}
               >
                 <SelectTrigger className="col-span-3 bg-gray-700 text-white border-gray-600">
@@ -551,11 +567,11 @@ export default function Simulation() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="status" className="text-right">Status</Label>
-              <Select 
-                value={editDevice?.status || 'Active'} 
+              <Select
+                value={editDevice?.status || 'Active'}
                 onValueChange={(value) => updateEditDevice('status', value)}
               >
                 <SelectTrigger className="col-span-3 bg-gray-700 text-white border-gray-600">
@@ -568,11 +584,11 @@ export default function Simulation() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image" className="text-right">Image</Label>
-              <Select 
-                value={editDevice?.image || '/components/fallback.png'} 
+              <Select
+                value={editDevice?.image || '/components/fallback.png'}
                 onValueChange={(value) => updateEditDevice('image', value)}
               >
                 <SelectTrigger className="col-span-3 bg-gray-700 text-white border-gray-600">
@@ -589,7 +605,7 @@ export default function Simulation() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="description" className="text-right">Description</Label>
               <Input
@@ -609,7 +625,7 @@ export default function Simulation() {
                     id="posX"
                     type="number"
                     value={Math.round(editDevice?.position?.x || 0)}
-                    onChange={(e) => updateEditDevice('position', { 
+                    onChange={(e) => updateEditDevice('position', {
                       ...editDevice?.position,
                       x: Number(e.target.value)
                     })}
@@ -622,7 +638,7 @@ export default function Simulation() {
                     id="posY"
                     type="number"
                     value={Math.round(editDevice?.position?.y || 0)}
-                    onChange={(e) => updateEditDevice('position', { 
+                    onChange={(e) => updateEditDevice('position', {
                       ...editDevice?.position,
                       y: Number(e.target.value)
                     })}
@@ -632,7 +648,7 @@ export default function Simulation() {
               </div>
             </div>
           </div>
-          
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" className="text-white">Cancel</Button>
