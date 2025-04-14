@@ -48,53 +48,6 @@ This system provides a real-time monitoring and control platform for server cent
 
 ---
 
-## Illustrations
-
-
-
-## System Components Illustrations
-
-### Hardware Components
-
-#### Sensors
-| Component | Image | Description |
-|-----------|-------|-------------|
-| Temperature & Humidity Sensor | ![DHT11](/public/components/DHT11.png) | Monitors environmental conditions in server rooms |
-| Motion Sensor | ![Motion Sensor](/public/components/motion_sensor.png) | Detects unauthorized movement in restricted areas |
-| RFID Reader | ![RFID](/public/components/rfid.png) | Controls access to server rooms |
-| Camera | ![Camera](/public/components/camera.png) | Provides visual monitoring of server rooms |
-
-#### Actuators
-| Component | Image | Description |
-|-----------|-------|-------------|
-| Relay | ![Relay](/public/components/raly.png) | Controls high-voltage devices |
-| Motor | ![Motor](/public/components/motor.png) | Powers mechanical components |
-| Servo Motor | ![Servo Motor](/public/components/servo_motor.png) | Provides precise positioning control |
-| Ventilation | ![Ventilation](/public/components/ventilation.png) | Maintains optimal temperature in server rooms |
-
-#### Control Systems
-| Component | Image | Description |
-|-----------|-------|-------------|
-| Microcontroller | ![Microcontroller](/public/components/microcontroller.png) | Central processing unit for sensor data |
-| Air Conditioner Control | ![Air Conditioner](/public/control/air-conditionair.png) | Regulates temperature in server rooms |
-| Door Control | ![Door](/public/control/door.png) | Manages secure access to facilities |
-| Lighting Control | ![Lighting](/public/control/lamp1.png) | Manages room illumination |
-| Lighting (Alternate) | ![Lighting 2](/public/control/lamp2.png) | Secondary lighting systems |
-| Lighting (Warning) | ![Lighting 3](/public/control/lamp3.png) | Alert indicator lights |
-| Lighting (Emergency) | ![Lighting 4](/public/control/lamp4.png) | Emergency lighting systems |
-| Lighting (Status) | ![Lighting 5](/public/control/lamp5.png) | Status indicator lights |
-| Curtains Control | ![Curtains](/public/control/curtains.png) | Controls room darkening for optimal conditions |
-| Fire Safety | ![Fire Extinguisher](/public/control/distinguisher.png) | Automated fire suppression systems |
-
-#### System Operations
-| Function | Image | Description |
-|----------|-------|-------------|
-| Backup Systems | ![Backup](/public/control/backup.png) | Data and system backup management |
-| System Restart | ![Restart](/public/control/restart.png) | Remote reboot functionality |
-| System Shutdown | ![Shutdown](/public/control/shutdown.png) | Controlled power-down procedures |
-
----
-
 ## Project Screenshots Gallery
 
 ### Dashboard & Monitoring Views
