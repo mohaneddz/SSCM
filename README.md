@@ -1,130 +1,98 @@
-# Smart Server Center Monitoring & Control System Documentation
+# 🖥️ SSCM - Smart Server Center Monitoring
 
-## Overview
-This system provides a real-time monitoring and control platform for server centers (callrooms). It is built using Raspberry Pi hardware, secure MQTT communication, and a modern web dashboard built with Next.js. The platform enables continuous tracking, real-time visualization, and remote management of environmental and security parameters within each server room.
-
----
-
-## System Architecture
-
-### 1. Hardware Layer
-- **Device**: Raspberry Pi  
-- **Sensors**: Temperature, humidity, motion, smoke detectors  
-- **Actuators**: Fans, alarms, LEDs (for visual indicators)  
-- **Connectivity**: Devices connect to the network and communicate via the MQTT protocol
-
-### 2. Communication Layer
-- **Protocol**: MQTT (Message Queuing Telemetry Transport)  
-- **Security**: Encrypted transmission (TLS/SSL)  
-- **Broker**: Secure and private MQTT broker handling publish/subscribe events
-
-### 3. Backend Services
-- **Database**: Supabase (PostgreSQL)  
-- **Authentication**: Supabase Auth  
-- **Realtime Updates**: Supabase Realtime or MQTT-integrated updates
-
-### 4. Web Dashboard (Frontend)
-- **Framework**: Next.js  
-- **Data Visualization**: Recharts  
-- **Design**: Tailwind CSS  
-- **Features**:
-- **Interactive** map of callrooms  
+## 📌 Overview
+Smart Server Center is a **real-time monitoring and control platform** for server centers (callrooms).  
+It integrates **Raspberry Pi hardware**, **secure MQTT communication**, and a **modern Next.js dashboard** to provide live tracking, remote control, and visual insights into environmental and security metrics.
 
 ---
 
-## Features
-
-### Callroom Map Interface
-- Displays each callroom’s location and live status  
-- Color-coded indicators for temperature and alert levels
-
-### Realtime Sensor Monitoring
-- Displays live temperature, humidity, and other sensor data  
-- Charted using Recharts with real-time updates
-
-### Remote Control
-- Admins can activate/deactivate devices (fans, alarms)  
-- Secure commands sent via MQTT to Raspberry Pi controllers
+## 🚀 Features
+- **Interactive Callroom Map**: Live status, color-coded indicators for temperature and alerts  
+- **Realtime Sensor Monitoring**: Temperature, humidity, motion, and smoke data visualized with charts  
+- **Remote Device Control**: Activate/deactivate fans, alarms, and LEDs securely via MQTT  
+- **User Management & Access Control**  
+- **Historical Analytics & Reporting**: System health, power consumption, and environmental trends  
+- **Configurable Alerts**: Temperature, humidity, and security thresholds  
+- **Scheduling & Automation**: Automated device operations based on time/events  
 
 ---
 
-## Project Screenshots Gallery
+## 🏗 System Architecture
+
+| Layer | Components | Description |
+|-------|------------|-------------|
+| **Hardware** | Raspberry Pi, Sensors (Temp, Humidity, Motion, Smoke), Actuators (Fans, LEDs, Alarms) | Devices connect via network and send data via MQTT |
+| **Communication** | MQTT Protocol, TLS/SSL encryption, Secure Broker | Handles pub/sub events for real-time control and monitoring |
+| **Backend Services** | Supabase (PostgreSQL), Supabase Auth, Realtime Updates | Stores data, manages users, and pushes updates to the frontend |
+| **Frontend** | Next.js, TailwindCSS, Recharts | Real-time dashboard for visualization, control, and analytics |
+
+---
+
+## 📸 Screenshots Gallery
 
 ### Dashboard & Monitoring Views
-![Dashboard Landing Page](/screenshots/0.png)
-*Landing page of the NEST application with main navigation*
+| Dashboard Landing | Overview | Callroom Map |
+|-----------------|---------|--------------|
+| ![](/screenshots/0.png) | ![](/screenshots/1.png) | ![](/screenshots/2.png) |
 
-![Dashboard Overview](/screenshots/1.png)
-*Dashboard overview with temperature and system status cards*
-
-![Server Room Map](/screenshots/2.png)
-*Map view showing server room locations with status indicators*
-
-![Power Monitoring](/screenshots/3.png)
-*Power consumption monitoring with usage graphs and analytics*
-
-![Server Metrics](/screenshots/4.png)
-*Server performance metrics with CPU, memory, and network charts*
-
-![Health Monitoring](/screenshots/5.png)
-*Health monitoring page showing component status indicators*
+| Power Monitoring | Server Metrics | Health Monitoring |
+|-----------------|---------------|-----------------|
+| ![](/screenshots/3.png) | ![](/screenshots/4.png) | ![](/screenshots/5.png) |
 
 ### Control & Management Screens
-![Environmental Control](/screenshots/6.png)
-*Control panel for managing server room environmental systems*
+| Environmental Control | Device Management | System Logs |
+|----------------------|-----------------|------------|
+| ![](/screenshots/6.png) | ![](/screenshots/7.png) | ![](/screenshots/8.png) |
 
-![Device Management](/screenshots/7.png)
-*Device management interface for sensors and actuators*
-
-![System Logs](/screenshots/8.png)
-*System logs and event records with filtering capabilities*
-
-![User Management](/screenshots/9.png)
-*User management and access control settings*
-
-![Surveillance View](/screenshots/10.png)
-*Surveillance view showing camera feeds from monitored areas*
-
-![Weather Conditions](/screenshots/11.png)
-*Weather conditions and environmental forecasting*
+| User Management | Surveillance View | Weather Conditions |
+|----------------|-----------------|-----------------|
+| ![](/screenshots/9.png) | ![](/screenshots/10.png) | ![](/screenshots/11.png) |
 
 ### Configuration & Simulation
-![Floor Plan](/screenshots/12.png)
-*Floor plan simulation showing device placement*
+| Floor Plan | Device Configuration | System Settings |
+|------------|-------------------|----------------|
+| ![](/screenshots/12.png) | ![](/screenshots/13.png) | ![](/screenshots/14.png) |
 
-![Device Configuration](/screenshots/13.png)
-*Device configuration dialog for sensor settings*
-
-![System Settings](/screenshots/14.png)
-*System settings and global configuration options*
-
-![Alert Configuration](/screenshots/15.png)
-*Alert configuration for temperature and security thresholds*
-
-![Network Topology](/screenshots/16.png)
-*Network topology map showing connectivity between devices*
-
-![Scheduling](/screenshots/17.png)
-*Scheduling interface for automated system operations*
+| Alert Configuration | Network Topology | Scheduling |
+|-------------------|----------------|------------|
+| ![](/screenshots/15.png) | ![](/screenshots/16.png) | ![](/screenshots/17.png) |
 
 ### Analytics & Reports
-![Historical Analytics](/screenshots/18.png)
-*Historical performance analytics with trend visualization*
+| Historical Analytics | Power Usage Report | Security Reports |
+|--------------------|-----------------|----------------|
+| ![](/screenshots/18.png) | ![](/screenshots/19.png) | ![](/screenshots/20.png) |
 
-![Power Usage Report](/screenshots/19.png)
-*Power usage report with efficiency recommendations*
-
-![Security Reports](/screenshots/20.png)
-*Security incident reports and audit logs*
-
-![System Health Report](/screenshots/21.png)
-*System health report with component status history*
-
-![Environmental Reports](/screenshots/22.png)
-*Environmental conditions report showing temperature trends*
-
-![User Activity Dashboard](/screenshots/23.png)
-*User activity dashboard showing login and action history*
+| System Health Report | Environmental Reports | User Activity Dashboard |
+|--------------------|---------------------|-----------------------|
+| ![](/screenshots/21.png) | ![](/screenshots/22.png) | ![](/screenshots/23.png) |
 
 ---
 
+## 🛠️ Tech Stack
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs)  
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)  
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss)  
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python)  
+![MQTT](https://img.shields.io/badge/MQTT-FF6F00?style=for-the-badge&logo=mqtt)  
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase)  
+![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-C51A4A?style=for-the-badge&logo=raspberry-pi)  
+
+---
+
+## 🔧 Installation
+
+```bash
+git clone <repository-url>
+cd smart-server-center
+pnpm install
+pnpm run dev
+````
+
+Raspberry Pi devices must be configured with sensors and actuators, connected to the MQTT broker, and linked with Supabase credentials.
+
+---
+
+## 📄 License
+
+This project is released under the **MIT License**.
