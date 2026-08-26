@@ -1,3 +1,5 @@
+![SSCM](screenshots/cover.avif)
+
 # 🖥️ SSCM - Smart Server Center Monitoring
 
 ## 📌 Overview
